@@ -1,2 +1,8 @@
 Build
 DerivedData
+.DS_Store
+.vs
+x64
+vs/sdl-vc/*
+!vs/sdl-vc/.placeholder
+SDLGame
