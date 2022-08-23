@@ -8,7 +8,7 @@ if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
   endif()
 endif()
 
-project(redrectangle)
+project(game)
 include("${VITASDK}/share/vita.cmake" REQUIRED)
 
 find_package(SDL2 REQUIRED)
@@ -25,7 +25,7 @@ include_directories(
 )
 
 add_executable(${PROJECT_NAME}
-  src/main.c
+  ../game/main.c
 )
 
 target_link_libraries(${PROJECT_NAME}
