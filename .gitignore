@@ -5,6 +5,10 @@ DerivedData
 x64
 windows/sdl-vc/*
 !windows/sdl-vc/.placeholder
+switch/*
+!switch/Makefile
+3ds/*
+!3ds/Makefile
 SDLGame
 build
 *.o

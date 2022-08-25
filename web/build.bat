@@ -1,3 +1,2 @@
-mkdir ../build
-emcc -c ../game/main.cpp -o ../game/main.o -s USE_SDL=2
-emcc ../game/main.o -o ../build/main.html -s USE_SDL=2
+mkdir build
+emcc ../game/sdl2/sdl2.cpp ../game/main.cpp -o build/game.js -s USE_SDL=2
