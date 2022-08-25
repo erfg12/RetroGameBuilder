@@ -16,3 +16,7 @@ Clone `https://github.com/emscripten-core/emsdk.git`. Navigate to emsdk dir. On 
 
 #### PSVita
 NOTE: I recommend doing this on a Linux distro like Ubuntu. First install [VitaSDK](https://vitasdk.org/). Then `chmod a+x psvita.sh`, and run `./psvita.sh`. In `/psvita/build` you will have your .vpk file.
+
+#### Switch
+Install DevKitPro. Open `DevKitPro > MSys2`. CD to the switch directory, type `make`.
+

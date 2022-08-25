@@ -25,7 +25,7 @@ include_directories(
 )
 
 add_executable(${PROJECT_NAME}
-  ../game/main.c
+  ../game/main.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}

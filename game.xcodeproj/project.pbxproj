@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E5B550C228B2959800E9D541 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = E5B550C128B2959800E9D541 /* main.c */; };
+		E5B550C228B2959800E9D541 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E5B550C128B2959800E9D541 /* main.cpp */; };
 		E5B550CA28B295E900E9D541 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E5B550C928B295E900E9D541 /* SDL2.framework */; };
 /* End PBXBuildFile section */
 
@@ -25,7 +25,7 @@
 
 /* Begin PBXFileReference section */
 		E5B550BE28B2959800E9D541 /* sdl2 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = sdl2; sourceTree = BUILT_PRODUCTS_DIR; };
-		E5B550C128B2959800E9D541 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		E5B550C128B2959800E9D541 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.cpp; sourceTree = "<group>"; };
 		E5B550C928B295E900E9D541 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -61,7 +61,7 @@
 		E5B550C028B2959800E9D541 /* game */ = {
 			isa = PBXGroup;
 			children = (
-				E5B550C128B2959800E9D541 /* main.c */,
+				E5B550C128B2959800E9D541 /* main.cpp */,
 			);
 			path = game;
 			sourceTree = "<group>";
@@ -131,7 +131,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E5B550C228B2959800E9D541 /* main.c in Sources */,
+				E5B550C228B2959800E9D541 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
