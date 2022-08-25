@@ -3,8 +3,8 @@ DerivedData
 .DS_Store
 .vs
 x64
-vs/sdl-vc/*
-!vs/sdl-vc/.placeholder
+windows/sdl-vc/*
+!windows/sdl-vc/.placeholder
 SDLGame
 build
 *.o
