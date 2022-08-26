@@ -6,4 +6,22 @@ const int SCREEN_HEIGHT = 480;
 
 const char WINDOW_TITLE[] = "SDL Title";
 
+bool init();
+bool loadMedia();
+void closeSDL();
+void keepWindowOpen();
+void updateSurfaces();
+
+#if defined (__3DS__)
+    #include "sdl1/sdl1.h" // this game's SDL1 methods
+#else
+    #include "sdl2/sdl2.h" // this game's SDL2 methods
+#endif
+#if defined (__DREAMCAST__)
+    #include "../sdl1/dreamcast.h"
+#endif
+
+#include <stdio.h>
+#include <stdbool.h>
+
 #endif
