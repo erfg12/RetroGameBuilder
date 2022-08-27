@@ -12,3 +12,9 @@ switch/*
 SDLGame
 build
 *.o
+nxdk
+*.exe
+*.obj
+*.xbe
+*.iso
+*.d
