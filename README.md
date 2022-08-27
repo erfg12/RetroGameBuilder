@@ -6,15 +6,15 @@ This project's goal is compiling a game across multiple consoles and computers. 
 
 ### MacOS (+ iOS,iPadOS,tvOS)
 - - -
-Download [SDL2 dmg](https://github.com/libsdl-org/SDL/releases/latest), open the DMG, place the framework file in `/library/frameworks` directory. Open `macos/game.xcodeproj` with XCode, press build.
+On a Mac computer, download [SDL2 dmg](https://github.com/libsdl-org/SDL/releases/latest), open the DMG, place the framework file in `/library/frameworks` directory. Open `macos/game.xcodeproj` with XCode, press build.
 
 ### Windows
 - - -
-Download [SDL2 vc zip](https://github.com/libsdl-org/SDL/releases/latest), unzip inner contents to the `windows\sdl2-vc` directory. Open `windows\game.sln` file with Visual Studio, press build.
+On a Windows computer, download [SDL2 vc zip](https://github.com/libsdl-org/SDL/releases/latest), unzip inner contents to the `windows\sdl2-vc` directory. Open `windows\game.sln` file with Visual Studio, press build.
 
 ### Linux (Ubuntu)
 - - -
-In Terminal, type `sudo apt install build-essential libsdl2-dev`, then in the project directory, CD to the `/linux` directory. Now type `make`.
+Use a Linux distro like Ubuntu (WSL for Windows users). In Terminal, type `sudo apt install build-essential libsdl2-dev`, then in the project directory, CD to the `/linux` directory. Now type `make`.
 
 ### Web
 - - -
