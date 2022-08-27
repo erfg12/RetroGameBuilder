@@ -18,3 +18,5 @@ nxdk
 *.xbe
 *.iso
 *.d
+*.elf
+*.dol

@@ -32,6 +32,10 @@ Install DevKitPro. Open `DevKitPro > MSys2`. Type `pacman -S switch-portlibs` an
 - - -
 Install DevKitPro. Open `DevKitPro > MSys2`. Type `pacman -S 3ds-portlibs` and install ALL. In the project directory, CD to the `/3ds` directory, type `make`.
 
+### Wii
+- - -
+Install DevKitPro. Open `DevKitPro > MSys2`. Type `pacman -S wii-portlibs` and install ALL. In the project directory, CD to the `/wii` directory, type `make`.
+
 ### DreamCast
 - - -
 Use a Linux distro like Ubuntu (WSL for Windows users). Setup [KOS](https://gist.github.com/erfg12/a55328f50abaea15bd06d6584ed435af#file-kos-setup-easy-md) first, then [OpenGL](https://gist.github.com/erfg12/64285ce6e466fccbe8316f2e7594861a#file-kos-sdl-with-opengl-md). In the project directory, CD to `/dreamcast`, type `make`.
