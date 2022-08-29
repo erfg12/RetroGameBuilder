@@ -54,3 +54,7 @@ Your .xbe file will be in the `bin` directory.
 ### Wii U
 - - -
 Install DevKitPro. Open `DevKitPro > MSys2`. Type `pacman -S wiiu-portlibs` and install ALL. In the project directory, CD to the `/wiiu` directory, type `make`.
+
+### GameCube
+- - -
+Install DevKitPro. Open `DevKitPro > MSys2`. Type `pacman -S gamecube-portlibs` and install ALL. In the project directory, CD to the `/gamecube` directory, type `make`.
