@@ -12,7 +12,7 @@ void closeSDL();
 void keepWindowOpen();
 void updateSurfaces();
 
-#if defined (__3DS__)
+#if defined (__3DS__) || defined (__WII__)
     #include "sdl1/sdl1.h" // this game's SDL1 methods
 #else
     #include "sdl2/sdl2.h" // this game's SDL2 methods

@@ -20,3 +20,4 @@ nxdk
 *.d
 *.elf
 *.dol
+*.rpx
