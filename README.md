@@ -40,6 +40,9 @@ Install DevKitPro. Open `DevKitPro > MSys2`. Type `pacman -S wii-portlibs` and i
 - - -
 Use a Linux distro like Ubuntu (WSL for Windows users). Setup [KOS](https://gist.github.com/erfg12/a55328f50abaea15bd06d6584ed435af#file-kos-setup-easy-md) first, then [OpenGL](https://gist.github.com/erfg12/64285ce6e466fccbe8316f2e7594861a#file-kos-sdl-with-opengl-md). In the project directory, CD to `/dreamcast`, type `make`.
 
+### PlayStation 2
+Use a Linux distro like Ubuntu (WSL for Windows users). Setup [PS2Dev environment](https://gist.github.com/erfg12/45bb0311f53bf2037d338c357c8c33f0). In the project directory, CD to `/ps2`, type `make`.
+
 ### Xbox (original)
 - - -
 Use a Linux distro like Ubuntu (WSL for Windows users). In Terminal, type `sudo apt install build-essential cmake flex bison clang lld git llvm`. Then, make sure you're in the project directory, and type: 

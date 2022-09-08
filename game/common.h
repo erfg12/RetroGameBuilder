@@ -12,13 +12,13 @@ void closeSDL();
 void keepWindowOpen();
 void updateSurfaces();
 
-#if defined (__3DS__) || defined (__WII__)
+#if defined (__3DS__) || defined (__WII__) || defined (__PS2__)
     #include "sdl1/sdl1.h" // this game's SDL1 methods
 #else
     #include "sdl2/sdl2.h" // this game's SDL2 methods
 #endif
 #if defined (__DREAMCAST__)
-    #include "../sdl1/dreamcast.h"
+    #include "sdl1/dreamcast.h"
 #endif
 
 #include <stdio.h>
