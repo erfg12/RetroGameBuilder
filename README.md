@@ -5,6 +5,7 @@ This project's goal is compiling a game across multiple consoles and computers. 
 ## How To Build:
 
 ### Android
+- - -
 Using Windows, install Android Studio. Clone the [SDL2 source](https://github.com/libsdl-org/SDL)'s `include`, `src` and `Android.mk` folders and files to the `android/app/jni/SDL` directory. Open the `android` directory with Android Studio, press `Build > Make Project`. If you want to add more source code files, edit the `android/app/jni/src/Android.mk` file.
 
 ### MacOS (+ iOS,iPadOS,tvOS)
@@ -44,12 +45,14 @@ Install [DevKitPro](https://devkitpro.org/wiki/Getting_Started). Open `DevKitPro
 Use a Linux distro like Ubuntu (WSL for Windows users). Setup [KOS](https://gist.github.com/erfg12/a55328f50abaea15bd06d6584ed435af#file-kos-setup-easy-md) first, then [OpenGL](https://gist.github.com/erfg12/64285ce6e466fccbe8316f2e7594861a#file-kos-sdl-with-opengl-md). In the project directory, CD to `/dreamcast`, type `make`.
 
 ### PlayStation 2
+- - -
 Use a Linux distro like Ubuntu (WSL for Windows users). Setup [PS2Dev environment](https://gist.github.com/erfg12/45bb0311f53bf2037d338c357c8c33f0). In the project directory, CD to `/ps2`, type `make`.
 
 ### Xbox (original)
 - - -
-Use a Linux distro like Ubuntu (WSL for Windows users). In Terminal, type `sudo apt install build-essential cmake flex bison clang lld git llvm`. Then, make sure you're in the project directory, and type: 
+Use a Linux distro like Ubuntu (WSL for Windows users). In Terminal, type: 
 ```
+sudo apt install build-essential cmake flex bison clang lld git llvm
 cd ./xbox
 git clone --recursive https://github.com/XboxDev/nxdk.git ./nxdk
 ./nxdk/bin/activate
