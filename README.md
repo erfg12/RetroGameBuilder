@@ -29,15 +29,15 @@ Use a Linux distro like Ubuntu (WSL for Windows users). First install [VitaSDK](
 
 ### Switch
 - - -
-Install DevKitPro. Open `DevKitPro > MSys2`. Type `pacman -S switch-portlibs` and install ALL. In the project directory, CD to the `/switch` directory, type `make`.
+Install [DevKitPro](https://devkitpro.org/wiki/Getting_Started). Open `DevKitPro > MSys2`. Type `pacman -S switch-portlibs` and install ALL. In the project directory, CD to the `/switch` directory, type `make`.
 
 ### 3DS
 - - -
-Install DevKitPro. Open `DevKitPro > MSys2`. Type `pacman -S 3ds-portlibs` and install ALL. In the project directory, CD to the `/3ds` directory, type `make`.
+Install [DevKitPro](https://devkitpro.org/wiki/Getting_Started). Open `DevKitPro > MSys2`. Type `pacman -S 3ds-portlibs` and install ALL. In the project directory, CD to the `/3ds` directory, type `make`.
 
 ### Wii
 - - -
-Install DevKitPro. Open `DevKitPro > MSys2`. Type `pacman -S wii-portlibs` and install ALL. In the project directory, CD to the `/wii` directory, type `make`.
+Install [DevKitPro](https://devkitpro.org/wiki/Getting_Started). Open `DevKitPro > MSys2`. Type `pacman -S wii-portlibs` and install ALL. In the project directory, CD to the `/wii` directory, type `make`.
 
 ### DreamCast
 - - -
@@ -59,8 +59,8 @@ Your .xbe file will be in the `bin` directory.
 
 ### Wii U
 - - -
-Install DevKitPro. Open `DevKitPro > MSys2`. Type `pacman -S wiiu-portlibs` and install ALL. In the project directory, CD to the `/wiiu` directory, type `make`.
+Install [DevKitPro](https://devkitpro.org/wiki/Getting_Started). Open `DevKitPro > MSys2`. Type `pacman -S wiiu-portlibs` and install ALL. In the project directory, CD to the `/wiiu` directory, type `make`.
 
 ### GameCube
 - - -
-Install DevKitPro. Open `DevKitPro > MSys2`. Type `pacman -S gamecube-portlibs` and install ALL. In the project directory, CD to the `/gamecube` directory, type `make`.
+Install [DevKitPro](https://devkitpro.org/wiki/Getting_Started). Open `DevKitPro > MSys2`. Type `pacman -S gamecube-portlibs` and install ALL. In the project directory, CD to the `/gamecube` directory, type `make`.
