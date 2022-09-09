@@ -1,0 +1,1 @@
+Copy, paste the SDL `/include`, `/src` and `Android.mk` here.

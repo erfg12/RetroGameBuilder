@@ -21,3 +21,13 @@ nxdk
 *.elf
 *.dol
 *.rpx
+
+android/app/jni/SDL/*
+!android/app/jni/SDL/put_SDL_include_src_Android.mk_here.md
+android/app/build
+android/wrapper
+android/native
+android/jdks
+android/gradle
+android/.gradle
+android/.idea

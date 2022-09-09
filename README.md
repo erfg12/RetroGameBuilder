@@ -4,6 +4,9 @@ This project's goal is compiling a game across multiple consoles and computers. 
 
 ## How To Build:
 
+### Android
+Using Windows, install Android Studio. Clone the [SDL2 source](https://github.com/libsdl-org/SDL)'s `include`, `src` and `Android.mk` folders and files to the `android/app/jni/SDL` directory. Open the `android` directory with Android Studio, press `Build > Make Project`. If you want to add more source code files, edit the `android/app/jni/src/Android.mk` file.
+
 ### MacOS (+ iOS,iPadOS,tvOS)
 - - -
 On a Mac computer, download [SDL2 dmg](https://github.com/libsdl-org/SDL/releases/latest), open the DMG, place the framework file in `/library/frameworks` directory. Open `macos/game.xcodeproj` with XCode, press build.
