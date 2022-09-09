@@ -6,7 +6,7 @@ This project's goal is compiling a game across multiple consoles and computers. 
 
 ### Android
 - - -
-Using Windows, install Android Studio. Clone the [SDL2 source](https://github.com/libsdl-org/SDL)'s `include`, `src` and `Android.mk` folders and files to the `android/app/jni/SDL` directory. Open the `android` directory with Android Studio, press `Build > Make Project`. If you want to add more source code files, edit the `android/app/jni/src/Android.mk` file.
+Using Windows, install Android Studio. Clone the [SDL2 source](https://github.com/libsdl-org/SDL)'s `include`, `src` and `Android.mk` folders and files to the `android\app\jni\SDL` directory. Open the `android` directory with Android Studio, press `Build > Make Project`. If you want to add more source code files, edit the `android\app\jni\src\Android.mk` file.
 
 ### MacOS (+ iOS,iPadOS,tvOS)
 - - -
@@ -22,7 +22,9 @@ Use a Linux distro like Ubuntu (WSL for Windows users). In Terminal, type `sudo 
 
 ### Web
 - - -
-Clone `https://github.com/emscripten-core/emsdk.git`. Navigate to `emsdk` dir. On Linux/MacOS: `./emsdk install latest`, `./emsdk activate latest`, `source ./emsdk_env.sh`. Don't close Terminal. Navigate back to project `/web` dir, type `chmod a+x build.sh` and run `build.sh`. On Windows: `emsdk install latest`, `emsdk activate latest`, `emsdk_env.bat`. Don't close command window. Navigate back to project dir and run `web\build.bat`
+Clone `https://github.com/emscripten-core/emsdk.git`. Navigate to `emsdk` dir. 
+* Linux/MacOS: `./emsdk install latest`, `./emsdk activate latest`, `source ./emsdk_env.sh`. Don't close Terminal. Go back to `/web` dir, type `chmod a+x build.sh` and `./build.sh`. 
+* Windows: `emsdk install latest`, `emsdk activate latest`, `emsdk_env.bat`. Don't close command window. Go back to `/web` dir and run `web\build.bat`
 
 ### PSVita
 - - -
@@ -50,11 +52,16 @@ Use a Linux distro like Ubuntu (WSL for Windows users). Setup [PS2Dev environmen
 
 ### Xbox (original)
 - - -
-Use a Linux distro like Ubuntu (WSL for Windows users). In Terminal, type: 
+Use a Linux distro like Ubuntu (WSL for Windows users).
+
+First time setup:
 ```
 sudo apt install build-essential cmake flex bison clang lld git llvm
 cd ./xbox
 git clone --recursive https://github.com/XboxDev/nxdk.git ./nxdk
+```
+To build:
+```
 ./nxdk/bin/activate
 make
 ```

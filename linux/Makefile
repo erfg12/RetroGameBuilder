@@ -17,3 +17,4 @@ OBJ_NAME = SDLGame
 #This is the target that compiles our executable
 all : $(OBJS)
 	$(CC) $(OBJS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OBJ_NAME)
+	cp -R '../game/res' './'
