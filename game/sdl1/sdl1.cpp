@@ -3,7 +3,7 @@
 
 //SDL_Window* gWindow = NULL;
 SDL_Surface* gScreenSurface = NULL;
-SDL_Surface* gHelloWorld = NULL;
+std::vector< SDL_Surface* > LoadedImages;
 
 bool init()
 {
@@ -21,28 +21,34 @@ bool init()
     return success;
 }
 
-bool loadMedia()
+bool loadMedia(std::vector<const char*> images)
 {
     bool success = true;
-    gHelloWorld = SDL_LoadBMP( "res/hello_world.bmp" );
-    if( gHelloWorld == NULL )
-    {
-        printf( "Unable to load image %s! SDL Error: %s\n", "hello_world.bmp", SDL_GetError() );
-        success = false;
+    for (const char* x : images) {
+        SDL_Surface* SDLImg = SDL_LoadBMP(x);
+        LoadedImages.push_back(SDLImg);
+        if (SDLImg == NULL)
+        {
+            printf("Unable to load image %s! SDL Error: %s\n", x, SDL_GetError());
+            success = false;
+        }
     }
     return success;
 }
 
 void closeSDL()
 {
-    SDL_FreeSurface( gHelloWorld );
-    gHelloWorld = NULL;
+    for (SDL_Surface* x : LoadedImages) {
+        SDL_FreeSurface( x );
+    }
     //gWindow = NULL;
     SDL_Quit();
 }
 
 void updateSurfaces() {
-    SDL_BlitSurface( gHelloWorld, NULL, gScreenSurface, NULL );
+    for (SDL_Surface* x : LoadedImages) {
+        SDL_BlitSurface( x, NULL, gScreenSurface, NULL );
+    }
     //SDL_UpdateWindowSurface( gWindow );
 }
 
