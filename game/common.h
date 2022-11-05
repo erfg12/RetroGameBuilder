@@ -13,7 +13,7 @@ const char WINDOW_TITLE[] = "SDL Title";
 #include <vector>
 
 bool init();
-bool loadMedia(std::vector<const char*> images);
+bool loadImageMedia(std::vector<const char*> images);
 void closeSDL();
 void keepWindowOpen();
 void updateSurfaces();

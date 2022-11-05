@@ -27,7 +27,7 @@ bool init()
     return success;
 }
 
-bool loadMedia(std::vector<const char*> images)
+bool loadImageMedia(std::vector<const char*> images)
 {
     bool success = true;
     for (const char* x : images) {

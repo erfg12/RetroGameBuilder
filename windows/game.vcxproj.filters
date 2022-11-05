@@ -21,9 +21,6 @@
     <ClCompile Include="..\game\sdl2\sdl2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\game\sdl1\sdl1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\game\sdl2\sdl2.h">

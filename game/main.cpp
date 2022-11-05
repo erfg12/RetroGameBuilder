@@ -2,11 +2,12 @@
 
 int main( int argc, char* args[] )
 {
-    std::vector<const char*> my_map = {
-        { "res/hello_world.bmp" }
+    std::vector<const char*> imageMap = {
+        { "res/bullet.bmp", "res/enemy.bmp", "res/player.bmp" }
     };
-    if (init() && loadMedia(my_map))
+    if (init() && loadImageMedia(imageMap)) {
         updateSurfaces();
+    }
     
     keepWindowOpen();
 
