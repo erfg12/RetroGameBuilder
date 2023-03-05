@@ -130,7 +130,8 @@
       </Command>
     </CustomBuildStep>
     <PostBuildEvent>
-      <Command>Xcopy /E /I /Y "$(SolutionDir)\..\game\res" "$(TargetDir)\res"</Command>
+      <Command>Xcopy /E /I /Y "$(SolutionDir)\..\game\res" "$(TargetDir)\res"
+Xcopy /E /I /Y "$(SolutionDir)\sdl-vc\lib\x64\*.dll" "$(TargetDir)"</Command>
       <Message>copy res directory</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>

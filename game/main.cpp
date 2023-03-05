@@ -71,33 +71,60 @@ int main(int argc, char* args[])
 	SDL_Surface* screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_DOUBLEBUF | SDL_HWSURFACE);
 	SDL_WM_SetCaption("SharkShark", NULL);
 	int colorkey = SDL_SRCCOLORKEY;
+	int key_s = SDLK_s;
+	int key_p = SDLK_p;
+	int key_w = SDLK_w;
+	int key_a = SDLK_a;
+	int key_s = SDLK_s;
+	int key_d = SDLK_d;
+	int key_return = SDLK_RETURN;
+	int key_left = SDLK_LEFT;
+	int key_right = SDLK_RIGHT;
+	int key_up = SDLK_UP;
+	int key_down = SDLK_DOWN;
 #else
-	SDL_Surface* screen = NULL;
-	SDL_Window* gWindow = NULL;
+	SDL_Window* gWindow = SDL_CreateWindow("SharkShark", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+	if (gWindow == NULL)
+		printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+	SDL_Surface* screen = SDL_GetWindowSurface(gWindow);
 	int colorkey = SDL_TRUE;
+	int key_p = SDL_SCANCODE_P;
+	int key_w = SDL_SCANCODE_W;
+	int key_a = SDL_SCANCODE_A;
+	int key_s = SDL_SCANCODE_S;
+	int key_d = SDL_SCANCODE_D;
+	int key_return = SDL_SCANCODE_RETURN;
+	int key_left = SDL_SCANCODE_LEFT;
+	int key_right = SDL_SCANCODE_RIGHT;
+	int key_up = SDL_SCANCODE_UP;
+	int key_down = SDL_SCANCODE_DOWN;
 #endif
 	
 	next_time = SDL_GetTicks() + TICK_INTERVAL;
 
-	shark = SDL_LoadBMP("assets/sprites/shark.bmp");
+	shark = SDL_LoadBMP("res\\sprites\\shark.bmp");
+	if (!shark) {
+		printf("Failed to load image: %sres\\sprites\\shark.bmp %s\n", SDL_GetBasePath(), SDL_GetError());
+		return 0;
+	}
 	SDL_SetColorKey(shark, colorkey, SDL_MapRGB(shark->format, 0xFF, 0x0, 0xFF)); // NOTE: Images must be 24 bit depth to work with color keys
-	shark_dead = SDL_LoadBMP("assets/sprites/shark_dead.bmp");
+	shark_dead = SDL_LoadBMP("res/sprites/shark_dead.bmp");
 	SDL_SetColorKey(shark_dead, colorkey, SDL_MapRGB(shark_dead->format, 0xFF, 0x0, 0xFF));
-	seahorse = SDL_LoadBMP("assets/sprites/seahorse.bmp");
+	seahorse = SDL_LoadBMP("res/sprites/seahorse.bmp");
 	SDL_SetColorKey(seahorse, colorkey, SDL_MapRGB(seahorse->format, 0xFF, 0x0, 0xFF));
-	lobster = SDL_LoadBMP("assets/sprites/lobster.bmp");
+	lobster = SDL_LoadBMP("res/sprites/lobster.bmp");
 	SDL_SetColorKey(lobster, colorkey, SDL_MapRGB(lobster->format, 0xFF, 0x0, 0xFF));
-	crab = SDL_LoadBMP("assets/sprites/crab.bmp");
+	crab = SDL_LoadBMP("res/sprites/crab.bmp");
 	SDL_SetColorKey(crab, colorkey, SDL_MapRGB(crab->format, 0xFF, 0x0, 0xFF));
-	fish[0] = SDL_LoadBMP("assets/sprites/rank1.bmp");
+	fish[0] = SDL_LoadBMP("res/sprites/rank1.bmp");
 	SDL_SetColorKey(fish[0], colorkey, SDL_MapRGB(fish[0]->format, 0xFF, 0x0, 0xFF));
-	fish[1] = SDL_LoadBMP("assets/sprites/rank2.bmp");
+	fish[1] = SDL_LoadBMP("res/sprites/rank2.bmp");
 	SDL_SetColorKey(fish[1], colorkey, SDL_MapRGB(fish[1]->format, 0xFF, 0x0, 0xFF));
-	fish[2] = SDL_LoadBMP("assets/sprites/rank3.bmp");
+	fish[2] = SDL_LoadBMP("res/sprites/rank3.bmp");
 	SDL_SetColorKey(fish[2], colorkey, SDL_MapRGB(fish[2]->format, 0xFF, 0x0, 0xFF));
-	fish[3] = SDL_LoadBMP("assets/sprites/rank4.bmp");
+	fish[3] = SDL_LoadBMP("res/sprites/rank4.bmp");
 	SDL_SetColorKey(fish[3], colorkey, SDL_MapRGB(fish[3]->format, 0xFF, 0x0, 0xFF));
-	fish[4] = SDL_LoadBMP("assets/sprites/rank5.bmp");
+	fish[4] = SDL_LoadBMP("res/sprites/rank5.bmp");
 	SDL_SetColorKey(fish[4], colorkey, SDL_MapRGB(fish[4]->format, 0xFF, 0x0, 0xFF));
 
 #if defined (__3DS__) || defined (__WII__) || defined (__PS2__) || (__DREAMCAST__)
@@ -113,21 +140,21 @@ int main(int argc, char* args[])
 		printf("SDL TTF could not initialize! %s", SDL_GetError());
 	}
 
-	TTF_Font* font = TTF_OpenFont("assets/pixantiqua.ttf", 25);
+	TTF_Font* font = TTF_OpenFont("res/pixantiqua.ttf", 25);
 
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
 	{
 		printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
 	}
 
-	sharkSpawnSound = Mix_LoadWAV("assets/audio/shark.wav");
-	fishBiteSound = Mix_LoadWAV("assets/audio/eat.wav");
-	gameOverSound = Mix_LoadWAV("assets/audio/gameover.wav");
-	deadSound = Mix_LoadWAV("assets/audio/dead.wav");
-	sharkDeadSound = Mix_LoadWAV("assets/audio/shark_dead.wav");
-	fishRankUp = Mix_LoadWAV("assets/audio/bigger.wav"); // NOTE: Game can crash on startup if audio bit-rate is too high
+	sharkSpawnSound = Mix_LoadWAV("res/audio/shark.wav");
+	fishBiteSound = Mix_LoadWAV("res/audio/eat.wav");
+	gameOverSound = Mix_LoadWAV("res/audio/gameover.wav");
+	deadSound = Mix_LoadWAV("res/audio/dead.wav");
+	sharkDeadSound = Mix_LoadWAV("res/audio/shark_dead.wav");
+	fishRankUp = Mix_LoadWAV("res/audio/bigger.wav"); // NOTE: Game can crash on startup if audio bit-rate is too high
 
-	bgMusic = Mix_LoadMUS("assets/audio/bg_music.wav");
+	bgMusic = Mix_LoadMUS("res/audio/bg_music.wav");
 
 	if (SDL_Init(SDL_INIT_EVERYTHING)  == -1) // Initialize SDL
 	{
@@ -174,17 +201,17 @@ int main(int argc, char* args[])
 				}
 
 				// check for button presses
-				if (keys[SDLK_p]) { if (PausedGame == 1) PausedGame = 0; else PausedGame = 1; }
-				if ((keys[SDLK_RETURN]) && GameOver == 1) { SetVars(SCREEN_WIDTH, SCREEN_HEIGHT); printf("restarting game"); }
-				if (keys[SDLK_RETURN] && playerDead == 1 && PausedGame == 0 && GameOver == 0) { playerDead = 0; playerPosition.x = (float)SCREEN_WIDTH / 2; playerPosition.y = (float)SCREEN_HEIGHT / 2; }
+				if (keys[key_p]) { if (PausedGame == 1) PausedGame = 0; else PausedGame = 1; }
+				if ((keys[key_return]) && GameOver == 1) { SetVars(SCREEN_WIDTH, SCREEN_HEIGHT); printf("restarting game"); }
+				if (keys[key_return] && playerDead == 1 && PausedGame == 0 && GameOver == 0) { playerDead = 0; playerPosition.x = (float)SCREEN_WIDTH / 2; playerPosition.y = (float)SCREEN_HEIGHT / 2; }
 				if (mainMenu == 1) {
-					if (keys[SDLK_s]) { mainMenu = 0; }
+					if (keys[key_s]) { mainMenu = 0; }
 				}
 				if (PausedGame == 0 && GameOver == 0 && mainMenu == 0) {
-					if ((keys[SDLK_RIGHT] || keys[SDLK_d]) && playerPosition.x < SCREEN_WIDTH && playerDead == 0) { playerPosition.x += playerSpeed; playerDirection = -1; }
-					if ((keys[SDLK_LEFT] || keys[SDLK_a]) && playerPosition.x > 0 && playerDead == 0) { playerPosition.x -= playerSpeed; playerDirection = 1; }
-					if ((keys[SDLK_UP] || keys[SDLK_w]) && playerPosition.y > 0 && playerDead == 0) playerPosition.y -= playerSpeed;
-					if ((keys[SDLK_DOWN] || keys[SDLK_s]) && playerPosition.y < SCREEN_HEIGHT - 15 && playerDead == 0) playerPosition.y += playerSpeed;
+					if ((keys[key_right] || keys[key_d]) && playerPosition.x < SCREEN_WIDTH && playerDead == 0) { playerPosition.x += playerSpeed; playerDirection = -1; }
+					if ((keys[key_left] || keys[key_a]) && playerPosition.x > 0 && playerDead == 0) { playerPosition.x -= playerSpeed; playerDirection = 1; }
+					if ((keys[key_up] || keys[key_w]) && playerPosition.y > 0 && playerDead == 0) playerPosition.y -= playerSpeed;
+					if ((keys[key_down] || keys[key_s]) && playerPosition.y < SCREEN_HEIGHT - 15 && playerDead == 0) playerPosition.y += playerSpeed;
 				}
 
 				char UI_Score_t[255];
