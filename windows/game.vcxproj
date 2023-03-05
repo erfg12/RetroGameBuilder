@@ -20,12 +20,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\game\main.cpp" />
-    <ClCompile Include="..\game\sdl2\sdl2.cpp" />
+    <ClCompile Include="..\game\shared.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\game\common.h" />
-    <ClInclude Include="..\game\sdl1\sdl1.h" />
-    <ClInclude Include="..\game\sdl2\sdl2.h" />
+    <ClInclude Include="..\game\common.hpp" />
+    <ClInclude Include="..\game\shared.hpp" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -80,6 +79,10 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LibraryPath>sdl-vc\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>sdl-vc\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -114,13 +117,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>sdl-vc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>sdl-vc\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_mixer.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
       <Command>
