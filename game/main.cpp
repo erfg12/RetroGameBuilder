@@ -102,9 +102,9 @@ int main(int argc, char* args[])
 	
 	next_time = SDL_GetTicks() + TICK_INTERVAL;
 
-	shark = SDL_LoadBMP("res\\sprites\\shark.bmp");
+	shark = SDL_LoadBMP("res/sprites/shark.bmp");
 	if (!shark) {
-		printf("Failed to load image: %sres\\sprites\\shark.bmp %s\n", SDL_GetBasePath(), SDL_GetError());
+		printf("Failed to load image: %sres/sprites/shark.bmp %s\n", SDL_GetBasePath(), SDL_GetError());
 		return 0;
 	}
 	SDL_SetColorKey(shark, colorkey, SDL_MapRGB(shark->format, 0xFF, 0x0, 0xFF)); // NOTE: Images must be 24 bit depth to work with color keys
