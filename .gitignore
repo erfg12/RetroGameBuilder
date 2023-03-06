@@ -31,3 +31,6 @@ android/jdks
 android/gradle
 android/.gradle
 android/.idea
+
+linux/res
+linux/game

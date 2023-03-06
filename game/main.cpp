@@ -215,18 +215,18 @@ int main(int argc, char* args[])
 				}
 
 				char UI_Score_t[255];
-				sprintf_s(UI_Score_t, 255, "SCORE %d", score);
+				sprintf(UI_Score_t, "SCORE %d", score);
 				SDL_Surface* UI_Score = TTF_RenderText_Solid(font, UI_Score_t, color_white);
 				SDL_Rect UI_Score_renderQuad = { 10, 10, UI_Score->w, UI_Score->h };
 				SDL_BlitSurface(UI_Score, NULL, screen, &UI_Score_renderQuad);
 				char UI_Lives_t[255];
-				sprintf_s(UI_Lives_t, 255, "%i LIVES", lives);
+				sprintf(UI_Lives_t, "%i LIVES", lives);
 				SDL_Surface* UI_Lives = TTF_RenderText_Solid(font, UI_Lives_t, color_white);
 				SDL_Rect UI_Lives_renderQuad = { SCREEN_WIDTH - 120, 10, UI_Lives->w, UI_Lives->h };
 				SDL_BlitSurface(UI_Lives, NULL, screen, &UI_Lives_renderQuad);
 				if (GameOver) {
 					char UI_gameover_t[255];
-					sprintf_s(UI_gameover_t, 255, "GAME OVER! - YOUR SCORE: %4i", score);
+					sprintf(UI_gameover_t, "GAME OVER! - YOUR SCORE: %4i", score);
 					SDL_Surface* UI_gameover = TTF_RenderText_Solid(font, UI_gameover_t, color_white);
 					SDL_Rect UI_gameover_renderQuad = { SCREEN_WIDTH / 2 - 200, SCREEN_HEIGHT / 2 - 200, UI_gameover->w, UI_gameover->h };
 					SDL_BlitSurface(UI_gameover, NULL, screen, &UI_gameover_renderQuad);

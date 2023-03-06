@@ -1,5 +1,5 @@
 #OBJS specifies which files to compile as part of the project
-OBJS = ../game/sdl2/sdl2.cpp ../game/main.cpp
+OBJS = ../game/shared.cpp ../game/main.cpp
 
 #CC specifies which compiler we're using
 CC = g++
@@ -9,10 +9,10 @@ CC = g++
 COMPILER_FLAGS = -w
 
 #LINKER_FLAGS specifies the libraries we're linking against
-LINKER_FLAGS = -lSDL2
+LINKER_FLAGS = -lSDL2 -lSDL2main -lSDL2_ttf -lSDL2_mixer
 
 #OBJ_NAME specifies the name of our exectuable
-OBJ_NAME = SDLGame
+OBJ_NAME = game
 
 #This is the target that compiles our executable
 all : $(OBJS)
