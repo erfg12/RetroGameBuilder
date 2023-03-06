@@ -12,19 +12,24 @@ Using Windows, install Android Studio. Clone the [SDL2 source](https://github.co
 - - -
 On a Mac computer, download [SDL2 dmg](https://github.com/libsdl-org/SDL/releases/latest), open the DMG, place the framework file in `/library/frameworks` directory. Open `macos/game.xcodeproj` with XCode, press build.
 
-### Windows
+### Windows 7+
 - - -
-On a Windows computer, download [SDL2 vc zip](https://github.com/libsdl-org/SDL/releases/latest), unzip inner contents to the `windows\sdl2-vc` directory. Open `windows\game.sln` file with Visual Studio, press build.
+On a Windows computer, download [SDL2 vc zip](https://github.com/libsdl-org/SDL/releases), [TTF vc zip](https://github.com/libsdl-org/SDL_ttf/releases), [Mixer vc zip](https://github.com/libsdl-org/SDL_mixer/releases) unzip `lib` and `includes` directories to the `windows\sdl2-vc` directory. Open `windows\game.sln` file with Visual Studio, press build.
+
+### Windows 9x (old)
+- - -
+On a Windows computer, download [SDL vc zip](https://sourceforge.net/projects/libsdl/files/SDL/1.2.15/), [TTF vc zip](https://sourceforge.net/projects/libsdl/files/SDL_ttf/2.0.12/), [Mixer vc zip](https://sourceforge.net/projects/libsdl/files/SDL_mixer/1.2.12/) unzip `lib` and `includes` directories to the `windows\sdl2-vc` directory. Open `windows\game.sln` file with Visual Studio, press build.
 
 ### Linux (Ubuntu)
 - - -
-Use a Linux distro like Ubuntu (WSL for Windows users). In Terminal, type `sudo apt install build-essential libsdl2-dev`, then in the project directory, CD to the `/linux` directory. Now type `make`.
+Use a Linux distro like Ubuntu (WSL for Windows users). In Terminal, type `sudo apt update`, then `sudo apt install build-essential libsdl2-dev libsdl2-mixer-dev libsdl2-ttf-dev`, then in the project directory, CD to the `/linux` directory. Now type `make`.
 
 ### Web
 - - -
-Clone `https://github.com/emscripten-core/emsdk.git`. Navigate to `emsdk` dir. 
+* Clone `https://github.com/emscripten-core/emsdk.git`. Navigate to `emsdk` dir. 
 * Linux/MacOS: `./emsdk install latest`, `./emsdk activate latest`, `source ./emsdk_env.sh`. Don't close Terminal. Go back to `/web` dir, type `chmod a+x build.sh` and `./build.sh`. 
-* Windows: `emsdk install latest`, `emsdk activate latest`, `emsdk_env.bat`. Don't close command window. Go back to `/web` dir and run `web\build.bat`
+* Windows: `emsdk install latest`, `emsdk activate latest`, `emsdk_env.bat`. Don't close command window. Go back to `/web` dir and run `build.bat`
+* For testing, run `emrun build/game.html`. 
 
 ### PSVita
 - - -

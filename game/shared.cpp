@@ -180,10 +180,10 @@ void FishSpawn(float ScreenWidth, float ScreenHeight) {
             if (creatures[pickCreature].type == 7 && playerRank < 2) return; // seahorses can wait a bit
             creatures[pickCreature].jump = 0;
             creatures[pickCreature].active = 1;
-            int pickSide[2] = { 20,(float)ScreenWidth - 20 };
-            float pickHeight = GetRandomNum(20, ScreenHeight - 50);
+            int pickSide[2] = { 20,(int)(ScreenWidth - 20) };
+            float pickHeight = GetRandomNum(20, (int)(ScreenHeight - 50));
             float ps = pickSide[rand() % 2];
-            if (creatures[pickCreature].type == 5 || creatures[pickCreature].type == 6) pickHeight = (float)ScreenHeight - height;
+            if (creatures[pickCreature].type == 5 || creatures[pickCreature].type == 6) pickHeight = ScreenHeight - height;
             creatures[pickCreature].origin = { ps,pickHeight };
             creatures[pickCreature].position = { ps,pickHeight };
             //printf("DEBUG: Spawning Fish coords x:%f y:%f type:%i active:%i\n", ps, pickHeight, creatures[pickCreature].type, creatures[pickCreature].active);

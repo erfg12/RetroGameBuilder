@@ -22,6 +22,8 @@ nxdk
 *.dol
 *.rpx
 
+web/res
+
 android/app/jni/SDL/*
 !android/app/jni/SDL/put_SDL_include_src_Android.mk_here.md
 android/app/build

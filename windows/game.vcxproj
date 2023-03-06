@@ -26,6 +26,10 @@
     <ClInclude Include="..\game\common.hpp" />
     <ClInclude Include="..\game\shared.hpp" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="game.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
