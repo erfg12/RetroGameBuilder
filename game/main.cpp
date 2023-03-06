@@ -109,7 +109,7 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 		SDL_Event e;
 
 		Uint32 ticks = SDL_GetTicks();
-		SDL_FillRect(screen, NULL, 0x0000FF);// blue like water
+		SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0,0,255)); // blue like water (SDL1 might be 0x0000FF)
 
 		struct Rectangle playerRec = { playerPosition.x, playerPosition.y, 16, 16 };
 
