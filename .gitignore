@@ -36,3 +36,6 @@ android/.idea
 
 linux/res
 linux/game
+
+xbox/bin
+xbox/main.lib
