@@ -6,6 +6,8 @@ const int SCREEN_HEIGHT = 480;
 
 int sharkDeathAudioPlayed = 0;
 
+int playerMove[4] = { 0,0,0,0 }; // up right down left
+
 SDL_Surface* shark;
 SDL_Surface* shark_dead;
 SDL_Surface* lobster;
@@ -104,26 +106,26 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 	int key_up = SDL_SCANCODE_UP;
 	int key_down = SDL_SCANCODE_DOWN;
 #endif
-//#if defined(__SWITCH__)
+#if defined(__SWITCH__)
 	#define JOY_PLUS  10
 	#define JOY_LEFT  12
 	#define JOY_UP    13
 	#define JOY_RIGHT 14
 	#define JOY_DOWN  15
-//#endif
+#endif
 
 	void game_loop() {
 #if defined (XBOX)
 		pb_wait_for_vbl();
-    	pb_target_back_buffer();
-    	pb_reset();
-    	pb_fill(0, 0, 640, 480, 0);
-    	pb_erase_text_screen();
+		pb_target_back_buffer();
+		pb_reset();
+		pb_fill(0, 0, 640, 480, 0);
+		pb_erase_text_screen();
 #endif
 		SDL_Event e;
 
 		Uint32 ticks = SDL_GetTicks();
-		SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0,0,255)); // blue like water (SDL1 might be 0x0000FF)
+		SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 0, 255)); // blue like water (SDL1 might be 0x0000FF)
 
 		struct Rectangle playerRec = { playerPosition.x, playerPosition.y, 16, 16 };
 
@@ -152,24 +154,27 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 				quit = 1;
 #if defined(__SWITCH__)
 			if (e.type == SDL_JOYBUTTONDOWN) {
-				SDL_Log("joystick %d button %d down\n", e.jbutton.which, e.jbutton.button);
-				if (e.jbutton.which == 0) { // controller 1
-					if (PausedGame == 0 && GameOver == 0 && mainMenu == 0) {
-						if (e.jbutton.button == JOY_UP && playerPosition.y > 0 && playerDead == 0) playerPosition.y -= playerSpeed;
-						if (e.jbutton.button == JOY_DOWN && playerPosition.y < SCREEN_HEIGHT - 15 && playerDead == 0) playerPosition.y += playerSpeed;
-						if (e.jbutton.button == JOY_RIGHT && playerPosition.x < SCREEN_WIDTH && playerDead == 0) { playerPosition.x += playerSpeed; playerDirection = -1; }
-						if (e.jbutton.button == JOY_LEFT && playerPosition.x > 0 && playerDead == 0) { playerPosition.x -= playerSpeed; playerDirection = 1; }
-					}
-					if (e.jbutton.button == JOY_PLUS) {
-						if (mainMenu == 1) mainMenu = 0;
-						if (GameOver == 1) SetVars(SCREEN_WIDTH, SCREEN_HEIGHT);
-						if (PausedGame == 1) PausedGame = 0;
-						if (playerDead == 1 && PausedGame == 0 && GameOver == 0) { playerDead = 0; playerPosition.x = (float)SCREEN_WIDTH / 2; playerPosition.y = (float)SCREEN_HEIGHT / 2; }
-					}
+				if (PausedGame == 0 && GameOver == 0 && mainMenu == 0) {
+					if (e.jbutton.button == JOY_UP) playerMove[0] = 1;
+					if (e.jbutton.button == JOY_DOWN) playerMove[2] = 1;
+					if (e.jbutton.button == JOY_RIGHT) playerMove[1] = 1;
+					if (e.jbutton.button == JOY_LEFT) playerMove[3] = 1;
+				}
+				if (e.jbutton.button == JOY_PLUS) {
+					if (mainMenu == 1) mainMenu = 0;
+					if (GameOver == 1) SetVars(SCREEN_WIDTH, SCREEN_HEIGHT);
+					if (PausedGame == 1) PausedGame = 0;
+					if (playerDead == 1 && PausedGame == 0 && GameOver == 0) { playerDead = 0; playerPosition.x = (float)SCREEN_WIDTH / 2; playerPosition.y = (float)SCREEN_HEIGHT / 2; }
 				}
 			}
+			else if (e.type == SDL_JOYBUTTONUP) {
+				if (e.jbutton.button == JOY_UP) playerMove[0] = 0;
+				if (e.jbutton.button == JOY_DOWN) playerMove[2] = 0;
+				if (e.jbutton.button == JOY_RIGHT) playerMove[1] = 0;
+				if (e.jbutton.button == JOY_LEFT) playerMove[3] = 0;
+			}
 #endif
-		}
+	}
 
 		// check for button presses
 		if (keys[key_p]) { if (PausedGame == 1) PausedGame = 0; else PausedGame = 1; }
@@ -179,10 +184,10 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 			if (keys[key_s]) { mainMenu = 0; }
 		}
 		if (PausedGame == 0 && GameOver == 0 && mainMenu == 0) {
-			if ((keys[key_right] || keys[key_d]) && playerPosition.x < SCREEN_WIDTH && playerDead == 0) { playerPosition.x += playerSpeed; playerDirection = -1; }
-			if ((keys[key_left] || keys[key_a]) && playerPosition.x > 0 && playerDead == 0) { playerPosition.x -= playerSpeed; playerDirection = 1; }
-			if ((keys[key_up] || keys[key_w]) && playerPosition.y > 0 && playerDead == 0) playerPosition.y -= playerSpeed;
-			if ((keys[key_down] || keys[key_s]) && playerPosition.y < SCREEN_HEIGHT - 15 && playerDead == 0) playerPosition.y += playerSpeed;
+			if ((keys[key_right] || keys[key_d] || playerMove[1] == 1) && playerPosition.x < SCREEN_WIDTH && playerDead == 0) { playerPosition.x += playerSpeed; playerDirection = -1; }
+			if ((keys[key_left] || keys[key_a] || playerMove[3] == 1) && playerPosition.x > 0 && playerDead == 0) { playerPosition.x -= playerSpeed; playerDirection = 1; }
+			if ((keys[key_up] || keys[key_w] || playerMove[0] == 1) && playerPosition.y > 0 && playerDead == 0) playerPosition.y -= playerSpeed;
+			if ((keys[key_down] || keys[key_s] || playerMove[2] == 1) && playerPosition.y < SCREEN_HEIGHT - 15 && playerDead == 0) playerPosition.y += playerSpeed;
 		}
 
 		char UI_Score_t[255];
@@ -380,6 +385,9 @@ int main(int argc, char* args[])
 #if defined (__SWITCH__)
 	romfsInit();
     chdir("romfs:/");
+	SDL_InitSubSystem(SDL_INIT_JOYSTICK);
+	SDL_JoystickEventState(SDL_ENABLE);
+	SDL_JoystickOpen(0);
 #endif
 #if defined (__3DS__) || defined (__WII__) || defined (__PS2__) || (__DREAMCAST__) // SDL1
 	screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_DOUBLEBUF | SDL_HWSURFACE);
@@ -441,7 +449,7 @@ int main(int argc, char* args[])
 
 	bgMusic = Mix_LoadMUS("res/audio/bg_music.wav");
 
-	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER|SDL_INIT_JOYSTICK)  == -1) // Initialize SDL
+	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER)  == -1) // Initialize SDL
 	{
 		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
 	}
