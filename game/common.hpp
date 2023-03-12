@@ -19,6 +19,17 @@
 #include <SDL_mixer.h>
 //#include "../xbox/nxdk/lib/sdl/SDL2_mixer/include/SDL_mixer.h" // xbox
 #endif
+#if defined(__SWITCH__)
+#include <unistd.h>
+#include <switch.h>
+#endif
+#if defined(XBOX)
+#include <hal/debug.h>
+#include <hal/video.h>
+#include <windows.h>
+#include <pbkit/pbkit.h>
+#include <stdbool.h>
+#endif
 
 #if __EMSCRIPTEN__
 #include <emscripten.h>

@@ -6,7 +6,7 @@ NXDK_SDL = y
 
 include $(NXDK_DIR)/Makefile
 
-TARGET += $(OUTPUT_DIR)/../../game/res
-$(GEN_XISO): $(OUTPUT_DIR)/../../game/res
-$(OUTPUT_DIR): $(OUTPUT_DIR)/../../game/res $(OUTPUT_DIR)
+TARGET += $(CURDIR)/../game/res
+$(GEN_XISO): $(CURDIR)/../game/res
+$(OUTPUT_DIR): $(CURDIR)/../game/res $(OUTPUT_DIR)/res
 	$(VE)cp -R '$<' '$@'

@@ -104,8 +104,22 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 	int key_up = SDL_SCANCODE_UP;
 	int key_down = SDL_SCANCODE_DOWN;
 #endif
+//#if defined(__SWITCH__)
+	#define JOY_PLUS  10
+	#define JOY_LEFT  12
+	#define JOY_UP    13
+	#define JOY_RIGHT 14
+	#define JOY_DOWN  15
+//#endif
 
 	void game_loop() {
+#if defined (XBOX)
+		pb_wait_for_vbl();
+    	pb_target_back_buffer();
+    	pb_reset();
+    	pb_fill(0, 0, 640, 480, 0);
+    	pb_erase_text_screen();
+#endif
 		SDL_Event e;
 
 		Uint32 ticks = SDL_GetTicks();
@@ -136,6 +150,25 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 		while (SDL_PollEvent(&e)) {
 			if (e.type == SDL_QUIT)
 				quit = 1;
+#if defined(__SWITCH__)
+			if (e.type == SDL_JOYBUTTONDOWN) {
+				SDL_Log("joystick %d button %d down\n", e.jbutton.which, e.jbutton.button);
+				if (e.jbutton.which == 0) { // controller 1
+					if (PausedGame == 0 && GameOver == 0 && mainMenu == 0) {
+						if (e.jbutton.button == JOY_UP && playerPosition.y > 0 && playerDead == 0) playerPosition.y -= playerSpeed;
+						if (e.jbutton.button == JOY_DOWN && playerPosition.y < SCREEN_HEIGHT - 15 && playerDead == 0) playerPosition.y += playerSpeed;
+						if (e.jbutton.button == JOY_RIGHT && playerPosition.x < SCREEN_WIDTH && playerDead == 0) { playerPosition.x += playerSpeed; playerDirection = -1; }
+						if (e.jbutton.button == JOY_LEFT && playerPosition.x > 0 && playerDead == 0) { playerPosition.x -= playerSpeed; playerDirection = 1; }
+					}
+					if (e.jbutton.button == JOY_PLUS) {
+						if (mainMenu == 1) mainMenu = 0;
+						if (GameOver == 1) SetVars(SCREEN_WIDTH, SCREEN_HEIGHT);
+						if (PausedGame == 1) PausedGame = 0;
+						if (playerDead == 1 && PausedGame == 0 && GameOver == 0) { playerDead = 0; playerPosition.x = (float)SCREEN_WIDTH / 2; playerPosition.y = (float)SCREEN_HEIGHT / 2; }
+					}
+				}
+			}
+#endif
 		}
 
 		// check for button presses
@@ -185,14 +218,14 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 			SDL_BlitSurface(UI_mainmenu, NULL, screen, &UI_mainmenu_renderQuad);
 		}
 
-		if (CheckCollisionRecs(playerRec, sharkBiteRec) && SharkHealth > 0) { // shark bit player
+		if (CheckCollisionRecs(playerRec, sharkBiteRec) && SharkHealth > 0 && playerDead == 0) { // shark bit player
 			PlayerBit();
 			if (lives == 0)
 				Mix_PlayChannel(-1, gameOverSound, 0);
 			else
 				Mix_PlayChannel(-1, deadSound, 0);
 		}
-		else if (CheckCollisionRecs(playerRec, sharkTailRec) && SharkHealth > 0) { // player bit shark on tail
+		else if (CheckCollisionRecs(playerRec, sharkTailRec) && SharkHealth > 0 && playerDead == 0) { // player bit shark on tail
 			if (sharkBitten != 1)
 				Mix_PlayChannel(-1, fishBiteSound, 0);
 			sharkBitten = 1;
@@ -329,6 +362,11 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 		SDL_BlitSurface(screen, NULL, screen, NULL);
 		SDL_UpdateWindowSurface(gWindow);
 #endif
+#if defined(XBOX)
+	pb_draw_text_screen();
+    while (pb_busy());
+    while (pb_finished());
+#endif
 
 		SDL_Delay(time_left());
 		next_time += TICK_INTERVAL;
@@ -336,10 +374,17 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 
 int main(int argc, char* args[])
 {
-#if defined (__3DS__) || defined (__WII__) || defined (__PS2__) || (__DREAMCAST__)
+#if defined (XBOX)
+	XVideoSetMode(640, 480, 32, REFRESH_DEFAULT);
+#endif
+#if defined (__SWITCH__)
+	romfsInit();
+    chdir("romfs:/");
+#endif
+#if defined (__3DS__) || defined (__WII__) || defined (__PS2__) || (__DREAMCAST__) // SDL1
 	screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_DOUBLEBUF | SDL_HWSURFACE);
 	SDL_WM_SetCaption("SharkShark", NULL);
-#else
+#else // SDL2
 	gWindow = SDL_CreateWindow("SharkShark", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	if (gWindow == NULL)
 		printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
@@ -396,12 +441,19 @@ int main(int argc, char* args[])
 
 	bgMusic = Mix_LoadMUS("res/audio/bg_music.wav");
 
-	if (SDL_Init(SDL_INIT_VIDEO)  == -1) // Initialize SDL
+	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER|SDL_INIT_JOYSTICK)  == -1) // Initialize SDL
 	{
 		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
 	}
 	else
 	{
+#if defined (XBOX)
+		bool pbk_init = pb_init() == 0;
+		if (!pbk_init) {
+			debugPrint("pbkit init failed\n");
+		}
+		pb_show_front_screen();
+#endif
 		if (screen == NULL)
 			printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 		else
@@ -439,6 +491,9 @@ int main(int argc, char* args[])
 	Mix_CloseAudio();
 	TTF_Quit();
 	SDL_Quit(); // Quit SDL subsystems
+#if defined (__SWITCH__)
+	romfsExit();
+#endif
 
 	return 0;
 }

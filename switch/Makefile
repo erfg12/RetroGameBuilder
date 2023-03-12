@@ -39,10 +39,13 @@ include $(DEVKITPRO)/libnx/switch_rules
 #---------------------------------------------------------------------------------
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
-SOURCES		:=	../game/sdl2 ../game
+SOURCES		:= ../game
 DATA		:=	data
-INCLUDES	:=	../game/sdl2 ../game
-#ROMFS	:=	romfs
+INCLUDES	:= ../game
+ROMFS		:=	romfs
+
+APP_TITLE   := SharkShark
+APP_AUTHOR  := Jacob Fliss
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -59,7 +62,8 @@ CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
-LIBS	:=	`sdl2-config --libs`
+LIBS	:=	`$(PREFIX)pkg-config --libs sdl2 SDL2_mixer SDL2_image SDL2_ttf` \
+			-lnx
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
@@ -161,6 +165,8 @@ endif
 all: $(BUILD)
 
 $(BUILD):
+	@mkdir -p ./romfs
+	@cp -R ../game/res ./romfs/res
 	@[ -d $@ ] || mkdir -p $@
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 
