@@ -9,7 +9,7 @@
 
 #if defined(__PS2__)
 #include "SDL/SDL.h"
-#elif defined(__APPLE__) || (defined(__linux__) && !defined(ANDROID)) || defined (__WIIU__)
+#elif defined(__APPLE__) || (defined(__linux__) && !defined(ANDROID)) || defined (__WIIU__) || defined (__PSVITA__)
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
@@ -17,7 +17,6 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
-//#include "../xbox/nxdk/lib/sdl/SDL2_mixer/include/SDL_mixer.h" // xbox
 #endif
 #if defined(__SWITCH__)
 #include <unistd.h>
@@ -29,6 +28,14 @@
 #include <windows.h>
 #include <pbkit/pbkit.h>
 #include <stdbool.h>
+#include "../xbox/nxdk/lib/sdl/SDL2_mixer/include/SDL_mixer.h"
+#endif
+
+#if __PSVITA__
+#include <vitasdk.h>
+#include <kubridge.h>
+#include <vitashark.h>
+#include <zlib.h>
 #endif
 
 #if __EMSCRIPTEN__
