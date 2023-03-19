@@ -16,7 +16,7 @@ set(VITA_TITLEID  "VSDK00017")
 set(VITA_VERSION  "01.00")
 set(VITA_MKSFOEX_FLAGS "-d ATTRIBUTE2=12")
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D__PSVITA__ -g -Wl,-q,--allow-multiple-definition -Wall -O3 -fdiagnostics-color=always -fno-optimize-sibling-calls -mfloat-abi=softfp")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D__PSVITA__ -fno-lto -g -Wl,-q -O3 -D_PSP2")
 set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++11 -Wno-write-strings")
 
 add_executable(${PROJECT_NAME}
@@ -26,9 +26,7 @@ add_executable(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
   -Wl,--whole-archive pthread -Wl,--no-whole-archive
   SDL2_mixer
-  SDL2_image
   SDL2_ttf
-  SDL2_net
   freetype
   SDL2
   png
@@ -36,21 +34,20 @@ target_link_libraries(${PROJECT_NAME}
   jpeg
   mikmod
   z
-  m
   stdc++
   sndfile
-  vorbis
-  vorbisenc
-  vorbisfile
-  ogg
   FLAC
-  openal
-  imgui
-  vitaGL
-  vitashark
-  SceShaccCgExt
-  mathneon
+  vorbisfile
+  vorbis
+  ogg
   mpg123
+  c
+  mikmod
+  mad
+  m
+  out123
+  modplug
+  SceShaccCgExt
   taihen_stub
   kubridge_stub
   SceNet_stub
