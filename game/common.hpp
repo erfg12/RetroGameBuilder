@@ -36,6 +36,7 @@
 #include <kubridge.h>
 #include <vitashark.h>
 #include <zlib.h>
+#include <psp2/kernel/processmgr.h>
 #endif
 
 #if __EMSCRIPTEN__

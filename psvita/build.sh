@@ -1,5 +1,8 @@
 #!/bin/sh
 
+export VITASDK=/usr/local/vitasdk
+export PATH=$VITASDK/bin:$PATH # add vitasdk tool to $PATH
+
 SCRIPTNAME='build.sh'
 RC=0
 if [ -n "${BASH:-}" ]; then

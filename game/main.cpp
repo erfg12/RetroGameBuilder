@@ -1,8 +1,13 @@
 #include "common.hpp"
 #include "shared.hpp"
 
+#if defined (__PSVITA__)
+const int SCREEN_WIDTH = 960;
+const int SCREEN_HEIGHT = 544;
+#else
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
+#endif
 
 int sharkDeathAudioPlayed = 0;
 
