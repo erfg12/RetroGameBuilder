@@ -112,11 +112,25 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 	int key_down = SDL_SCANCODE_DOWN;
 #endif
 #if defined(__SWITCH__)
-	#define JOY_PLUS  10
+	#define JOY_START 10
 	#define JOY_LEFT  12
 	#define JOY_UP    13
 	#define JOY_RIGHT 14
 	#define JOY_DOWN  15
+#endif
+#if defined(__PSVITA__)
+	#define JOY_START 11
+	#define JOY_LEFT  7
+	#define JOY_UP	  8
+	#define JOY_RIGHT 9
+	#define JOY_DOWN  6
+#endif
+#if defined(__WIN32__) || defined(__APPLE__) || defined(__linux__)
+#define JOY_START SDL_CONTROLLER_BUTTON_START
+#define JOY_LEFT  SDL_CONTROLLER_BUTTON_BACK
+#define JOY_UP	  SDL_CONTROLLER_BUTTON_DPAD_UP
+#define JOY_RIGHT SDL_CONTROLLER_BUTTON_DPAD_RIGHT
+#define JOY_DOWN  SDL_CONTROLLER_BUTTON_DPAD_DOWN
 #endif
 
 	void game_loop() {
@@ -157,15 +171,16 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 		while (SDL_PollEvent(&e)) {
 			if (e.type == SDL_QUIT)
 				quit = 1;
-#if defined(__SWITCH__)
+//#if defined(__SWITCH__)
 			if (e.type == SDL_JOYBUTTONDOWN) {
+				score = e.jbutton.button;
 				if (PausedGame == 0 && GameOver == 0 && mainMenu == 0) {
 					if (e.jbutton.button == JOY_UP) playerMove[0] = 1;
 					if (e.jbutton.button == JOY_DOWN) playerMove[2] = 1;
 					if (e.jbutton.button == JOY_RIGHT) playerMove[1] = 1;
 					if (e.jbutton.button == JOY_LEFT) playerMove[3] = 1;
 				}
-				if (e.jbutton.button == JOY_PLUS) {
+				if (e.jbutton.button == JOY_START) {
 					if (mainMenu == 1) mainMenu = 0;
 					if (GameOver == 1) SetVars(SCREEN_WIDTH, SCREEN_HEIGHT);
 					if (PausedGame == 1) PausedGame = 0;
@@ -178,7 +193,7 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 				if (e.jbutton.button == JOY_RIGHT) playerMove[1] = 0;
 				if (e.jbutton.button == JOY_LEFT) playerMove[3] = 0;
 			}
-#endif
+//#endif
 	}
 
 		// check for button presses
@@ -390,14 +405,14 @@ int main(int argc, char* args[])
 #if defined (__SWITCH__)
 	romfsInit();
     chdir("romfs:/");
-	SDL_InitSubSystem(SDL_INIT_JOYSTICK);
-	SDL_JoystickEventState(SDL_ENABLE);
-	SDL_JoystickOpen(0);
 #endif
 #if defined (__3DS__) || defined (__WII__) || defined (__PS2__) || (__DREAMCAST__) // SDL1
 	screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_DOUBLEBUF | SDL_HWSURFACE);
 	SDL_WM_SetCaption("SharkShark", NULL);
 #else // SDL2
+	SDL_InitSubSystem(SDL_INIT_JOYSTICK);
+	SDL_JoystickEventState(SDL_ENABLE);
+	SDL_JoystickOpen(0);
 	gWindow = SDL_CreateWindow("SharkShark", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	if (gWindow == NULL)
 		printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
