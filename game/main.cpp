@@ -171,9 +171,8 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 		while (SDL_PollEvent(&e)) {
 			if (e.type == SDL_QUIT)
 				quit = 1;
-//#if defined(__SWITCH__)
 			if (e.type == SDL_JOYBUTTONDOWN) {
-				score = e.jbutton.button;
+				//score = e.jbutton.button;
 				if (PausedGame == 0 && GameOver == 0 && mainMenu == 0) {
 					if (e.jbutton.button == JOY_UP) playerMove[0] = 1;
 					if (e.jbutton.button == JOY_DOWN) playerMove[2] = 1;
@@ -193,7 +192,6 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 				if (e.jbutton.button == JOY_RIGHT) playerMove[1] = 0;
 				if (e.jbutton.button == JOY_LEFT) playerMove[3] = 0;
 			}
-//#endif
 	}
 
 		// check for button presses
