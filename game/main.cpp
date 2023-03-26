@@ -415,7 +415,7 @@ int main(int argc, char* args[])
 		printf("Failed to load image: %s%s %s\n", SDL_GetBasePath(), RealPath("res/sprites/shark.bmp"), SDL_GetError());
 		return 0;
 	}
-	SDL_SetColorKey(shark, colorkey, SDL_MapRGB(shark->format, 0xFF, 0x0, 0xFF)); // NOTE: Images must be 24 bit depth to work with color keys
+	SDL_SetColorKey(shark, colorkey, SDL_MapRGB(shark->format, 0xFF, 0x0, 0xFF)); // NOTE: (SDL1) Images must be 24 bit depth to work with color keys
 	shark_dead = SDL_LoadBMP(RealPath("res/sprites/shark_dead.bmp"));
 	SDL_SetColorKey(shark_dead, colorkey, SDL_MapRGB(shark_dead->format, 0xFF, 0x0, 0xFF));
 	seahorse = SDL_LoadBMP(RealPath("res/sprites/seahorse.bmp"));
@@ -454,7 +454,7 @@ int main(int argc, char* args[])
 	gameOverSound = Mix_LoadWAV(RealPath("res/audio/gameover.wav"));
 	deadSound = Mix_LoadWAV(RealPath("res/audio/dead.wav"));
 	sharkDeadSound = Mix_LoadWAV(RealPath("res/audio/shark_dead.wav"));
-	fishRankUp = Mix_LoadWAV(RealPath("res/audio/bigger.wav")); // NOTE: Game can crash on startup if audio bit-rate is too high
+	fishRankUp = Mix_LoadWAV(RealPath("res/audio/bigger.wav")); // NOTE: (SDL1) Game can crash on startup if audio bit-rate is too high
 
 	bgMusic = Mix_LoadMUS(RealPath("res/audio/bg_music.wav"));
 

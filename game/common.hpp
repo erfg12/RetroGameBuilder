@@ -24,6 +24,7 @@
 #endif
 #if defined(XBOX)
 #include <hal/debug.h>
+#include <hal/xbox.h>
 #include <hal/video.h>
 #include <windows.h>
 #endif

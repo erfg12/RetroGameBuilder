@@ -61,13 +61,13 @@ Use a Linux distro like Ubuntu (WSL for Windows users).
 
 First time setup:
 ```
+sudo apt update
 sudo apt install build-essential cmake flex bison clang lld git llvm
 cd ./xbox
-git clone --recursive https://github.com/XboxDev/nxdk.git ./nxdk
-git clone https://github.com/libsdl-org/SDL_mixer.git ./nxdk/lib/sdl
+sudo git clone --recursive https://github.com/fgsfdsfgs/nxdk.git ./nxdk
 ```
 
-Copy this [Makefile](https://github.com/fgsfdsfgs/nxdk/blob/development/lib/sdl/SDL2_mixer/Makefile) text, place in `nxdk/lib/sdl`'s Makefile.
+Copy this [Makefile](https://raw.githubusercontent.com/fgsfdsfgs/nxdk/development/lib/sdl/SDL2_mixer/Makefile) text, place the text at the top of the `nxdk/lib/sdl`'s Makefile.
 
 To build:
 ```
