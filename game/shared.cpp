@@ -107,7 +107,7 @@ void SetVars(float ScreenWidth, float ScreenHeight) {
 
 void HurtShark() {
     if (!sharkBitten || SharkHealth <= 0) return;
-    printf("DEBUG: Shark was bitten. Timer: %i\n", SharkHurtTimer);
+    //printf("DEBUG: Shark was bitten. Timer: %i\n", SharkHurtTimer);
     mrShark.position = { mrShark.position.x, mrShark.position.y };
     mrShark.objective = { mrShark.position.x, mrShark.position.y }; // pause for a sec
     if (SharkHurtTimer >= 60) {
@@ -241,4 +241,26 @@ void PlayerBit() {
     if (lives < 0) {
         GameOver = 1;
     }
+}
+
+/// <summary>
+/// Switch our file paths with system specific ones
+/// </summary>
+/// <param name="path">Should start with res/</param>
+/// <returns></returns>
+const char* RealPath(const char* path) {
+    static char newPath[255];
+    int index = 0;
+#if defined (XBOX)
+    sprintf(newPath, "D:\\%s", path);
+    while (newPath[index])
+    {
+        if (newPath[index] == '/')
+            newPath[index] = '\\';
+        index++;
+    }
+#else
+    sprintf(newPath, "%s", path);
+#endif
+    return newPath;
 }

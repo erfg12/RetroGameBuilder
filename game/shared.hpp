@@ -56,5 +56,6 @@ extern void FishSpawn(float ScreenWidth, float ScreenHeight);
 extern void CrustJump(int CreatureID, float ScreenHeight, int height);
 extern void FishMoveAndDeSpawn(float ScreenWidth, float ScreenHeight, int CrustHeight);
 extern void PlayerBit();
+extern const char* RealPath(const char* path);
 
 #endif

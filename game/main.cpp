@@ -134,13 +134,6 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 #endif
 
 	void game_loop() {
-#if defined (XBOX)
-		pb_wait_for_vbl();
-		pb_target_back_buffer();
-		pb_reset();
-		pb_fill(0, 0, 640, 480, 0);
-		pb_erase_text_screen();
-#endif
 		SDL_Event e;
 
 		Uint32 ticks = SDL_GetTicks();
@@ -385,12 +378,6 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 		SDL_BlitSurface(screen, NULL, screen, NULL);
 		SDL_UpdateWindowSurface(gWindow);
 #endif
-#if defined(XBOX)
-	pb_draw_text_screen();
-    while (pb_busy());
-    while (pb_finished());
-#endif
-
 		SDL_Delay(time_left());
 		next_time += TICK_INTERVAL;
 	}
@@ -398,7 +385,8 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 int main(int argc, char* args[])
 {
 #if defined (XBOX)
-	XVideoSetMode(640, 480, 32, REFRESH_DEFAULT);
+	XVideoSetMode(640, 480, 32, REFRESH_DEFAULT); // must be the very first call
+	debugPrint("Shark! Shark! Loading...\n");
 #endif
 #if defined (__SWITCH__)
 	romfsInit();
@@ -419,29 +407,32 @@ int main(int argc, char* args[])
 	
 	next_time = SDL_GetTicks() + TICK_INTERVAL;
 
-	shark = SDL_LoadBMP("res/sprites/shark.bmp");
-	if (!shark) {
-		printf("Failed to load image: %sres/sprites/shark.bmp %s\n", SDL_GetBasePath(), SDL_GetError());
+	shark = SDL_LoadBMP(RealPath("res/sprites/shark.bmp"));
+	if (!shark) { // check if resources are where they're supposed to be
+#if defined (XBOX)
+		debugPrint("Failed to load res/sprites/shark.bmp file!\n");
+#endif
+		printf("Failed to load image: %s%s %s\n", SDL_GetBasePath(), RealPath("res/sprites/shark.bmp"), SDL_GetError());
 		return 0;
 	}
 	SDL_SetColorKey(shark, colorkey, SDL_MapRGB(shark->format, 0xFF, 0x0, 0xFF)); // NOTE: Images must be 24 bit depth to work with color keys
-	shark_dead = SDL_LoadBMP("res/sprites/shark_dead.bmp");
+	shark_dead = SDL_LoadBMP(RealPath("res/sprites/shark_dead.bmp"));
 	SDL_SetColorKey(shark_dead, colorkey, SDL_MapRGB(shark_dead->format, 0xFF, 0x0, 0xFF));
-	seahorse = SDL_LoadBMP("res/sprites/seahorse.bmp");
+	seahorse = SDL_LoadBMP(RealPath("res/sprites/seahorse.bmp"));
 	SDL_SetColorKey(seahorse, colorkey, SDL_MapRGB(seahorse->format, 0xFF, 0x0, 0xFF));
-	lobster = SDL_LoadBMP("res/sprites/lobster.bmp");
+	lobster = SDL_LoadBMP(RealPath("res/sprites/lobster.bmp"));
 	SDL_SetColorKey(lobster, colorkey, SDL_MapRGB(lobster->format, 0xFF, 0x0, 0xFF));
-	crab = SDL_LoadBMP("res/sprites/crab.bmp");
+	crab = SDL_LoadBMP(RealPath("res/sprites/crab.bmp"));
 	SDL_SetColorKey(crab, colorkey, SDL_MapRGB(crab->format, 0xFF, 0x0, 0xFF));
-	fish[0] = SDL_LoadBMP("res/sprites/rank1.bmp");
+	fish[0] = SDL_LoadBMP(RealPath("res/sprites/rank1.bmp"));
 	SDL_SetColorKey(fish[0], colorkey, SDL_MapRGB(fish[0]->format, 0xFF, 0x0, 0xFF));
-	fish[1] = SDL_LoadBMP("res/sprites/rank2.bmp");
+	fish[1] = SDL_LoadBMP(RealPath("res/sprites/rank2.bmp"));
 	SDL_SetColorKey(fish[1], colorkey, SDL_MapRGB(fish[1]->format, 0xFF, 0x0, 0xFF));
-	fish[2] = SDL_LoadBMP("res/sprites/rank3.bmp");
+	fish[2] = SDL_LoadBMP(RealPath("res/sprites/rank3.bmp"));
 	SDL_SetColorKey(fish[2], colorkey, SDL_MapRGB(fish[2]->format, 0xFF, 0x0, 0xFF));
-	fish[3] = SDL_LoadBMP("res/sprites/rank4.bmp");
+	fish[3] = SDL_LoadBMP(RealPath("res/sprites/rank4.bmp"));
 	SDL_SetColorKey(fish[3], colorkey, SDL_MapRGB(fish[3]->format, 0xFF, 0x0, 0xFF));
-	fish[4] = SDL_LoadBMP("res/sprites/rank5.bmp");
+	fish[4] = SDL_LoadBMP(RealPath("res/sprites/rank5.bmp"));
 	SDL_SetColorKey(fish[4], colorkey, SDL_MapRGB(fish[4]->format, 0xFF, 0x0, 0xFF));
 
 	if (!shark)
@@ -451,21 +442,21 @@ int main(int argc, char* args[])
 		printf("SDL TTF could not initialize! %s", SDL_GetError());
 	}
 
-	font = TTF_OpenFont("res/pixantiqua.ttf", 25);
+	font = TTF_OpenFont(RealPath("res/pixantiqua.ttf"), 25);
 
 	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
 	{
 		printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
 	}
 
-	sharkSpawnSound = Mix_LoadWAV("res/audio/shark.wav");
-	fishBiteSound = Mix_LoadWAV("res/audio/eat.wav");
-	gameOverSound = Mix_LoadWAV("res/audio/gameover.wav");
-	deadSound = Mix_LoadWAV("res/audio/dead.wav");
-	sharkDeadSound = Mix_LoadWAV("res/audio/shark_dead.wav");
-	fishRankUp = Mix_LoadWAV("res/audio/bigger.wav"); // NOTE: Game can crash on startup if audio bit-rate is too high
+	sharkSpawnSound = Mix_LoadWAV(RealPath("res/audio/shark.wav"));
+	fishBiteSound = Mix_LoadWAV(RealPath("res/audio/eat.wav"));
+	gameOverSound = Mix_LoadWAV(RealPath("res/audio/gameover.wav"));
+	deadSound = Mix_LoadWAV(RealPath("res/audio/dead.wav"));
+	sharkDeadSound = Mix_LoadWAV(RealPath("res/audio/shark_dead.wav"));
+	fishRankUp = Mix_LoadWAV(RealPath("res/audio/bigger.wav")); // NOTE: Game can crash on startup if audio bit-rate is too high
 
-	bgMusic = Mix_LoadMUS("res/audio/bg_music.wav");
+	bgMusic = Mix_LoadMUS(RealPath("res/audio/bg_music.wav"));
 
 	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER)  == -1) // Initialize SDL
 	{
@@ -473,13 +464,6 @@ int main(int argc, char* args[])
 	}
 	else
 	{
-#if defined (XBOX)
-		bool pbk_init = pb_init() == 0;
-		if (!pbk_init) {
-			debugPrint("pbkit init failed\n");
-		}
-		pb_show_front_screen();
-#endif
 		if (screen == NULL)
 			printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 		else

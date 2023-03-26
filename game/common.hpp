@@ -26,9 +26,6 @@
 #include <hal/debug.h>
 #include <hal/video.h>
 #include <windows.h>
-#include <pbkit/pbkit.h>
-#include <stdbool.h>
-#include "../xbox/nxdk/lib/sdl/SDL2_mixer/include/SDL_mixer.h"
 #endif
 
 #if __PSVITA__
