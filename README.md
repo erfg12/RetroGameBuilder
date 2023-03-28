@@ -64,7 +64,7 @@ First time setup:
 sudo apt update
 sudo apt install build-essential cmake flex bison clang lld git llvm
 cd ./xbox
-sudo git clone --recursive https://github.com/fgsfdsfgs/nxdk.git ./nxdk
+sudo git clone --recursive https://github.com/XboxDev/nxdk.git
 ```
 
 Copy this [Makefile](https://raw.githubusercontent.com/fgsfdsfgs/nxdk/development/lib/sdl/SDL2_mixer/Makefile) text, place the text at the top of the `nxdk/lib/sdl`'s Makefile.

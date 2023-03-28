@@ -1,6 +1,14 @@
 #ifndef SHARED_H_   /* Include guard */
 #define SHARED_H_
 
+#if defined(__PS2__)
+#include "SDL/SDL.h"
+#elif defined(__APPLE__) || (defined(__linux__) && !defined(ANDROID)) || defined (__WIIU__) || defined (__PSVITA__)
+#include <SDL2/SDL.h>
+#else
+#include <SDL.h>
+#endif
+
 typedef struct Vec2 {
     float x;
     float y;
@@ -13,6 +21,12 @@ typedef struct Shark {
     int active; // bool
     int direction;
 } Shark;
+
+typedef struct AudioFile {
+    SDL_AudioSpec wavSpec;
+    Uint32 wavLength;
+    Uint8* wavBuffer;
+} AudioFile;
 
 typedef struct SeaCreature {
     Vec2 position; // current positioning
@@ -56,6 +70,6 @@ extern void FishSpawn(float ScreenWidth, float ScreenHeight);
 extern void CrustJump(int CreatureID, float ScreenHeight, int height);
 extern void FishMoveAndDeSpawn(float ScreenWidth, float ScreenHeight, int CrustHeight);
 extern void PlayerBit();
-extern const char* RealPath(const char* path);
+extern void RealPath(char* target, const char* path);
 
 #endif

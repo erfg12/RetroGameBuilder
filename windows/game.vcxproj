@@ -19,10 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\game\audio.cpp" />
     <ClCompile Include="..\game\main.cpp" />
     <ClCompile Include="..\game\shared.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\game\audio.hpp" />
     <ClInclude Include="..\game\common.hpp" />
     <ClInclude Include="..\game\shared.hpp" />
     <ClInclude Include="resource.h" />
@@ -127,7 +129,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_mixer.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
       <Command>

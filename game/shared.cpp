@@ -243,24 +243,19 @@ void PlayerBit() {
     }
 }
 
-/// <summary>
-/// Switch our file paths with system specific ones
-/// </summary>
-/// <param name="path">Should start with res/</param>
-/// <returns></returns>
-const char* RealPath(const char* path) {
+void RealPath(char* target, const char* path) {
     static char newPath[255];
     int index = 0;
 #if defined (XBOX)
-    sprintf(newPath, "D:\\%s", path);
-    while (newPath[index])
+    for(index; index < 255; index++)
     {
-        if (newPath[index] == '/')
+        if (path[index] == '/')
             newPath[index] = '\\';
-        index++;
+        else
+            newPath[index] = path[index];
     }
+    sprintf(target, "D:\\%s", newPath);
 #else
-    sprintf(newPath, "%s", path);
+    sprintf(target, "%s", path);
 #endif
-    return newPath;
 }
