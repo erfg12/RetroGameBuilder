@@ -125,7 +125,7 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 	#define JOY_RIGHT 9
 	#define JOY_DOWN  6
 #endif
-#if defined(__WIN32__) || defined(__APPLE__) || defined(__linux__)
+#if defined(__WIN32__) || defined(__APPLE__) || defined(__linux__) || defined(__EMSCRIPTEN__)
 #define JOY_START SDL_CONTROLLER_BUTTON_START
 #define JOY_LEFT  SDL_CONTROLLER_BUTTON_BACK
 #define JOY_UP	  SDL_CONTROLLER_BUTTON_DPAD_UP
