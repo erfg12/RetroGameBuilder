@@ -22,6 +22,9 @@
 #include <unistd.h>
 #include <switch.h>
 #endif
+#if defined(__WIIU__)
+#include <romfs-wiiu.h>
+#endif
 #if defined(XBOX)
 #include <hal/debug.h>
 #include <hal/xbox.h>

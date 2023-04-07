@@ -78,7 +78,15 @@ Your .xbe file will be in the `bin` directory.
 
 ### Wii U
 - - -
-Install [DevKitPro](https://devkitpro.org/wiki/Getting_Started). Open `DevKitPro > MSys2`. Type `pacman -S wiiu-portlibs` and install ALL. In the project directory, CD to the `/wiiu` directory, type `make`.
+1. Install [DevKitPro](https://devkitpro.org/wiki/Getting_Started). Open `DevKitPro > MSys2`. Type `pacman -S wiiu-portlibs` and install ALL.
+2. Install libromfs-wiiu:
+```
+git clone https://github.com/yawut/libromfs-wiiu.git
+cd libromfs-wiiu
+make
+sudo make install
+```
+3. In the project directory, CD to the `/wiiu` directory, type `make`.
 
 ### GameCube
 - - -

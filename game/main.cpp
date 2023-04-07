@@ -111,7 +111,7 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 	int key_up = SDL_SCANCODE_UP;
 	int key_down = SDL_SCANCODE_DOWN;
 #endif
-#if defined(__SWITCH__)
+#if defined(__SWITCH__) || defined(__WIIU__)
 	#define JOY_START 10
 	#define JOY_LEFT  12
 	#define JOY_UP    13
@@ -388,8 +388,10 @@ int main(int argc, char* args[])
 	XVideoSetMode(640, 480, 32, REFRESH_DEFAULT); // must be the very first call
 	debugPrint("Shark! Shark! Loading...\n");
 #endif
-#if defined (__SWITCH__)
+#if defined (__SWITCH__) || defined (__WIIU__)
 	romfsInit();
+#endif
+#if defined (__SWITCH__)
     chdir("romfs:/");
 #endif
 #if defined (__3DS__) || defined (__WII__) || defined (__PS2__) || (__DREAMCAST__) // SDL1
@@ -501,7 +503,7 @@ int main(int argc, char* args[])
 	Mix_CloseAudio();
 	TTF_Quit();
 	SDL_Quit(); // Quit SDL subsystems
-#if defined (__SWITCH__)
+#if defined (__SWITCH__) || defined (__WIIU__)
 	romfsExit();
 #endif
 

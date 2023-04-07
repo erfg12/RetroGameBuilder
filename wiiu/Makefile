@@ -7,7 +7,6 @@ $(error "Please set DEVKITPRO in your environment. export DEVKITPRO=<path to>/de
 endif
 
 TOPDIR ?= $(CURDIR)
-
 include $(DEVKITPRO)/wut/share/wut_rules
 
 #-------------------------------------------------------------------------------
@@ -19,24 +18,29 @@ include $(DEVKITPRO)/wut/share/wut_rules
 #-------------------------------------------------------------------------------
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
-SOURCES		:=	../game/sdl2 ../game
+SOURCES		:= ../game
 DATA		:=	data
-INCLUDES	:=	../game/sdl2 ../game
+INCLUDES	:= ../game
+ROMFS		:=	romfs
+
+APP_TITLE   := SharkShark
+APP_AUTHOR  := Jacob Fliss
 
 #-------------------------------------------------------------------------------
 # options for code generation
 #-------------------------------------------------------------------------------
-CFLAGS	:=	-g -Wall -O2 -ffunction-sections \
+CFLAGS		:=	-g -Wall -O2 -ffunction-sections \
+			-ffast-math \
 			$(MACHDEP)
 
-CFLAGS	+=	$(INCLUDE) -D__WIIU__ -D__WUT__
+CFLAGS		+=	$(INCLUDE) -D__WIIU__ -D__WUT__
 
-CXXFLAGS	:= $(CFLAGS)
+CXXFLAGS	:=	$(CFLAGS) -std=gnu++14
 
-ASFLAGS	:=	-g $(ARCH)
-LDFLAGS	=	-g $(ARCH) $(RPXSPECS) -Wl,-Map,$(notdir $*.map)
+ASFLAGS		:=	-g $(MACHDEP)
+LDFLAGS		:=	-g $(MACHDEP) $(RPXSPECS) -Wl,-Map,$(notdir $*.map)
 
-LIBS	:= -lwut `sdl2-config --libs`
+LIBS		:=	-lSDL2_ttf -lSDL2_mixer -lSDL2_gfx -lSDL2_image -lSDL2 -lfreetype -lpng -lmpg123 -lmodplug -lvorbisfile -lvorbis -logg -lbz2 -ljpeg -lz -lwut
 
 #-------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level
@@ -63,7 +67,6 @@ export DEPSDIR	:=	$(CURDIR)/$(BUILD)
 CFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
 CPPFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp)))
 SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
-BINFILES	:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
 
 #-------------------------------------------------------------------------------
 # use CXX for linking C++ projects, CC for standard C
@@ -79,23 +82,26 @@ else
 endif
 #-------------------------------------------------------------------------------
 
-export OFILES_BIN	:=	$(addsuffix .o,$(BINFILES))
-export OFILES_SRC	:=	$(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
-export OFILES 	:=	$(OFILES_BIN) $(OFILES_SRC)
-export HFILES_BIN	:=	$(addsuffix .h,$(subst .,_,$(BINFILES)))
+export SRCFILES		:=	$(CPPFILES) $(CFILES) $(SFILES)
+export OFILES		:=	$(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
+export INCLUDE		:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
+				$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
+				-I$(CURDIR)/$(BUILD)
 
-export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
-			$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
-			-I$(CURDIR)/$(BUILD)
+export LIBPATHS		:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 
-export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib)
+ifneq ($(ROMFS),)
+	export NROFLAGS += --romfsdir=$(CURDIR)/$(ROMFS)
+endif
 
 .PHONY: $(BUILD) clean all
 
 #-------------------------------------------------------------------------------
 all: $(BUILD)
 
-$(BUILD):
+$(BUILD): $(SRCFILES)
+	@mkdir -p ./romfs
+	@cp -R ../game/res ./romfs
 	@[ -d $@ ] || mkdir -p $@
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 
@@ -108,28 +114,29 @@ clean:
 else
 .PHONY:	all
 
-DEPENDS	:=	$(OFILES:.o=.d)
+#-------------------------------------------------------------------------------
+# romfs
+#-------------------------------------------------------------------------------
+include $(PORTLIBS_PATH)/wiiu/share/romfs-wiiu.mk
+CFLAGS		+=	$(ROMFS_CFLAGS)
+CXXFLAGS	+=	$(ROMFS_CFLAGS)
+LIBS		+=	$(ROMFS_LIBS)
+OFILES		+=	$(ROMFS_TARGET)
+#-------------------------------------------------------------------------------
+
+DEPENDS		:=	$(OFILES:.o=.d)
 
 #-------------------------------------------------------------------------------
 # main targets
 #-------------------------------------------------------------------------------
-all	:	$(OUTPUT).rpx
+all		:	$(OUTPUT).rpx
 
 $(OUTPUT).rpx	:	$(OUTPUT).elf
+
 $(OUTPUT).elf	:	$(OFILES)
-
-$(OFILES_SRC)	: $(HFILES_BIN)
-
-#-------------------------------------------------------------------------------
-# you need a rule like this for each extension you use as binary data
-#-------------------------------------------------------------------------------
-%.bin.o	%_bin.h :	%.bin
-#-------------------------------------------------------------------------------
-	@echo $(notdir $<)
-	@$(bin2o)
 
 -include $(DEPENDS)
 
 #-------------------------------------------------------------------------------
 endif
-#-------------------------------------------------------------------------------
+#------------------------------------------------------------------------------- 

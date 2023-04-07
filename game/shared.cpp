@@ -259,6 +259,8 @@ const char* RealPath(const char* path) {
             newPath[index] = '\\';
         index++;
     }
+#elif defined (__WIIU__)
+    sprintf(newPath, "romfs:/%s", path);
 #else
     sprintf(newPath, "%s", path);
 #endif
