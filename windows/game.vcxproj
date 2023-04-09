@@ -84,8 +84,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LibraryPath>sdl-vc\lib\x64;$(LibraryPath)</LibraryPath>
-    <IncludePath>sdl-vc\include;$(IncludePath)</IncludePath>
+    <LibraryPath>.\sdl-vc\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>.\sdl-vc\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LibraryPath>C:\Users\newgm\git\repos\RetroGameBuilder\windows\sdl-vc\lib\x64;$(LibraryPath)</LibraryPath>

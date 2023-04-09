@@ -91,7 +91,6 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 	int key_p = SDLK_p;
 	int key_w = SDLK_w;
 	int key_a = SDLK_a;
-	int key_s = SDLK_s;
 	int key_d = SDLK_d;
 	int key_return = SDLK_RETURN;
 	int key_left = SDLK_LEFT;
