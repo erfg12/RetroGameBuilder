@@ -13,7 +13,7 @@ Currently most systems don't compile. Check the TO-DO section below to see what 
 - [ ] Mac OS X
 - [ ] PlayStation 2
 - [x] PSVita
-- [ ] Switch
+- [x] Switch
 - [x] Windows 9x
 - [x] Windows
 - [x] Web
