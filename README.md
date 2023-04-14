@@ -5,7 +5,7 @@ This project's goal is compiling a game across multiple consoles and computers. 
 Currently most systems don't compile. Check the TO-DO section below to see what systems currently build.
 
 ## TO-DO
-- [ ] 3DS
+- [x] 3DS
 - [ ] Android
 - [ ] DreamCast
 - [x] Linux

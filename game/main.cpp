@@ -127,19 +127,24 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
 #endif
 
-#if defined (__3DS__) || defined(__SWITCH__) || defined(__WIIU__)
+#if defined(__SWITCH__) || defined(__WIIU__)
 	#define JOY_START 10
 	#define JOY_LEFT  12
 	#define JOY_UP    13
 	#define JOY_RIGHT 14
 	#define JOY_DOWN  15
-#endif
-#if defined(__PSVITA__)
+#elif defined(__PSVITA__)
 	#define JOY_START 11
 	#define JOY_LEFT  7
 	#define JOY_UP	  8
 	#define JOY_RIGHT 9
 	#define JOY_DOWN  6
+#elif defined(__3DS__)
+	#define JOY_START 0
+	#define JOY_LEFT  99 // these are processed through joystick Hat
+	#define JOY_UP	  99
+	#define JOY_RIGHT 99
+	#define JOY_DOWN  99
 #endif
 
 #if defined(__WIN9X__)
@@ -190,6 +195,17 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 		while (SDL_PollEvent(&e)) {
 			if (e.type == SDL_QUIT)
 				quit = 1;
+			if (e.type == SDL_JOYAXISMOTION) {
+				//score = e.jaxis.value;
+			}
+			if (e.type == SDL_JOYHATMOTION) { // d-pad directions for consoles
+				if (PausedGame == 0 && GameOver == 0 && mainMenu == 0) {
+					if (e.jhat.value & SDL_HAT_UP) playerMove[0] = 1; else playerMove[0] = 0;
+					if (e.jhat.value & SDL_HAT_DOWN) playerMove[2] = 1; else playerMove[2] = 0;
+					if (e.jhat.value & SDL_HAT_RIGHT) playerMove[1] = 1; else playerMove[1] = 0;
+					if (e.jhat.value & SDL_HAT_LEFT) playerMove[3] = 1; else playerMove[3] = 0;
+				}
+			}
 			if (e.type == SDL_JOYBUTTONDOWN) {
 				//score = e.jbutton.button;
 				if (PausedGame == 0 && GameOver == 0 && mainMenu == 0) {
@@ -211,14 +227,14 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 				if (e.jbutton.button == JOY_RIGHT) playerMove[1] = 0;
 				if (e.jbutton.button == JOY_LEFT) playerMove[3] = 0;
 			}
-	}
+		}
 
 		// check for button presses
 		if (keys[key_p]) { if (PausedGame == 1) PausedGame = 0; else PausedGame = 1; }
 		if ((keys[key_return]) && GameOver == 1) { SetVars(SCREEN_WIDTH, SCREEN_HEIGHT); printf("restarting game"); }
 		if (keys[key_return] && playerDead == 1 && PausedGame == 0 && GameOver == 0) { playerDead = 0; playerPosition.x = (float)SCREEN_WIDTH / 2; playerPosition.y = (float)SCREEN_HEIGHT / 2; }
 		if (mainMenu == 1) {
-			if (keys[key_s]) { mainMenu = 0; }
+			if (keys[key_s] || keys[key_return] || keys[key_a]) { mainMenu = 0; }
 		}
 		if (PausedGame == 0 && GameOver == 0 && mainMenu == 0) {
 			if ((keys[key_right] || keys[key_d] || playerMove[1] == 1) && playerPosition.x < SCREEN_WIDTH && playerDead == 0) { playerPosition.x += playerSpeed; playerDirection = -1; }
@@ -436,15 +452,21 @@ int main(int argc, char* args[])
 	XVideoSetMode(640, 480, 32, REFRESH_DEFAULT); // must be the very first call
 	debugPrint("Shark! Shark! Loading...\n");
 #endif
-#if defined (__SWITCH__) || defined (__WIIU__)
+#if defined (__SWITCH__) || defined (__WIIU__) || defined (__3DS__)
 	romfsInit();
 #endif
 #if defined (__SWITCH__)
     chdir("romfs:/");
 #endif
-#if defined (__3DS__) || defined (__WII__) || defined (__PS2__) || (__DREAMCAST__) || defined (__WIN9X__)// SDL1
+#if defined (__WII__) || defined (__PS2__) || (__DREAMCAST__) || defined (__WIN9X__)// SDL1
 	screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_DOUBLEBUF | SDL_HWSURFACE);
 	SDL_WM_SetCaption("SharkShark", NULL);
+#elif defined (__3DS__)
+	screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_SWSURFACE | SDL_FULLSCREEN);
+	SDL_WM_SetCaption("SharkShark", NULL);
+	SDL_InitSubSystem(SDL_INIT_JOYSTICK);
+	SDL_JoystickEventState(SDL_ENABLE);
+	SDL_JoystickOpen(0);
 #else // SDL2
 	SDL_InitSubSystem(SDL_INIT_JOYSTICK);
 	SDL_JoystickEventState(SDL_ENABLE);
@@ -579,7 +601,7 @@ int main(int argc, char* args[])
 	Mix_CloseAudio();
 	TTF_Quit();
 	SDL_Quit(); // Quit SDL subsystems
-#if defined (__SWITCH__) || defined (__WIIU__)
+#if defined (__SWITCH__) || defined (__WIIU__) || defined (__3DS__)
 	romfsExit();
 #endif
 

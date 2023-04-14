@@ -15,6 +15,7 @@
 #include <SDL2/SDL_mixer.h>
 #else
 #include <SDL.h>
+#include <SDL_main.h>
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
 #endif
@@ -23,6 +24,7 @@
 #include <switch.h>
 #endif
 #if defined(__WIIU__)
+#include "wiiu.h"
 #include <romfs-wiiu.h>
 #endif
 #if defined(XBOX)
@@ -46,6 +48,10 @@
 
 #if __DREAMCAST__
 #include "dreamcast.hpp"
+#endif
+
+#if __3DS__
+#include "3ds.h"
 #endif
 
 #endif
