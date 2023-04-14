@@ -5,7 +5,7 @@
 
 #include "shared.hpp"
 
-float creatureSpeed[9] = { 1, 1.3, 1.5, 1.7, 2, 0.8, 0.8, 2, 1.3 }; // use SC type to get speed
+float creatureSpeed[9] = { 1, 1.3f, 1.5f, 1.7f, 2, 0.8f, 0.8f, 2, 1.3f }; // use SC type to get speed
 int creatureRank[9] = { 1, 2, 3, 4, 5, 5, 5, 5, 6 }; // use SC type to get rank. Rank determines what a creature can eat. (jellyfish are immune)
 
 Vec2 playerPosition;
@@ -250,8 +250,8 @@ void PlayerBit() {
 /// <returns></returns>
 const char* RealPath(const char* path) {
     static char newPath[255];
-    int index = 0;
 #if defined (XBOX)
+    int index = 0;
     sprintf(newPath, "D:\\%s", path);
     while (newPath[index])
     {
@@ -259,7 +259,7 @@ const char* RealPath(const char* path) {
             newPath[index] = '\\';
         index++;
     }
-#elif defined (__WIIU__)
+#elif defined (__WIIU__) || defined (__3DS__)
     sprintf(newPath, "romfs:/%s", path);
 #else
     sprintf(newPath, "%s", path);

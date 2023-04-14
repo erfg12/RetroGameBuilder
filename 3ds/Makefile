@@ -39,12 +39,12 @@ include $(DEVKITARM)/3ds_rules
 #---------------------------------------------------------------------------------
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
-SOURCES		:=	../game/sdl1 ../game
+SOURCES		:= ../game
 DATA		:=	data
-INCLUDES	:=	../game/sdl1 ../game
+INCLUDES	:= ../game
 GRAPHICS	:=	gfx
 GFXBUILD	:=	$(BUILD)
-#ROMFS	:=	romfs
+ROMFS		:=	romfs
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -62,7 +62,7 @@ CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++11
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=3dsx.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
-LIBS	:=	-lcitro3d -lctru -lm `sdl-config --libs`
+LIBS	:=	-lcitro3d -lctru -lm `sdl-config --libs` -lSDL_mixer -lSDL_ttf -lfreetype -lpng -lmpg123 -lvorbisidec -lmikmod -lmodplug -logg -lmad -lbz2 -ljpeg -lz -lSDL
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
@@ -169,6 +169,8 @@ all: $(BUILD) $(GFXBUILD) $(DEPSDIR) $(ROMFS_T3XFILES) $(T3XHFILES)
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 
 $(BUILD):
+	@mkdir -p ./romfs
+	@cp -R ../game/res ./romfs/res
 	@mkdir -p $@
 
 ifneq ($(GFXBUILD),$(BUILD))
