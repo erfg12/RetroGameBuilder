@@ -40,11 +40,12 @@ include $(DEVKITARM)/3ds_rules
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
 SOURCES		:= ../game
-DATA		:=	data
 INCLUDES	:= ../game
-GRAPHICS	:=	gfx
-GFXBUILD	:=	$(BUILD)
 ROMFS		:=	romfs
+
+APP_TITLE		:= SharkShark
+APP_DESCRIPTION	:= SharkShark rebuilt
+APP_AUTHOR		:= Jacob Fliss
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -52,10 +53,10 @@ ROMFS		:=	romfs
 ARCH	:=	-march=armv6k -mtune=mpcore -mfloat-abi=hard -mtp=soft
 
 CFLAGS	:=	-g -Wall -O2 -mword-relocations \
-			-ffunction-sections \
+			-ffunction-sections -fomit-frame-pointer -ffast-math \
 			$(ARCH)
 
-CFLAGS	+=	-D__3DS__ $(INCLUDE) `sdl-config --cflags`
+CFLAGS	+=	$(INCLUDE) -DARM11 -D_3DS -D__3DS__ -DENABLE_3DS `sdl-config --cflags`
 
 CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++11
 
@@ -68,7 +69,7 @@ LIBS	:=	-lcitro3d -lctru -lm `sdl-config --libs` -lSDL_mixer -lSDL_ttf -lfreetyp
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
-LIBDIRS	:= $(PORTLIBS) $(CTRULIB)
+LIBDIRS	:= $(CTRULIB) $(PORTLIBS)
 
 
 #---------------------------------------------------------------------------------
