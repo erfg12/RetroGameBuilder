@@ -14,7 +14,7 @@ Currently most systems don't compile. Check the TO-DO section below to see what 
 - [ ] PlayStation 2
 - [x] PSVita
 - [ ] Switch
-- [ ] Windows 9x
+- [x] Windows 9x
 - [x] Windows
 - [x] Web
 - [ ] Wii
@@ -87,7 +87,7 @@ On a Windows computer, download [SDL2 vc zip](https://github.com/libsdl-org/SDL/
 
 ### Windows 9x (old)
 - - -
-On a Windows computer, download [SDL vc zip](https://sourceforge.net/projects/libsdl/files/SDL/1.2.15/), [TTF vc zip](https://sourceforge.net/projects/libsdl/files/SDL_ttf/2.0.12/), [Mixer vc zip](https://sourceforge.net/projects/libsdl/files/SDL_mixer/1.2.12/) unzip `lib` and `includes` directories to the `windows\sdl2-vc` directory. Open `windows\game.sln` file with Visual Studio, press build.
+On a Windows (95, 98, ME) computer, download [SDL VC6 zip](https://libsdl.org/release/SDL-devel-1.2.14-VC6.zip), [TTF VC6 zip](https://www.libsdl.org/projects/SDL_ttf/release/SDL_ttf-devel-2.0.8-VC6.zip), [Mixer VC6 zip](https://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-devel-1.2.7-VC6.zip) unzip `includes` directories to the `win9x\sdl-vc` directory, and the `lib` directory files to `C:\Program Files\Microsoft Visual Studio\VC98\Lib` directory. Open `win9x\game.sln` file with Visual Studio 6.0, press build.
 
 ### Xbox (original)
 - - -

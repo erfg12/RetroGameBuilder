@@ -1,0 +1,44 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: game - Win32 Release--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\WINDOWS\TEMP\RSP40A4.TMP" with contents
+[
+/nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "__WIN9X__" /Fp"Release/game.pch" /YX /Fo"Release/" /Fd"Release/" /FD /c 
+"C:\Windows\Desktop\RetroGameBuilder\game\main.cpp"
+"C:\Windows\Desktop\RetroGameBuilder\game\shared.cpp"
+]
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP40A4.TMP" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP40A5.TMP" with contents
+[
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib SDL.lib SDLmain.lib SDL_ttf.lib SDL_mixer.lib /nologo /subsystem:windows /incremental:yes /pdb:"Release/game.pdb" /machine:I386 /nodefaultlib:"library" /out:"Release/game.exe" 
+.\Release\main.obj
+.\Release\shared.obj
+]
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSP40A5.TMP"
+<h3>Output Window</h3>
+Compiling...
+main.cpp
+shared.cpp
+C:\Windows\Desktop\RetroGameBuilder\game\shared.cpp(53) : warning C4244: 'initializing' : conversion from 'double' to 'float', possible loss of data
+C:\Windows\Desktop\RetroGameBuilder\game\shared.cpp(189) : warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
+C:\Windows\Desktop\RetroGameBuilder\game\shared.cpp(190) : warning C4244: 'initializing' : conversion from 'int' to 'float', possible loss of data
+Linking...
+msvcrt.lib(MSVCRT.dll) : error LNK2005: _exit already defined in LIBCMT.lib(crt0dat.obj)
+msvcrt.lib(MSVCRT.dll) : error LNK2005: _fclose already defined in LIBCMT.lib(fclose.obj)
+msvcrt.lib(MSVCRT.dll) : error LNK2005: __isctype already defined in LIBCMT.lib(isctype.obj)
+LIBCMT.lib(crt0init.obj) : warning LNK4098: defaultlib "msvcrt.lib" conflicts with use of other libs; use /NODEFAULTLIB:library
+Release/game.exe : fatal error LNK1169: one or more multiply defined symbols found
+Error executing link.exe.
+
+
+
+<h3>Results</h3>
+game.exe - 4 error(s), 4 warning(s)
+</pre>
+</body>
+</html>

@@ -15,8 +15,8 @@ typedef struct Shark {
 } Shark;
 
 typedef struct SeaCreature {
-    Vec2 position; // current positioning
-    Vec2 origin; // helps determine which direction to head when spawned
+    struct Vec2 position; // current positioning
+    struct Vec2 origin; // helps determine which direction to head when spawned
     int active; // bool
     int direction;
     int type; // 0-4 = fish ranked, 5 = seahorse, 6 = crab, 7 = lobster, 8 = jellyfish (use for creatureSize and creatureSpeed)

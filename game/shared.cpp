@@ -8,12 +8,12 @@
 float creatureSpeed[9] = { 1, 1.3f, 1.5f, 1.7f, 2, 0.8f, 0.8f, 2, 1.3f }; // use SC type to get speed
 int creatureRank[9] = { 1, 2, 3, 4, 5, 5, 5, 5, 6 }; // use SC type to get rank. Rank determines what a creature can eat. (jellyfish are immune)
 
-Vec2 playerPosition;
+struct Vec2 playerPosition;
 int lives;
 int playerRank;
 int playerDirection; // 1 = left, -1 = right
 int FishSpawnTimer;
-Shark mrShark;
+struct Shark mrShark;
 int sharkBounces;
 int sharkMaxBounces;
 int score;
@@ -27,7 +27,7 @@ int mainMenu;
 int GameOver;
 int playerDead;
 int sharkBitten; // bool
-SeaCreature creatures[27];
+struct SeaCreature creatures[27];
 
 int GetRandomNum(int min, int max)
 {
@@ -55,7 +55,8 @@ void SetShark(int bitten) {
     float sideX = (mrShark.objective.x - mrShark.position.x) / module;
     float sideY = (mrShark.objective.y - mrShark.position.y) / module;
 
-    mrShark.speed = { sideX, sideY };
+    mrShark.speed.x=sideX;
+	mrShark.speed.y=sideY;
     //printf("DEBUG: Resetting shark\n");
 }
 
@@ -63,8 +64,10 @@ void SetFish() {
     int t = 0; // creature type
     for (int i = 0; i < 27; i++) { // generate 27 sea creatures
         SeaCreature sc;
-        sc.position = { 0,0 };
-        sc.origin = { 0,0 };
+        sc.position.x=0;
+		sc.position.y=0;
+        sc.origin.x=0;
+		sc.origin.y=0;
         if (t > 8) t = 8;
         sc.type = t;
         sc.active = 0;
@@ -81,7 +84,8 @@ void SetVars(float ScreenWidth, float ScreenHeight) {
     playerPosition.x = ScreenWidth / 2;
     playerPosition.y = ScreenHeight / 2;
 
-    mrShark.position = { ScreenWidth - 20, 20 };
+    mrShark.position.x=ScreenWidth - 20;
+	mrShark.position.y=20;
 
     PausedGame = 0;
     mainMenu = 1;
@@ -108,8 +112,8 @@ void SetVars(float ScreenWidth, float ScreenHeight) {
 void HurtShark() {
     if (!sharkBitten || SharkHealth <= 0) return;
     //printf("DEBUG: Shark was bitten. Timer: %i\n", SharkHurtTimer);
-    mrShark.position = { mrShark.position.x, mrShark.position.y };
-    mrShark.objective = { mrShark.position.x, mrShark.position.y }; // pause for a sec
+    mrShark.position.x=mrShark.position.x;
+    mrShark.objective.x=mrShark.position.x; // pause for a sec
     if (SharkHurtTimer >= 60) {
         SharkHealth--;
         sharkDirection = sharkDirection * -1; // change direction
@@ -161,7 +165,8 @@ void SharkRoam(float ScreenWidth, float ScreenHeight) {
             SharkHealth = 10;
             sharkDirection = 1;
             mrShark.active = 1;
-            mrShark.position = { ScreenWidth - 20, 20 };
+            mrShark.position.x=ScreenWidth - 20;
+			mrShark.position.y=20;
             SharkSpawnTimer = 0;
         }
         //printf("DEBUG: SharkSpawnTimer: %i\n", SharkSpawnTimer);
@@ -184,8 +189,10 @@ void FishSpawn(float ScreenWidth, float ScreenHeight) {
             float pickHeight = GetRandomNum(20, (int)(ScreenHeight - 50));
             float ps = pickSide[rand() % 2];
             if (creatures[pickCreature].type == 5 || creatures[pickCreature].type == 6) pickHeight = ScreenHeight - height;
-            creatures[pickCreature].origin = { ps,pickHeight };
-            creatures[pickCreature].position = { ps,pickHeight };
+            creatures[pickCreature].origin.x=ps;
+			creatures[pickCreature].origin.y=pickHeight;
+            creatures[pickCreature].position.x=ps;
+			creatures[pickCreature].position.y=pickHeight;
             //printf("DEBUG: Spawning Fish coords x:%f y:%f type:%i active:%i\n", ps, pickHeight, creatures[pickCreature].type, creatures[pickCreature].active);
         }
         FishSpawnTimer = 0;
@@ -236,7 +243,8 @@ void FishMoveAndDeSpawn(float ScreenWidth, float ScreenHeight, int CrustHeight) 
 
 void PlayerBit() {
     lives--;
-    playerPosition = { -200,-200 };
+    playerPosition.x=-200;
+	playerPosition.y=-200;
     playerDead = 1;
     if (lives < 0) {
         GameOver = 1;

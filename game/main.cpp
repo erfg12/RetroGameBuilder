@@ -46,13 +46,13 @@ SDL_Surface* UI_gameover;
 SDL_Rect* UI_gameover_renderQuad;
 
 SDL_Surface* UI_pause;
-SDL_Rect* UI_pause_renderQuad;
+SDL_Rect UI_pause_renderQuad;
 
 SDL_Surface* UI_died;
-SDL_Rect* UI_died_renderQuad;
+SDL_Rect UI_died_renderQuad;
 
 SDL_Surface* UI_mainmenu;
-SDL_Rect* UI_mainmenu_renderQuad;
+SDL_Rect UI_mainmenu_renderQuad;
 
 int playerSpeed = 2;
 int quit = 0;
@@ -96,7 +96,7 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 	return 0;
 }
 
-#if defined (__3DS__) || defined (__WII__) || defined (__PS2__) || (__DREAMCAST__)
+#if defined (__3DS__) || defined (__WII__) || defined (__PS2__) || defined (__DREAMCAST__) || defined (__WIN9X__)
 	int colorkey = SDL_SRCCOLORKEY;
 	int key_s = SDLK_s;
 	int key_p = SDLK_p;
@@ -142,12 +142,18 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 	#define JOY_DOWN  6
 #endif
 
-#if defined(__WIN32__) || defined(__APPLE__) || defined(__linux__) || defined(__EMSCRIPTEN__)
+#if (defined(__WIN32__) && !defined(__WIN9X__)) || defined(__APPLE__) || defined(__linux__) || defined(__EMSCRIPTEN__)
 #define JOY_START SDL_CONTROLLER_BUTTON_START
 #define JOY_LEFT  SDL_CONTROLLER_BUTTON_BACK
 #define JOY_UP	  SDL_CONTROLLER_BUTTON_DPAD_UP
 #define JOY_RIGHT SDL_CONTROLLER_BUTTON_DPAD_RIGHT
 #define JOY_DOWN  SDL_CONTROLLER_BUTTON_DPAD_DOWN
+#else
+#define JOY_START 0
+#define JOY_LEFT  0
+#define JOY_UP	  0
+#define JOY_RIGHT 0
+#define JOY_DOWN  0
 #endif
 
 	void game_loop() {
@@ -167,8 +173,10 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 		struct Rectangle sharkTailRec = { mrShark.position.x + (64 / 2), mrShark.position.y, 64 / 2, 32 };
 		struct Rectangle sharkBiteRec = { mrShark.position.x, mrShark.position.y, 64 / 2, 32 };
 		if (sharkDirection == -1) {
-			sharkTailRec = { mrShark.position.x, mrShark.position.y, 64 / 2, 32 };
-			sharkBiteRec = { mrShark.position.x + (64 / 2), mrShark.position.y, 64 / 2, 32 };
+			sharkTailRec.x=mrShark.position.x; 
+			sharkTailRec.y=mrShark.position.y;
+			sharkBiteRec.x=mrShark.position.x + (64 / 2);
+			sharkBiteRec.y=mrShark.position.y;
 		}
 
 		// NPCs move
@@ -221,28 +229,40 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 		char UI_Score_t[255];
 		sprintf(UI_Score_t, "SCORE %d", score);
 		UI_Score = TTF_RenderText_Solid(font, UI_Score_t, color_white);
-		UI_Score_renderQuad = new SDL_Rect { 10, 10, (Uint16)UI_Score->w, (Uint16)UI_Score->h };
-		SDL_BlitSurface(UI_Score, NULL, screen, UI_Score_renderQuad);
+		struct SDL_Rect UI_Score_renderQuad;
+		UI_Score_renderQuad.x=10;
+		UI_Score_renderQuad.y=10;
+		UI_Score_renderQuad.w=(Uint16)UI_Score->w;
+		UI_Score_renderQuad.h=(Uint16)UI_Score->h;
+		SDL_BlitSurface(UI_Score, NULL, screen, &UI_Score_renderQuad);
 		char UI_Lives_t[255];
 		sprintf(UI_Lives_t, "%i LIVES", lives);
 		UI_Lives = TTF_RenderText_Solid(font, UI_Lives_t, color_white);
-		UI_Lives_renderQuad = new SDL_Rect { SCREEN_WIDTH - 120, 10, (Uint16)UI_Lives->w, (Uint16)UI_Lives->h };
-		SDL_BlitSurface(UI_Lives, NULL, screen, UI_Lives_renderQuad);
+		struct SDL_Rect UI_Lives_renderQuad;
+		UI_Lives_renderQuad.x=SCREEN_WIDTH - 120;
+		UI_Lives_renderQuad.y=10;
+		UI_Lives_renderQuad.w=(Uint16)UI_Lives->w;
+		UI_Lives_renderQuad.h=(Uint16)UI_Lives->h;
+		SDL_BlitSurface(UI_Lives, NULL, screen, &UI_Lives_renderQuad);
 		if (GameOver) {
 			char UI_gameover_t[255];
 			sprintf(UI_gameover_t, "GAME OVER! - YOUR SCORE: %4i", score);
 			UI_gameover = TTF_RenderText_Solid(font, UI_gameover_t, color_white);
-			UI_gameover_renderQuad = new SDL_Rect { SCREEN_WIDTH / 2 - 200, SCREEN_HEIGHT / 2 - 200, (Uint16)UI_gameover->w, (Uint16)UI_gameover->h };
-			SDL_BlitSurface(UI_gameover, NULL, screen, UI_gameover_renderQuad);
+			struct SDL_Rect UI_gameover_renderQuad;
+			UI_gameover_renderQuad.x=SCREEN_WIDTH / 2 - 200;
+			UI_gameover_renderQuad.y=SCREEN_HEIGHT / 2 - 200;
+			UI_gameover_renderQuad.w=(Uint16)UI_gameover->w;
+			UI_gameover_renderQuad.h=(Uint16)UI_gameover->h;
+			SDL_BlitSurface(UI_gameover, NULL, screen, &UI_gameover_renderQuad);
 		}
 		if (PausedGame) {
-			SDL_BlitSurface(UI_pause, NULL, screen, UI_pause_renderQuad);
+			SDL_BlitSurface(UI_pause, NULL, screen, &UI_pause_renderQuad);
 		}
 		if (playerDead) {
-			SDL_BlitSurface(UI_died, NULL, screen, UI_died_renderQuad);
+			SDL_BlitSurface(UI_died, NULL, screen, &UI_died_renderQuad);
 		}
 		if (mainMenu == 1) {
-			SDL_BlitSurface(UI_mainmenu, NULL, screen, UI_mainmenu_renderQuad);
+			SDL_BlitSurface(UI_mainmenu, NULL, screen, &UI_mainmenu_renderQuad);
 		}
 
 		if (CheckCollisionRecs(playerRec, sharkBiteRec) && SharkHealth > 0 && playerDead == 0) { // shark bit player
@@ -345,35 +365,51 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 				}
 
 				SDL_Rect GoTo = { (Sint16)creatures[i].position.x, (Sint16)creatures[i].position.y, 16, 16 };
-				SDL_Rect* tmp = new SDL_Rect{ (Sint16)(animChange * 16), 0, 16, 16 }; // 2 frames of animation
-				SDL_Rect* tmp2 = new SDL_Rect{ (Sint16)((animChange + 2) * 16), 0, 16, 16 }; // 2 animations + 2 directions
+				SDL_Rect tmp;
+				tmp.x=(Sint16)(animChange * 16);
+				tmp.y=0;
+				tmp.w=16;
+				tmp.h=16; // 2 frames of animation
+				SDL_Rect tmp2;
+				tmp2.x=(Sint16)((animChange + 2) * 16);
+				tmp2.y=0;
+				tmp2.w=16;
+				tmp2.h=16; // 2 animations + 2 directions
 				if (creatures[i].type == 5) {
-					SDL_BlitSurface(crab, tmp, screen, &GoTo);
+					SDL_BlitSurface(crab, &tmp, screen, &GoTo);
 				}
 				else if (creatures[i].type == 6) {
 					if (creatures[i].origin.x <= 20) { // move right
-						SDL_BlitSurface(lobster, tmp2, screen, &GoTo);
+						SDL_BlitSurface(lobster, &tmp2, screen, &GoTo);
 					}
 					else { // move left
-						SDL_BlitSurface(lobster, tmp, screen, &GoTo);
+						SDL_BlitSurface(lobster, &tmp, screen, &GoTo);
 					}
 				}
 				else if (creatures[i].type <= 4 && creatures[i].type >= 0) {
 					if (creatures[i].origin.x <= 20) {
-						SDL_Rect* fish_right = new SDL_Rect{ 0, 0, 16, (Uint16)GoTo.y };
-						SDL_BlitSurface(fish[creatures[i].type], fish_right, screen, &GoTo); // RIGHT
+						SDL_Rect fish_right;
+						fish_right.x=0;
+						fish_right.y=0;
+						fish_right.w=16;
+						fish_right.h=(Uint16)GoTo.y;
+						SDL_BlitSurface(fish[creatures[i].type], &fish_right, screen, &GoTo); // RIGHT
 					}
 					else {
-						SDL_Rect* fish_left = new SDL_Rect{ 16, 0, 32, (Uint16)GoTo.y };
-						SDL_BlitSurface(fish[creatures[i].type], fish_left, screen, &GoTo); // LEFT
+						SDL_Rect fish_left;
+						fish_left.x=16;
+						fish_left.y=0;
+						fish_left.w=32;
+						fish_left.h=(Uint16)GoTo.y;
+						SDL_BlitSurface(fish[creatures[i].type], &fish_left, screen, &GoTo); // LEFT
 					}
 				}
 				else if (creatures[i].type == 7) {
 					if (creatures[i].origin.x <= 20) { // move right
-						SDL_BlitSurface(seahorse, tmp, screen, &GoTo);
+						SDL_BlitSurface(seahorse, &tmp, screen, &GoTo);
 					}
 					else { // move left
-						SDL_BlitSurface(seahorse, tmp2, screen, &GoTo);
+						SDL_BlitSurface(seahorse, &tmp2, screen, &GoTo);
 					}
 				}
 				else if (creatures[i].type == 8) {
@@ -383,7 +419,7 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 				}
 			}
 		}
-#if defined (__3DS__) || defined (__WII__) || defined (__PS2__) || (__DREAMCAST__)
+#if defined (__3DS__) || defined (__WII__) || defined (__PS2__) || (__DREAMCAST__) || defined (__WIN9X__)
 		SDL_Flip(screen);
 #else
 		SDL_BlitSurface(screen, NULL, screen, NULL);
@@ -405,7 +441,7 @@ int main(int argc, char* args[])
 #if defined (__SWITCH__)
     chdir("romfs:/");
 #endif
-#if defined (__3DS__) || defined (__WII__) || defined (__PS2__) || (__DREAMCAST__) // SDL1
+#if defined (__3DS__) || defined (__WII__) || defined (__PS2__) || (__DREAMCAST__) || defined (__WIN9X__)// SDL1
 	screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_DOUBLEBUF | SDL_HWSURFACE);
 	SDL_WM_SetCaption("SharkShark", NULL);
 #else // SDL2
@@ -490,13 +526,25 @@ int main(int argc, char* args[])
 			SetVars(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 			UI_pause = TTF_RenderText_Solid(font, "PAUSED - PRESS P TO RESUME", color_white);
-			UI_pause_renderQuad = new SDL_Rect{ SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2 - 50, (Uint16)UI_pause->w, (Uint16)UI_pause->h };
+			
+			UI_pause_renderQuad.x=SCREEN_WIDTH / 2 - 50;
+			UI_pause_renderQuad.y=SCREEN_HEIGHT / 2 - 50;
+			UI_pause_renderQuad.w=(Uint16)UI_pause->w;
+			UI_pause_renderQuad.h=(Uint16)UI_pause->h;
 
 			UI_died = TTF_RenderText_Solid(font, "PLAYER DIED - PRESS ENTER TO SPAWN", color_white);
-			UI_died_renderQuad = new SDL_Rect{ SCREEN_WIDTH / 2 - 250, SCREEN_HEIGHT / 2 - 50, (Uint16)UI_died->w, (Uint16)UI_died->h };
+			
+			UI_died_renderQuad.x=SCREEN_WIDTH / 2 - 250;
+			UI_died_renderQuad.y=SCREEN_HEIGHT / 2 - 50;
+			UI_died_renderQuad.w=(Uint16)UI_died->w;
+			UI_died_renderQuad.h=(Uint16)UI_died->h;
 
 			UI_mainmenu = TTF_RenderText_Solid(font, "SHARK! SHARK! - [S]tart Game", color_white);
-			UI_mainmenu_renderQuad = new SDL_Rect{ SCREEN_WIDTH / 2 - 150, SCREEN_HEIGHT / 2 - 90, (Uint16)UI_mainmenu->w, (Uint16)UI_mainmenu->h };
+			
+			UI_mainmenu_renderQuad.x=SCREEN_WIDTH / 2 - 150;
+			UI_mainmenu_renderQuad.y=SCREEN_HEIGHT / 2 - 90;
+			UI_mainmenu_renderQuad.w=(Uint16)UI_mainmenu->w;
+			UI_mainmenu_renderQuad.h=(Uint16)UI_mainmenu->h;
 
 #ifdef __EMSCRIPTEN__
 			emscripten_set_main_loop(game_loop, 0, 1);
