@@ -18,6 +18,7 @@ Currently most systems don't compile. Check the TO-DO section below to see what 
 - [x] Windows
 - [x] Web
 - [ ] Wii
+- [ ] Wii U
 - [ ] OG Xbox
 
 ## How To Build:
