@@ -17,7 +17,7 @@ Currently most systems don't compile. Check the TO-DO section below to see what 
 - [x] Windows 9x
 - [x] Windows
 - [x] Web
-- [ ] Wii
+- [x] Wii
 - [ ] Wii U
 - [ ] OG Xbox
 
