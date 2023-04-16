@@ -147,7 +147,7 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 	#define JOY_DOWN  99
 #endif
 
-#if defined(__WIN9X__) || defined(__WII__)
+#if defined(__WIN9X__)
 #define JOY_START 0
 #define JOY_LEFT  0
 #define JOY_UP	  0
@@ -213,7 +213,7 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 				}
 			}
 			if (e.type == SDL_JOYBUTTONDOWN) {
-				score = e.jbutton.button;
+				//score = e.jbutton.button;
 				if (PausedGame == 0 && GameOver == 0 && mainMenu == 0) {
 					if (e.jbutton.button == JOY_UP) playerMove[0] = 1;
 					if (e.jbutton.button == JOY_DOWN) playerMove[2] = 1;
