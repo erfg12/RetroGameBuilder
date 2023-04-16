@@ -11,8 +11,10 @@
 #include "SDL/SDL.h"
 #elif defined(__APPLE__) || (defined(__linux__) && !defined(ANDROID)) || defined (__WIIU__) || defined (__PSVITA__)
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_main.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_events.h>
 #else
 #include <SDL.h>
 #include <SDL_main.h>
@@ -23,29 +25,16 @@
 #include <unistd.h>
 #include <switch.h>
 #endif
-#if defined(__WIIU__)
-#include <gfd.h>
-#include <gx2/draw.h>
-#include <gx2/shaders.h>
-#include <gx2/mem.h>
-#include <gx2/registers.h>
-#include <gx2r/draw.h>
-#include <gx2r/buffer.h>
-#include <string.h>
-#include <stdio.h>
-#include <whb/file.h>
-#include <whb/proc.h>
-#include <whb/sdcard.h>
-#include <whb/gfx.h>
-#include <whb/log.h>
-#include <whb/log_udp.h>
-#include <romfs-wiiu.h>
-#endif
 #if defined(XBOX)
 #include <hal/debug.h>
 #include <hal/xbox.h>
 #include <hal/video.h>
 #include <windows.h>
+#endif
+
+#if defined (__WIIU__)
+#include <whb/proc.h>
+#include <wut.h>
 #endif
 
 #if __PSVITA__

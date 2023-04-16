@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<app version="1">
+  <name>SharkShark</name>
+  <coder>JacobFliss</coder>
+  <version>1.00</version>
+  <url>https://github.com/erfg12/RetroGameBuilder</url>
+  <release_date>20160503120400</release_date>
+  <short_description>Shark Shark Game</short_description>
+  <long_description>Shark Shark intellivision game re-created for Wii U
+</long_description>
+<category>game</category>
+</app>

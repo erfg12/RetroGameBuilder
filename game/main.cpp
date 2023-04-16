@@ -155,10 +155,10 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 #define JOY_DOWN  0
 #elif defined(__WII__)
 #define JOY_START 5
-#define JOY_LEFT  0 // joystick Hat
-#define JOY_UP	  0
-#define JOY_RIGHT 0
-#define JOY_DOWN  0
+#define JOY_LEFT  99 // joystick Hat
+#define JOY_UP	  99
+#define JOY_RIGHT 99
+#define JOY_DOWN  99
 #elif (defined(__WIN32__) && !defined(__WIN9X__)) || defined(__APPLE__) || defined(__linux__) || defined(__EMSCRIPTEN__)
 #define JOY_START SDL_CONTROLLER_BUTTON_START
 #define JOY_LEFT  SDL_CONTROLLER_BUTTON_BACK
@@ -458,7 +458,7 @@ int main(int argc, char* args[])
 	XVideoSetMode(640, 480, 32, REFRESH_DEFAULT); // must be the very first call
 	debugPrint("Shark! Shark! Loading...\n");
 #endif
-#if defined (__SWITCH__) || defined (__WIIU__) || defined (__3DS__)
+#if defined (__SWITCH__) || defined (__3DS__)
 	romfsInit();
 #endif
 #if defined (__SWITCH__)
@@ -607,7 +607,7 @@ int main(int argc, char* args[])
 	Mix_CloseAudio();
 	TTF_Quit();
 	SDL_Quit(); // Quit SDL subsystems
-#if defined (__SWITCH__) || defined (__WIIU__) || defined (__3DS__)
+#if defined (__SWITCH__) || defined (__3DS__)
 	romfsExit();
 #endif
 

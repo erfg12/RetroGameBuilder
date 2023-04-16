@@ -19,9 +19,7 @@ include $(DEVKITPRO)/wut/share/wut_rules
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
 SOURCES		:= ../game
-DATA		:=	data
 INCLUDES	:= ../game
-ROMFS		:=	romfs
 
 APP_TITLE   := SharkShark
 APP_AUTHOR  := Jacob Fliss
@@ -30,17 +28,17 @@ APP_AUTHOR  := Jacob Fliss
 # options for code generation
 #-------------------------------------------------------------------------------
 CFLAGS		:=	-g -Wall -O2 -ffunction-sections \
-			-ffast-math \
-			$(MACHDEP)
+			$(MACHDEP) $(DEFINES)
 
-CFLAGS		+=	$(INCLUDE) -D__WIIU__ -D__WUT__
+CFLAGS		+=	-D__WIIU__ -D__WUT__ $(INCLUDE) `sdl2-config --cflags`
 
-CXXFLAGS	:=	$(CFLAGS) -std=gnu++14
+CXXFLAGS	:=	$(CFLAGS) -fno-rtti -fno-exceptions
 
 ASFLAGS		:=	-g $(MACHDEP)
 LDFLAGS		:=	-g $(MACHDEP) $(RPXSPECS) -Wl,-Map,$(notdir $*.map)
 
-LIBS		:=	-lSDL2_ttf -lSDL2_mixer -lSDL2_gfx -lSDL2_image -lSDL2 -lfreetype -lpng -lmpg123 -lmodplug -lvorbisfile -lvorbis -logg -lbz2 -ljpeg -lz -lwut
+LIBS	:=	`$(PREFIX)pkg-config --libs sdl2 SDL2_mixer SDL2_image SDL2_ttf` \
+			-lwut
 
 #-------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level
@@ -90,18 +88,12 @@ export INCLUDE		:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
 
 export LIBPATHS		:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 
-ifneq ($(ROMFS),)
-	export NROFLAGS += --romfsdir=$(CURDIR)/$(ROMFS)
-endif
-
 .PHONY: $(BUILD) clean all
 
 #-------------------------------------------------------------------------------
 all: $(BUILD)
 
 $(BUILD): $(SRCFILES)
-	@mkdir -p ./romfs
-	@cp -R ../game/res ./romfs
 	@[ -d $@ ] || mkdir -p $@
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 
@@ -113,16 +105,6 @@ clean:
 #-------------------------------------------------------------------------------
 else
 .PHONY:	all
-
-#-------------------------------------------------------------------------------
-# romfs
-#-------------------------------------------------------------------------------
-include $(PORTLIBS_PATH)/wiiu/share/romfs-wiiu.mk
-CFLAGS		+=	$(ROMFS_CFLAGS)
-CXXFLAGS	+=	$(ROMFS_CFLAGS)
-LIBS		+=	$(ROMFS_LIBS)
-OFILES		+=	$(ROMFS_TARGET)
-#-------------------------------------------------------------------------------
 
 DEPENDS		:=	$(OFILES:.o=.d)
 

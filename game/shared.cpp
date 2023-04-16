@@ -269,7 +269,9 @@ const char* RealPath(const char* path) {
     }
 #elif defined (__WII__)
     sprintf(newPath, "sd:/apps/SharkShark/%s", path);
-#elif defined (__WIIU__) || defined (__3DS__)
+#elif defined (__WIIU__)
+    sprintf(newPath, "sd:/wiiu/apps/SharkShark/%s", path);
+#elif defined (__3DS__)
     sprintf(newPath, "romfs:/%s", path);
 #else
     sprintf(newPath, "%s", path);
