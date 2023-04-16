@@ -24,7 +24,21 @@
 #include <switch.h>
 #endif
 #if defined(__WIIU__)
-#include "wiiu.h"
+#include <gfd.h>
+#include <gx2/draw.h>
+#include <gx2/shaders.h>
+#include <gx2/mem.h>
+#include <gx2/registers.h>
+#include <gx2r/draw.h>
+#include <gx2r/buffer.h>
+#include <string.h>
+#include <stdio.h>
+#include <whb/file.h>
+#include <whb/proc.h>
+#include <whb/sdcard.h>
+#include <whb/gfx.h>
+#include <whb/log.h>
+#include <whb/log_udp.h>
 #include <romfs-wiiu.h>
 #endif
 #if defined(XBOX)

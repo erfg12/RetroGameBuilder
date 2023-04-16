@@ -17,15 +17,20 @@ include $(DEVKITPPC)/wii_rules
 #---------------------------------------------------------------------------------
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
-SOURCES		:=	../game/sdl1 ../game
+SOURCES		:=	../game
 DATA		:=	data
-INCLUDES	:=	../game/sdl1 ../game
+INCLUDES	:=	../game
+
+ROMFS		:=	romfs
+
+APP_TITLE   := SharkShark
+APP_AUTHOR  := Jacob Fliss
 
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
 
-CFLAGS	= -g -O2 -Wall $(MACHDEP) $(INCLUDE) `sdl-config --cflags`
+CFLAGS	= -g -O2 -Wall $(MACHDEP) $(INCLUDE) `sdl-config --cflags` -D__WII__ -DSND_SDLMIXER
 CXXFLAGS	=	$(CFLAGS)
 
 LDFLAGS	=	-g $(MACHDEP) -Wl,-Map,$(notdir $@).map
@@ -33,7 +38,7 @@ LDFLAGS	=	-g $(MACHDEP) -Wl,-Map,$(notdir $@).map
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
 #---------------------------------------------------------------------------------
-LIBS	:=	-lwiiuse -lbte -logc -lm `sdl-config --libs`
+LIBS	:=	-lwiiuse -lbte -logc -lm `sdl-config --libs` -lSDL_mixer -lSDL_ttf -lfreetype -lpng -lmpg123 -lmodplug -lmad -lbz2 -lSDL -lpng -ljpeg -lz -lwiiuse -lfat -lbte -logc -lfreetype -lwiikeyboard -lm -lstdc++ -lvorbisfile -lvorbis -logg
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
@@ -91,6 +96,10 @@ export INCLUDE	:=	$(foreach dir,$(INCLUDES), -iquote $(CURDIR)/$(dir)) \
 # build a list of library paths
 #---------------------------------------------------------------------------------
 export LIBPATHS	:= -L$(LIBOGC_LIB) $(foreach dir,$(LIBDIRS),-L$(dir)/lib)
+
+ifneq ($(ROMFS),)
+	export NROFLAGS += --romfsdir=$(CURDIR)/$(ROMFS)
+endif
 
 export OUTPUT	:=	$(CURDIR)/$(TARGET)
 .PHONY: $(BUILD) clean

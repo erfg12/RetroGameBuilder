@@ -147,7 +147,7 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 	#define JOY_DOWN  99
 #endif
 
-#if defined(__WIN9X__)
+#if defined(__WIN9X__) || defined(__WII__)
 #define JOY_START 0
 #define JOY_LEFT  0
 #define JOY_UP	  0
