@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<app version="0.1">
+<name>SharkShark</name>
+<version>v1.0</version>
+<release_date>201104120000</release_date>
+<coder>Red Squirrel</coder>
+<short_description>SharkShark re-created</short_description>
+<long_description>Shark! Shark! is an Intellivision game originally designed by Don Daglow, and with additional design and programming by Ji-Wen Tsao, 
+one of the first female game programmers in the history of video games. The player is a fish who must eat smaller fishes in order to gain points and extra lives 
+while avoiding enemies such as larger fishes, sharks, jellyfish, lobsters and crabs. After eating a certain number of fish, the player's fish grows in size and 
+is thus able to eat a larger selection of fish. However, while the larger fish becomes a bit faster, he is less agile than the small fish and has a harder time avoiding enemies.
+</long_description>
+</app>

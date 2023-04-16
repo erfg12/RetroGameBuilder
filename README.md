@@ -68,7 +68,7 @@ Install [DevKitPro](https://devkitpro.org/wiki/Getting_Started). Open `DevKitPro
 
 ### Wii
 - - -
-Install [DevKitPro](https://devkitpro.org/wiki/Getting_Started). Open `DevKitPro > MSys2`. Type `pacman -S wii-portlibs` and install ALL. In the project directory, CD to the `/wii` directory, type `make`.
+Install [DevKitPro](https://devkitpro.org/wiki/Getting_Started). Open `DevKitPro > MSys2`. Type `pacman -S wii-portlibs` and install ALL. In the project directory, CD to the `/wii` directory, type `make`. Inside the `wii/apps/SharkShark` directory should now be a `res` folder and `boot.dol` file. Copy the `apps` folder to your Wii SD card and launch through the Homebrew Browser app.
 
 ### Wii U
 - - -

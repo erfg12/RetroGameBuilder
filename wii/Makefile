@@ -106,13 +106,17 @@ export OUTPUT	:=	$(CURDIR)/$(TARGET)
 
 #---------------------------------------------------------------------------------
 $(BUILD):
+	@cp -R ../game/res ./apps/SharkShark/res
 	@[ -d $@ ] || mkdir -p $@
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
+	@cp -R ./wii.dol ./apps/SharkShark/boot.dol
 
 #---------------------------------------------------------------------------------
 clean:
 	@echo clean ...
 	@rm -fr $(BUILD) $(OUTPUT).elf $(OUTPUT).dol
+	@rm -rf ./apps/SharkShark/res
+	@rm -rf ./apps/SharkShark/boot.dol
 
 #---------------------------------------------------------------------------------
 run:
