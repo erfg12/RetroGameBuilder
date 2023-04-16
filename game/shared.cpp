@@ -267,6 +267,15 @@ const char* RealPath(const char* path) {
             newPath[index] = '\\';
         index++;
     }
+#elif defined (__WII__)
+    int index = 0;
+    sprintf(newPath, "sd:/apps/SharkShark/%s", path);
+    while (newPath[index])
+    {
+        if (newPath[index] == '/')
+            newPath[index] = '\\';
+        index++;
+    }
 #elif defined (__WIIU__) || defined (__3DS__)
     sprintf(newPath, "romfs:/%s", path);
 #else
