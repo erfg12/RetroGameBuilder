@@ -153,6 +153,12 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 #define JOY_UP	  0
 #define JOY_RIGHT 0
 #define JOY_DOWN  0
+#elif defined(__WII__)
+#define JOY_START 5
+#define JOY_LEFT  0 // joystick Hat
+#define JOY_UP	  0
+#define JOY_RIGHT 0
+#define JOY_DOWN  0
 #elif (defined(__WIN32__) && !defined(__WIN9X__)) || defined(__APPLE__) || defined(__linux__) || defined(__EMSCRIPTEN__)
 #define JOY_START SDL_CONTROLLER_BUTTON_START
 #define JOY_LEFT  SDL_CONTROLLER_BUTTON_BACK
@@ -207,7 +213,7 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 				}
 			}
 			if (e.type == SDL_JOYBUTTONDOWN) {
-				//score = e.jbutton.button;
+				score = e.jbutton.button;
 				if (PausedGame == 0 && GameOver == 0 && mainMenu == 0) {
 					if (e.jbutton.button == JOY_UP) playerMove[0] = 1;
 					if (e.jbutton.button == JOY_DOWN) playerMove[2] = 1;
@@ -458,10 +464,10 @@ int main(int argc, char* args[])
 #if defined (__SWITCH__)
     chdir("romfs:/");
 #endif
-#if defined (__WII__) || defined (__PS2__) || (__DREAMCAST__) || defined (__WIN9X__)// SDL1
+#if defined (__PS2__) || (__DREAMCAST__) || defined (__WIN9X__)// SDL1
 	screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_DOUBLEBUF | SDL_HWSURFACE);
 	SDL_WM_SetCaption("SharkShark", NULL);
-#elif defined (__3DS__)
+#elif defined (__3DS__) || defined (__WII__)
 	screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_SWSURFACE | SDL_FULLSCREEN);
 	SDL_WM_SetCaption("SharkShark", NULL);
 	SDL_InitSubSystem(SDL_INIT_JOYSTICK);

@@ -21,8 +21,6 @@ SOURCES		:=	../game
 DATA		:=	data
 INCLUDES	:=	../game
 
-ROMFS		:=	romfs
-
 APP_TITLE   := SharkShark
 APP_AUTHOR  := Jacob Fliss
 
@@ -96,10 +94,6 @@ export INCLUDE	:=	$(foreach dir,$(INCLUDES), -iquote $(CURDIR)/$(dir)) \
 # build a list of library paths
 #---------------------------------------------------------------------------------
 export LIBPATHS	:= -L$(LIBOGC_LIB) $(foreach dir,$(LIBDIRS),-L$(dir)/lib)
-
-ifneq ($(ROMFS),)
-	export NROFLAGS += --romfsdir=$(CURDIR)/$(ROMFS)
-endif
 
 export OUTPUT	:=	$(CURDIR)/$(TARGET)
 .PHONY: $(BUILD) clean
