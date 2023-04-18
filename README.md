@@ -29,7 +29,7 @@ Install [DevKitPro](https://devkitpro.org/wiki/Getting_Started). Open `DevKitPro
 
 ### Android
 - - -
-Using Windows, install Android Studio. Clone the [SDL2 source](https://github.com/libsdl-org/SDL)'s `include`, `src` and `Android.mk` folders and files to the `android\app\jni\SDL` directory. Open the `android` directory with Android Studio, press `Build > Make Project`. If you want to add more source code files, edit the `android\app\jni\src\Android.mk` file.
+Using Windows, install Android Studio. Download the [SDL2 release source](https://github.com/libsdl-org/SDL)'s `include`, `src` and `Android.mk` folders and files to the `android\app\jni\SDL` directory. Do the same with [SDL2_mixer](https://github.com/libsdl-org/SDL_mixer/releases/) and [SDL2_ttf](https://github.com/libsdl-org/SDL_ttf/releases/). Open the `android` directory with Android Studio, press `Build > Make Project`. If you want to add more source code files, edit the `android\app\jni\src\Android.mk` file.
 
 ### DreamCast
 - - -
