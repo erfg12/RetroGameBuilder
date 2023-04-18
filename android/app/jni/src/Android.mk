@@ -9,9 +9,9 @@ SDL_PATH := ../SDL
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/$(SDL_PATH)/include
 
 # Add your application source files here...
-LOCAL_SRC_FILES := ../../../../game/sdl2/sdl2.cpp ../../../../game/main.cpp
+LOCAL_SRC_FILES := ../../../../game/shared.cpp ../../../../game/main.cpp
 
-LOCAL_SHARED_LIBRARIES := SDL2
+LOCAL_SHARED_LIBRARIES := SDL2 SDL2_mixer SDL2_ttf freetype
 
 LOCAL_LDLIBS := -lGLESv1_CM -lGLESv2 -lOpenSLES -llog -landroid
 
