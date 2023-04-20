@@ -9,11 +9,17 @@
 
 #if defined(__PS2__)
 #include "SDL/SDL.h"
-#elif defined(__APPLE__) || (defined(__linux__) && !defined(ANDROID)) || defined (__WIIU__) || defined (__PSVITA__)
+#elif (defined(__linux__) && !defined(ANDROID)) || defined (__WIIU__) || defined (__PSVITA__)
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_main.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_events.h>
+#elif defined(__APPLE__)
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_main.h>
+#include <SDL2_ttf/SDL_ttf.h>
+#include <SDL2_mixer/SDL_mixer.h>
 #include <SDL2/SDL_events.h>
 #else
 #include <SDL.h>
