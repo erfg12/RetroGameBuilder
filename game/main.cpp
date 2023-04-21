@@ -212,6 +212,19 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 					if (e.jhat.value & SDL_HAT_LEFT) playerMove[3] = 1; else playerMove[3] = 0;
 				}
 			}
+			if (e.type == SDL_MOUSEBUTTONDOWN) {
+				if (PausedGame == 1 || mainMenu == 1) {
+					PausedGame = 0;
+					mainMenu = 0;
+				} else if (GameOver == 1)
+					SetVars(SCREEN_WIDTH, SCREEN_HEIGHT);
+				else if (playerDead == 1 && PausedGame == 0 && GameOver == 0) {
+					playerDead = 0; playerPosition.x = (float)SCREEN_WIDTH / 2; playerPosition.y = (float)SCREEN_HEIGHT / 2; 
+				} else {
+					SDL_GetMouseState(&MouseX, &MouseY);
+					printf("mouse clicked coords x:%i y:%i\n", MouseX, MouseY);
+				}
+			}
 			if (e.type == SDL_JOYBUTTONDOWN) {
 				//score = e.jbutton.button;
 				if (PausedGame == 0 && GameOver == 0 && mainMenu == 0) {
@@ -235,6 +248,31 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 			}
 		}
 
+		// click to move
+		if (MouseX && MouseY > 0 && PausedGame == 0 && GameOver == 0) {
+			if (abs(playerPosition.x - MouseX) > 2) { // move towards X
+				if (MouseX > playerPosition.x) {
+					playerPosition.x += playerSpeed;
+					playerDirection = -1;
+				} 
+				else {
+					playerPosition.x -= playerSpeed;
+					playerDirection = 1;
+				}
+			}
+			if (abs(playerPosition.y - MouseY) > 2) { // move towards Y
+				if (MouseY > playerPosition.y)
+					playerPosition.y += playerSpeed;
+				else
+					playerPosition.y -= playerSpeed;
+			}
+			if (abs(playerPosition.x - MouseX) < 2 && abs(playerPosition.y - MouseY) < 2) // arrived at location
+			{
+				MouseX = 0;
+				MouseY = 0;
+			}
+		}
+
 		// check for button presses
 		if (keys[key_p]) { if (PausedGame == 1) PausedGame = 0; else PausedGame = 1; }
 		if ((keys[key_return]) && GameOver == 1) { SetVars(SCREEN_WIDTH, SCREEN_HEIGHT); printf("restarting game"); }
@@ -242,7 +280,7 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 		if (mainMenu == 1) {
 			if (keys[key_s] || keys[key_return] || keys[key_a]) { mainMenu = 0; }
 		}
-		if (PausedGame == 0 && GameOver == 0 && mainMenu == 0) {
+		if (PausedGame == 0 && GameOver == 0 && mainMenu == 0 && MouseX == 0 && MouseY == 0) {
 			if ((keys[key_right] || keys[key_d] || playerMove[1] == 1) && playerPosition.x < SCREEN_WIDTH && playerDead == 0) { playerPosition.x += playerSpeed; playerDirection = -1; }
 			if ((keys[key_left] || keys[key_a] || playerMove[3] == 1) && playerPosition.x > 0 && playerDead == 0) { playerPosition.x -= playerSpeed; playerDirection = 1; }
 			if ((keys[key_up] || keys[key_w] || playerMove[0] == 1) && playerPosition.y > 0 && playerDead == 0) playerPosition.y -= playerSpeed;

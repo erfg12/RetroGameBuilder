@@ -27,6 +27,8 @@ int mainMenu;
 int GameOver;
 int playerDead;
 int sharkBitten; // bool
+int MouseX = 0;
+int MouseY = 0;
 struct SeaCreature creatures[27];
 
 int GetRandomNum(int min, int max)
@@ -245,6 +247,8 @@ void PlayerBit() {
     lives--;
     playerPosition.x=-200;
 	playerPosition.y=-200;
+    MouseX = 0;
+    MouseY = 0;
     playerDead = 1;
     if (lives <= 0) {
         GameOver = 1;

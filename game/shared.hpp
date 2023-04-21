@@ -42,6 +42,8 @@ extern int mainMenu;
 extern int GameOver;
 extern int playerDead;
 extern int sharkBitten; // bool
+extern int MouseX;
+extern int MouseY;
 extern SeaCreature creatures[27];
 extern int creatureRank[9];
 extern float creatureSpeed[9];
