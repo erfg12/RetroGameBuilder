@@ -673,18 +673,20 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../../../SDL_mixer/include\"",
+					"\"$(SRCROOT)/../../../SDL2_ttf\"",
 					../../include,
-					../../../SDL_mixer/include,
-					../../../SDL2_ttf,
 				);
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				MARKETING_VERSION = 1.0;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "$(CONFIG_FRAMEWORK_LDFLAGS)";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.libsdl.$(PRODUCT_NAME)";
 				SDKROOT = iphoneos;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
+				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../../SDL2_ttf\" \"$(SRCROOT)/../../../SDL_mixer/include\"";
 			};
 			name = Release;
 		};
