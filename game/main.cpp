@@ -4,6 +4,9 @@
 #if defined (__PSVITA__)
 const int SCREEN_WIDTH = 960;
 const int SCREEN_HEIGHT = 544;
+#elif defined (IOSBUILD)
+const int SCREEN_WIDTH = 920;
+const int SCREEN_HEIGHT = 430;
 #else
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
