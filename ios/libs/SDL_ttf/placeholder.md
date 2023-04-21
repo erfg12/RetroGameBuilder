@@ -1,0 +1,1 @@
+Unzip the SDL_ttf source zip file contents into this directory.

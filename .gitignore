@@ -39,3 +39,10 @@ linux/game
 
 xbox/bin
 xbox/main.lib
+
+ios/libs/SDL/*
+!ios/libs/SDL/placeholder.md
+ios/libs/SDL_mixer/*
+!ios/libs/SDL_mixer/placeholder.md
+ios/libs/SDL_ttf/*
+!ios/libs/SDL_ttf/placeholder.md

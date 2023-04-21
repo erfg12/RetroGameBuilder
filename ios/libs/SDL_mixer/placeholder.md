@@ -1,0 +1,1 @@
+Unzip the SDL_mixer source zip file contents into this directory.

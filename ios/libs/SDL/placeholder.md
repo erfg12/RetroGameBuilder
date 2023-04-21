@@ -1,0 +1,1 @@
+Unzip the SDL source zip file contents into this directory.
