@@ -9,7 +9,8 @@ Currently most systems don't compile. Check the TO-DO section below to see what 
 - [ ] Android
 - [ ] DreamCast
 - [x] Linux
-- [ ] MacOS (+ iOS)
+- [x] MacOS
+- [x] iOS
 - [ ] Mac OS X
 - [ ] PlayStation 2
 - [x] PSVita
@@ -39,13 +40,17 @@ Use a Linux distro like Ubuntu (WSL for Windows users). Setup [KOS](https://gist
 - - -
 Install [DevKitPro](https://devkitpro.org/wiki/Getting_Started). Open `DevKitPro > MSys2`. Type `pacman -S gamecube-portlibs` and install ALL. In the project directory, CD to the `/gamecube` directory, type `make`.
 
-### Linux (Ubuntu)
+### Linux
 - - -
 Use a Linux distro like Ubuntu (WSL for Windows users). In Terminal, type `sudo apt update`, then `sudo apt install build-essential libsdl2-dev libsdl2-mixer-dev libsdl2-ttf-dev`, then in the project directory, CD to the `/linux` directory. Now type `make`.
 
-### MacOS (+ iOS)
+### MacOS
 - - -
-On a Mac computer, download [SDL2 dmg](https://github.com/libsdl-org/SDL/releases/latest), open the DMG, place the framework file in `/library/frameworks` directory. Open `macos/game.xcodeproj` with XCode, press build.
+On a Mac computer, download [SDL2 dmg](https://github.com/libsdl-org/SDL/releases), [SDL2_ttf dmg](https://github.com/libsdl-org/SDL_ttf/releases) and [SDL2_mixer dmg](https://github.com/libsdl-org/SDL_mixer/releases) open the DMGs, place the framework files in the `/library/frameworks` directory. Open `macos/game.xcodeproj` with XCode, press build.
+
+### iOS
+- - -
+On a Mac computer, download [SDL2](https://github.com/libsdl-org/SDL/releases), [SDL2_ttf](https://github.com/libsdl-org/SDL_ttf/releases) and [SDL2_mixer](https://github.com/libsdl-org/SDL_mixer/releases) sources. Unzip their contents into their `ios/libs` directories. Open `project/project.xcodeproj` with XCode, press build.
 
 ### PlayStation 2
 - - -
