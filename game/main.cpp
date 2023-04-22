@@ -521,10 +521,12 @@ int main(int argc, char* args[])
 	gWindow = SDL_CreateWindow("SharkShark", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	if (gWindow == NULL)
 		printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+#if defined(IOSBUILD) || defined(ANDROID)
     SDL_DisplayMode dm;
     SDL_GetDesktopDisplayMode(0, &dm);
     SCREEN_WIDTH = dm.w;
     SCREEN_HEIGHT = dm.h;
+#endif
 	screen = SDL_GetWindowSurface(gWindow);
 	printf("Window located");
 #endif
