@@ -6,7 +6,7 @@ Currently most systems don't compile. Check the TO-DO section below to see what 
 
 ## TO-DO
 - [x] 3DS
-- [ ] Android
+- [x] Android
 - [ ] DreamCast
 - [x] Linux
 - [x] MacOS
@@ -30,7 +30,7 @@ Install [DevKitPro](https://devkitpro.org/wiki/Getting_Started). Open `DevKitPro
 
 ### Android
 - - -
-Using Windows, install Android Studio. Download the [SDL2 release source](https://github.com/libsdl-org/SDL)'s `include`, `src` and `Android.mk` folders and files to the `android\app\jni\SDL` directory. Do the same with [SDL2_mixer](https://github.com/libsdl-org/SDL_mixer/releases/) and [SDL2_ttf](https://github.com/libsdl-org/SDL_ttf/releases/). Open the `android` directory with Android Studio, press `Build > Make Project`. If you want to add more source code files, edit the `android\app\jni\src\Android.mk` file.
+Using Windows, install Android Studio. Download the [SDL2 release source](https://github.com/libsdl-org/SDL)'s `include`, `src` and `Android.mk` folders and files to the `android\app\jni\SDL` directory. Do the same with [SDL2_mixer](https://github.com/libsdl-org/SDL_mixer/releases/) and [SDL2_ttf](https://github.com/libsdl-org/SDL_ttf/releases/). Copy the `game\res` directory to `android\app\src\main\assets` directory. Open the `android` directory with Android Studio, press `Build > Make Project`. If you want to add more source code files, edit the `android\app\jni\src\Android.mk` file.
 
 ### DreamCast
 - - -
