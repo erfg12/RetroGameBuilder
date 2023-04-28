@@ -9,6 +9,9 @@
 
 #if defined(__PS2__)
 #include "SDL/SDL.h"
+#include "SDL/SDL_endian.h"
+#include "SDL/SDL_ttf.h"
+#include "SDL/SDL_mixer.h"
 #elif (defined(__linux__) && !defined(ANDROID)) || defined (__WIIU__) || defined (__PSVITA__)
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_main.h>

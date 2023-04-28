@@ -99,7 +99,7 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 	return 0;
 }
 
-#if defined (__3DS__) || defined (__WII__) || defined (__PS2__) || defined (__DREAMCAST__) || defined (__WIN9X__)
+#if defined (__3DS__) || defined (__WII__) || defined (__DREAMCAST__) || defined (__WIN9X__) || defined (__PS2__)
 	int colorkey = SDL_SRCCOLORKEY;
 	int key_s = SDLK_s;
 	int key_p = SDLK_p;
@@ -142,7 +142,7 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 	#define JOY_UP	  8
 	#define JOY_RIGHT 9
 	#define JOY_DOWN  6
-#elif defined(__3DS__)
+#elif defined(__3DS__) || defined(__PS2__)
 	#define JOY_START 0
 	#define JOY_LEFT  99 // these are processed through joystick Hat
 	#define JOY_UP	  99
@@ -483,7 +483,7 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 				}
 			}
 		}
-#if defined (__3DS__) || defined (__WII__) || defined (__PS2__) || (__DREAMCAST__) || defined (__WIN9X__)
+#if defined (__3DS__) || defined (__WII__) || (__DREAMCAST__) || defined (__WIN9X__) || defined (__PS2__)
 		SDL_Flip(screen);
 #else
 		SDL_BlitSurface(screen, NULL, screen, NULL);
@@ -505,10 +505,10 @@ int main(int argc, char* args[])
 #if defined (__SWITCH__)
     chdir("romfs:/");
 #endif
-#if defined (__PS2__) || (__DREAMCAST__) || defined (__WIN9X__)// SDL1
+#if (__DREAMCAST__) || defined (__WIN9X__)// SDL1
 	screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_DOUBLEBUF | SDL_HWSURFACE);
 	SDL_WM_SetCaption("SharkShark", NULL);
-#elif defined (__3DS__) || defined (__WII__)
+#elif defined (__3DS__) || defined (__WII__) || defined (__PS2__)
 	screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_SWSURFACE | SDL_FULLSCREEN);
 	SDL_WM_SetCaption("SharkShark", NULL);
 	SDL_InitSubSystem(SDL_INIT_JOYSTICK);

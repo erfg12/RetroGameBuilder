@@ -1,9 +1,9 @@
 EE_BIN = game.elf
 
-EE_OBJS = ../game/sdl1/sdl1.o ../game/main.o
+EE_OBJS = ../game/shared.o ../game/main.o
 
-EE_INCS = -I$(HOME)/ps2dev/ps2sdk/ports/include
-EE_LIBS = -L. -L$(HOME)/ps2dev/ps2sdk/ports/lib -L$(GSKIT)/lib -L../lib -lsdl -lcdvd
+EE_INCS = -I$(PS2DEV)/ps2sdk/ports/include -I../include -I$(PS2DEV)/ps2sdk/ports/include/SDL -I$(PS2DEV)/ps2sdk/ports/include/freetype2
+EE_LIBS = -L. -L$(PS2DEV)/ps2sdk/ports/lib -L$(PS2DEV)/ps2sdk/ports/lib -L$(PS2DEV)/ps2sdk/ports/lib -L$(GSKIT)/lib -L$(DMAKIT)/lib -L../lib -lsdlmixer -lSDL_ttf -lsdl -lcdvd -lgskit -ldmakit -lfreetype -lpng -lz
 EE_CXXFLAGS = -D__PS2__
 
 all: $(EE_BIN)
