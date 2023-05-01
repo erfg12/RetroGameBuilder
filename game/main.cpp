@@ -579,23 +579,7 @@ int main(int argc, char* args[])
 
 	font = TTF_OpenFont(RealPath("res/pixantiqua.ttf"), 25);
 
-	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
-	{
-		printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
-	}
-
-	printf("SDL mixer and ttf initialized");
-
-	sharkSpawnSound = Mix_LoadWAV(RealPath("res/audio/shark.wav"));
-	fishBiteSound = Mix_LoadWAV(RealPath("res/audio/eat.wav"));
-	gameOverSound = Mix_LoadWAV(RealPath("res/audio/gameover.wav"));
-	deadSound = Mix_LoadWAV(RealPath("res/audio/dead.wav"));
-	sharkDeadSound = Mix_LoadWAV(RealPath("res/audio/shark_dead.wav"));
-	fishRankUp = Mix_LoadWAV(RealPath("res/audio/bigger.wav")); // NOTE: (SDL1) Game can crash on startup if audio bit-rate is too high
-
-	bgMusic = Mix_LoadMUS(RealPath("res/audio/bg_music.wav"));
-
-	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER)  == -1) // Initialize SDL
+	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO|SDL_INIT_TIMER)  == -1) // Initialize SDL
 	{
 		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
 	}
@@ -606,6 +590,27 @@ int main(int argc, char* args[])
 			printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 		else
 		{
+			if (Mix_Init(MIX_INIT_OGG) == 0) {
+				debugPrint("SDL_Mixer Error: %s\n", Mix_GetError());
+				SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't initialize SDL_mixer.\n");
+			}
+
+			if (Mix_OpenAudio(48000, AUDIO_S16LSB, 2, 1024) < 0)
+			{
+				printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+			}
+
+			printf("SDL mixer and ttf initialized");
+
+			sharkSpawnSound = Mix_LoadWAV(RealPath("res/audio/shark.wav"));
+			fishBiteSound = Mix_LoadWAV(RealPath("res/audio/eat.wav"));
+			gameOverSound = Mix_LoadWAV(RealPath("res/audio/gameover.wav"));
+			deadSound = Mix_LoadWAV(RealPath("res/audio/dead.wav"));
+			sharkDeadSound = Mix_LoadWAV(RealPath("res/audio/shark_dead.wav"));
+			fishRankUp = Mix_LoadWAV(RealPath("res/audio/bigger.wav")); // NOTE: (SDL1) Game can crash on startup if audio bit-rate is too high
+
+			bgMusic = Mix_LoadMUS(RealPath("res/audio/bg_music.wav"));
+
 			SetVars(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 			UI_pause = TTF_RenderText_Solid(font, "PAUSED - PRESS P TO RESUME", color_white);
