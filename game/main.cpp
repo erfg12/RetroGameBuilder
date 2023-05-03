@@ -243,9 +243,10 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 				}
 				if (e.jbutton.button == JOY_START) {
 					if (mainMenu == 1) mainMenu = 0;
-					if (GameOver == 1) SetVars(SCREEN_WIDTH, SCREEN_HEIGHT);
-					if (PausedGame == 1) PausedGame = 0;
-					if (playerDead == 1 && PausedGame == 0 && GameOver == 0) { playerDead = 0; playerPosition.x = (float)SCREEN_WIDTH / 2; playerPosition.y = (float)SCREEN_HEIGHT / 2; }
+					else if (GameOver == 1) SetVars(SCREEN_WIDTH, SCREEN_HEIGHT);
+					else if (PausedGame == 0 && playerDead == 0 && GameOver == 0) PausedGame = 1;
+					else if (PausedGame == 1 && playerDead == 0 && GameOver == 0) PausedGame = 0;
+					else if (playerDead == 1 && PausedGame == 0 && GameOver == 0) { playerDead = 0; playerPosition.x = (float)SCREEN_WIDTH / 2; playerPosition.y = (float)SCREEN_HEIGHT / 2; }
 				}
 			}
 			else if (e.type == SDL_JOYBUTTONUP) {
@@ -584,9 +585,9 @@ int main(int argc, char* args[])
 
 	font = TTF_OpenFont(RealPath("res/pixantiqua.ttf"), 25);
 #if !defined(XBOX)
-	SDL_VideoInit(NULL);
+	SDL_InitSubSystem(SDL_INIT_VIDEO);
 #endif
-	if (SDL_Init(SDL_INIT_AUDIO|SDL_INIT_TIMER)  == -1) // Initialize SDL
+	if (SDL_Init(SDL_INIT_AUDIO|SDL_INIT_TIMER) == -1) // Initialize SDL
 	{
 		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
 	}
@@ -597,8 +598,7 @@ int main(int argc, char* args[])
 			printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 		else
 		{
-			if (Mix_Init(MIX_INIT_OGG) == 0) {
-				debugPrint("SDL_Mixer Error: %s\n", Mix_GetError());
+			if (Mix_Init(MIX_INIT_MOD | MIX_INIT_MID) == 0) {
 				SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't initialize SDL_mixer.\n");
 			}
 
@@ -606,8 +606,6 @@ int main(int argc, char* args[])
 			{
 				printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
 			}
-
-			printf("SDL mixer and ttf initialized");
 
 			sharkSpawnSound = Mix_LoadWAV(RealPath("res/audio/shark.wav"));
 			fishBiteSound = Mix_LoadWAV(RealPath("res/audio/eat.wav"));
