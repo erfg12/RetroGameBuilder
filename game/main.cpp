@@ -162,13 +162,18 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 #define JOY_UP	  99
 #define JOY_RIGHT 99
 #define JOY_DOWN  99
-#elif (defined(__WIN32__) && !defined(__WIN9X__)) || defined(__APPLE__) || defined(__linux__) || defined(__EMSCRIPTEN__)
+#elif (defined(__WIN32__) && !defined(__WIN9X__) && !defined(XBOX)) || defined(__APPLE__) || defined(__linux__) || defined(__EMSCRIPTEN__)
 #define JOY_START SDL_CONTROLLER_BUTTON_START
-#define JOY_LEFT  SDL_CONTROLLER_BUTTON_BACK
+#define JOY_LEFT  SDL_CONTROLLER_BUTTON_DPAD_LEFT
 #define JOY_UP	  SDL_CONTROLLER_BUTTON_DPAD_UP
 #define JOY_RIGHT SDL_CONTROLLER_BUTTON_DPAD_RIGHT
 #define JOY_DOWN  SDL_CONTROLLER_BUTTON_DPAD_DOWN
-
+#elif defined(XBOX)
+#define JOY_START 7
+#define JOY_LEFT  SDL_CONTROLLER_BUTTON_DPAD_LEFT
+#define JOY_UP	  SDL_CONTROLLER_BUTTON_DPAD_UP
+#define JOY_RIGHT SDL_CONTROLLER_BUTTON_DPAD_RIGHT
+#define JOY_DOWN  SDL_CONTROLLER_BUTTON_DPAD_DOWN
 #endif
 
 	void game_loop() {
