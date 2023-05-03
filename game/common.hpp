@@ -12,6 +12,22 @@
 #include "SDL/SDL_endian.h"
 #include "SDL/SDL_ttf.h"
 #include "SDL/SDL_mixer.h"
+
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <tamtypes.h>
+#include <sifrpc.h>
+#include <kernel.h>
+#include <loadfile.h>
+#include <errno.h>
+#include <iopheap.h>
+#include <debug.h>
+#include <iopcontrol.h>
+#include <sbv_patches.h>
+#include <libmc.h>
+#include <libcdvd.h>
+#include <debug.h>
 #elif (defined(__linux__) && !defined(ANDROID)) || defined (__WIIU__) || defined (__PSVITA__)
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_main.h>
