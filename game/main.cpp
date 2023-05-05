@@ -174,6 +174,12 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 #define JOY_UP	  SDL_CONTROLLER_BUTTON_DPAD_UP
 #define JOY_RIGHT SDL_CONTROLLER_BUTTON_DPAD_RIGHT
 #define JOY_DOWN  SDL_CONTROLLER_BUTTON_DPAD_DOWN
+#elif defined(__XBOXONE__)
+#define JOY_START 7
+#define JOY_LEFT  13
+#define JOY_UP	  10
+#define JOY_RIGHT 11
+#define JOY_DOWN  12
 #endif
 
 	void game_loop() {
@@ -510,40 +516,7 @@ int main(int argc, char* args[])
 #endif
 #if defined (__SWITCH__)
     chdir("romfs:/");
-#endif
-#if (__DREAMCAST__) || defined (__WIN9X__)// SDL1
-	screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_DOUBLEBUF | SDL_HWSURFACE);
-	SDL_WM_SetCaption("SharkShark", NULL);
-#elif defined (__3DS__) || defined (__WII__) || defined (__PS2__)
-	screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_SWSURFACE | SDL_FULLSCREEN);
-	SDL_WM_SetCaption("SharkShark", NULL);
-	SDL_InitSubSystem(SDL_INIT_JOYSTICK);
-	SDL_JoystickEventState(SDL_ENABLE);
-	SDL_JoystickOpen(0);
-#else // SDL2
-	SDL_InitSubSystem(SDL_INIT_JOYSTICK);
-	SDL_JoystickEventState(SDL_ENABLE);
-	SDL_JoystickOpen(0);
-	gWindow = SDL_CreateWindow("SharkShark", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-	if (gWindow == NULL)
-		printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
-#if defined(IOSBUILD)
-    SDL_DisplayMode dm;
-    SDL_GetDesktopDisplayMode(0, &dm);
-    SCREEN_WIDTH = dm.w;
-    SCREEN_HEIGHT = dm.h;
-#elif defined (ANDROID)
-	SDL_DisplayMode dm;
-	SDL_GetDesktopDisplayMode(0, &dm);
-	SDL_SetWindowSize(gWindow, dm.w, dm.h);
-	//SDL_SetWindowFullscreen(gWindow, 0);
-	SCREEN_WIDTH = dm.w;
-	SCREEN_HEIGHT = dm.h;
-#endif
-	screen = SDL_GetWindowSurface(gWindow);
-	printf("Window located");
-#endif
-	
+#endif	
 	next_time = SDL_GetTicks() + TICK_INTERVAL;
 
 	shark = SDL_LoadBMP(RealPath("res/sprites/shark.bmp"));
@@ -551,8 +524,9 @@ int main(int argc, char* args[])
 #if defined (XBOX)
 		debugPrint("Failed to load res/sprites/shark.bmp file!\n");
 #endif
-		//printf("Failed to load image: %s%s %s\n", SDL_GetBasePath(), RealPath("res/sprites/shark.bmp"), SDL_GetError());
-		printf("Failed to load image: %s %s\n", RealPath("res/sprites/shark.bmp"), SDL_GetError());
+		static char newPath[255];
+		sprintf(newPath, "Failed to load image: %s%s %s\n", SDL_GetBasePath(), RealPath("res/sprites/shark.bmp"), SDL_GetError());
+		//printf("Failed to load image: %s %s\n", RealPath("res/sprites/shark.bmp"), SDL_GetError());
 		return 0;
 	}
 	printf("Shark image located.");
@@ -593,11 +567,47 @@ int main(int argc, char* args[])
 	}
 	else
 	{
-		printf("SDL video and timer initialized");
+		
+#if (__DREAMCAST__) || defined (__WIN9X__)// SDL1
+		screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_DOUBLEBUF | SDL_HWSURFACE);
+		SDL_WM_SetCaption("SharkShark", NULL);
+#elif defined (__3DS__) || defined (__WII__) || defined (__PS2__)
+		screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_SWSURFACE | SDL_FULLSCREEN);
+		SDL_WM_SetCaption("SharkShark", NULL);
+		SDL_InitSubSystem(SDL_INIT_JOYSTICK);
+		SDL_JoystickEventState(SDL_ENABLE);
+		SDL_JoystickOpen(0);
+#else // SDL2
+		gWindow = SDL_CreateWindow("SharkShark", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+		if (gWindow == NULL)
+			printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+#if defined(IOSBUILD) || defined(__XBOXONE__)
+		SDL_DisplayMode dm;
+		SDL_GetDesktopDisplayMode(0, &dm);
+		SCREEN_WIDTH = dm.w;
+		SCREEN_HEIGHT = dm.h;
+#elif defined (ANDROID)
+		SDL_DisplayMode dm;
+		SDL_GetDesktopDisplayMode(0, &dm);
+		SDL_SetWindowSize(gWindow, dm.w, dm.h);
+		//SDL_SetWindowFullscreen(gWindow, 0);
+		SCREEN_WIDTH = dm.w;
+		SCREEN_HEIGHT = dm.h;
+#endif
+		screen = SDL_GetWindowSurface(gWindow);
+		printf("Window located");
+#endif
+
 		if (screen == NULL)
 			printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 		else
 		{
+#if !defined (__3DS__) && !defined (__WII__) && !defined (__PS2__) && !defined (__DREAMCAST__) && !defined (__WIN9X__)
+			SDL_InitSubSystem(SDL_INIT_JOYSTICK);
+			SDL_JoystickEventState(SDL_ENABLE);
+			SDL_JoystickOpen(0);
+#endif
+
 			if (Mix_Init(MIX_INIT_MOD | MIX_INIT_MID) == 0) {
 				SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't initialize SDL_mixer.\n");
 			}

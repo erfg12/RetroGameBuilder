@@ -7,20 +7,21 @@ Currently most systems don't compile. Check the TO-DO section below to see what 
 ## TO-DO
 - [x] 3DS
 - [x] Android
-- [ ] DreamCast
+- [ ] DreamCast (no TTF lib)
+- [x] iOS
 - [x] Linux
 - [x] MacOS
-- [x] iOS
-- [ ] Mac OS X
-- [ ] PlayStation 2
+- [ ] Mac OS X (no PPC Frameworks)
+- [ ] PlayStation 2 (SDL_INIT_AUDIO causes black screen)
 - [x] PSVita
 - [x] Switch
 - [x] Windows 9x
 - [x] Windows
 - [x] Web
 - [x] Wii
-- [ ] Wii U
-- [ ] OG Xbox
+- [ ] Wii U (builds, but black screen)
+- [x] Xbox (Original) (no audio)
+- [X] Xbox (UWP)
 
 ## How To Build:
 
@@ -40,6 +41,10 @@ Use a Linux distro like Ubuntu (WSL for Windows users). Setup [KOS](https://gist
 - - -
 Install [DevKitPro](https://devkitpro.org/wiki/Getting_Started). Open `DevKitPro > MSys2`. Type `pacman -S gamecube-portlibs` and install ALL. In the project directory, CD to the `/gamecube` directory, type `make`.
 
+### iOS
+- - -
+On a Mac computer, download [SDL2](https://github.com/libsdl-org/SDL/releases), [SDL2_ttf](https://github.com/libsdl-org/SDL_ttf/releases) and [SDL2_mixer](https://github.com/libsdl-org/SDL_mixer/releases) sources. Unzip their contents into their `ios/libs` directories. Open `project/project.xcodeproj` with XCode, press build.
+
 ### Linux
 - - -
 Use a Linux distro like Ubuntu (WSL for Windows users). In Terminal, type `sudo apt update`, then `sudo apt install build-essential libsdl2-dev libsdl2-mixer-dev libsdl2-ttf-dev`, then in the project directory, CD to the `/linux` directory. Now type `make`.
@@ -47,10 +52,6 @@ Use a Linux distro like Ubuntu (WSL for Windows users). In Terminal, type `sudo 
 ### MacOS
 - - -
 On a Mac computer, download [SDL2 dmg](https://github.com/libsdl-org/SDL/releases), [SDL2_ttf dmg](https://github.com/libsdl-org/SDL_ttf/releases) and [SDL2_mixer dmg](https://github.com/libsdl-org/SDL_mixer/releases) open the DMGs, place the framework files in the `/library/frameworks` directory. Open `macos/game.xcodeproj` with XCode, press build.
-
-### iOS
-- - -
-On a Mac computer, download [SDL2](https://github.com/libsdl-org/SDL/releases), [SDL2_ttf](https://github.com/libsdl-org/SDL_ttf/releases) and [SDL2_mixer](https://github.com/libsdl-org/SDL_mixer/releases) sources. Unzip their contents into their `ios/libs` directories. Open `project/project.xcodeproj` with XCode, press build.
 
 ### PlayStation 2
 - - -
@@ -115,3 +116,11 @@ To build:
 make
 ```
 Your .xbe file will be in the `bin` directory.
+
+### Xbox (UWP)
+- - -
+Install Visual Studio with C++ UWP stuff. Download SDL2 source code releases (TTF and Mixer) and place zip contents into `uwp-xbone/sdl-sln` directories. Copy `game/res` directory to `uwp-xbone\XboxSDL`. Click build or debug on your console.
+
+If SDL TTF Mixer projects are missing/blank even after adding source code to the `uwp-xbone/sdl-sln` directory, you have to add the `VisualC-WinRT/*.vcxproj` files. On TTF and Mixer you need to Add > Reference SDL-UWP, and on the game project, Add > Reference SDL TTF and Mixer. If it still doesn't build and says it can't find the .h files, you have to open the game project properties and add the include directory paths. 
+
+NOTE: The `game/res` folder path is hard coded in the game project's .vcxproj file.
