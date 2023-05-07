@@ -127,7 +127,7 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 	int key_down = SDL_SCANCODE_DOWN;
 
 	SDL_Window* gWindow = NULL;
-	const Uint8* keys = SDL_GetKeyboardState(NULL);
+	const Uint8* keys = NULL;
 #endif
 
 #if defined(__SWITCH__) || defined(__WIIU__)
@@ -525,11 +525,11 @@ int main(int argc, char* args[])
 		debugPrint("Failed to load res/sprites/shark.bmp file!\n");
 #endif
 		static char newPath[255];
-		sprintf(newPath, "Failed to load image: %s%s %s\n", SDL_GetBasePath(), RealPath("res/sprites/shark.bmp"), SDL_GetError());
-		//printf("Failed to load image: %s %s\n", RealPath("res/sprites/shark.bmp"), SDL_GetError());
+		//sprintf(newPath, "Failed to load image: %s%s %s\n", SDL_GetBasePath(), RealPath("res/sprites/shark.bmp"), SDL_GetError());
+		printf("Failed to load image: %s %s\n", RealPath("res/sprites/shark.bmp"), SDL_GetError());
 		return 0;
 	}
-	printf("Shark image located.");
+
 	SDL_SetColorKey(shark, colorkey, SDL_MapRGB(shark->format, 0xFF, 0x0, 0xFF)); // NOTE: (SDL1) Images must be 24 bit depth to work with color keys
 	shark_dead = SDL_LoadBMP(RealPath("res/sprites/shark_dead.bmp"));
 	SDL_SetColorKey(shark_dead, colorkey, SDL_MapRGB(shark_dead->format, 0xFF, 0x0, 0xFF));
@@ -595,7 +595,6 @@ int main(int argc, char* args[])
 		SCREEN_HEIGHT = dm.h;
 #endif
 		screen = SDL_GetWindowSurface(gWindow);
-		printf("Window located");
 #endif
 
 		if (screen == NULL)
@@ -607,7 +606,7 @@ int main(int argc, char* args[])
 			SDL_JoystickEventState(SDL_ENABLE);
 			SDL_JoystickOpen(0);
 #endif
-
+			keys = SDL_GetKeyboardState(NULL);
 			if (Mix_Init(MIX_INIT_MOD | MIX_INIT_MID) == 0) {
 				SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't initialize SDL_mixer.\n");
 			}
