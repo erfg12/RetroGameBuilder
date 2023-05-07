@@ -558,6 +558,12 @@ int main(int argc, char* args[])
 	}
 
 	font = TTF_OpenFont(RealPath("res/pixantiqua.ttf"), 25);
+
+#if defined (__PS2__)
+	SifLoadFileInit();
+	SifInitIopHeap();
+	sbv_patch_enable_lmb();
+#endif
 #if !defined(XBOX)
 	SDL_InitSubSystem(SDL_INIT_VIDEO);
 #endif
@@ -605,11 +611,12 @@ int main(int argc, char* args[])
 			SDL_InitSubSystem(SDL_INIT_JOYSTICK);
 			SDL_JoystickEventState(SDL_ENABLE);
 			SDL_JoystickOpen(0);
-#endif
 			keys = SDL_GetKeyboardState(NULL);
-			if (Mix_Init(MIX_INIT_MOD | MIX_INIT_MID) == 0) {
-				SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't initialize SDL_mixer.\n");
-			}
+#endif
+			
+			//if (Mix_Init(MIX_INIT_MOD | MIX_INIT_MID) == 0) {
+			//	SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't initialize SDL_mixer.\n");
+			//}
 
 			if (Mix_OpenAudio(48000, AUDIO_S16LSB, 2, 1024) < 0)
 			{
