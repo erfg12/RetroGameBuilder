@@ -18,6 +18,7 @@
 #include <loadfile.h>
 #include <iopheap.h>
 #include <sbv_patches.h>
+#include <romfs_io.h>
 #elif (defined(__linux__) && !defined(ANDROID)) || defined (__WIIU__) || defined (__PSVITA__)
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_main.h>

@@ -563,6 +563,7 @@ int main(int argc, char* args[])
 	SifLoadFileInit();
 	SifInitIopHeap();
 	sbv_patch_enable_lmb();
+	//rioInit();
 #endif
 #if !defined(XBOX)
 	SDL_InitSubSystem(SDL_INIT_VIDEO);
