@@ -55,7 +55,9 @@ On a Mac computer, download [SDL2 dmg](https://github.com/libsdl-org/SDL/release
 
 ### PlayStation 2
 - - -
-On Windows, download Docker. Run docker, now open a command prompt at the RetroGameBuilder directory. Type: `docker run --rm -it -v %cd%:/usr/local/project -w /usr/local/project ps2dev/ps2dev sh`. You should now be in the Docker engine. Type: `apk add make mpc1-dev mpfr freetype libpng`, then `cd ./ps2`, `make`.
+On Windows, download Docker. Run docker, now open a command prompt at the RetroGameBuilder directory. Type: `docker run --rm -it -v %cd%:/usr/local/project -w /usr/local/project ps2dev/ps2dev sh`. You should now be in the Docker engine. Type: `apk add make mpc1-dev mpfr freetype libpng xorriso`, then `cd ./ps2`, `make`.
+
+To build an iso disc image, use the command `mkisofs ./APP -o ./game.iso -allow-lowercase`
 
 ### PSVita
 - - -

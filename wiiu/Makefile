@@ -30,15 +30,14 @@ APP_AUTHOR  := Jacob Fliss
 CFLAGS		:=	-g -Wall -O2 -ffunction-sections \
 			$(MACHDEP) $(DEFINES)
 
-CFLAGS		+=	-D__WIIU__ -D__WUT__ $(INCLUDE) `sdl2-config --cflags`
+CFLAGS		+=	-D__WIIU__ -D__WUT__ -DHAVE_SDL2 $(INCLUDE) `sdl2-config --cflags`
 
 CXXFLAGS	:=	$(CFLAGS) -fno-rtti -fno-exceptions
 
 ASFLAGS		:=	-g $(MACHDEP)
 LDFLAGS		:=	-g $(MACHDEP) $(RPXSPECS) -Wl,-Map,$(notdir $*.map)
 
-LIBS	:=	`$(PREFIX)pkg-config --libs sdl2 SDL2_mixer SDL2_image SDL2_ttf` \
-			-lwut
+LIBS	:=	-lm `sdl2-config --libs` -lSDL2main -lSDL2_mixer -lSDL2_ttf -lfreetype -lpng -lmpg123 -lmodplug -lbz2 -lsdl2 -lpng -ljpeg -lz -lfreetype -lm -lstdc++ -lvorbisfile -lvorbis -logg -lwut
 
 #-------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level

@@ -277,6 +277,15 @@ const char* RealPath(const char* path) {
     sprintf(newPath, "sd:/wiiu/apps/SharkShark/%s", path);
 #elif defined (__3DS__)
     sprintf(newPath, "romfs:/%s", path);
+#elif defined (__PS2__)
+    int index = 0;
+    sprintf(newPath, "cdrom0:\\%s", path);
+    while (newPath[index])
+    {
+        if (newPath[index] == '/')
+            newPath[index] = '\\';
+        index++;
+    }
 #else
     sprintf(newPath, "%s", path);
 #endif

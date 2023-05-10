@@ -8,17 +8,18 @@
 #include <vector>
 
 #if defined(__PS2__)
-#include "SDL/SDL.h"
-#include "SDL/SDL_endian.h"
-#include "SDL/SDL_ttf.h"
-#include "SDL/SDL_mixer.h"
+#include "SDL2/SDL.h"
+#include "SDL2/SDL_endian.h"
+#include "SDL2/SDL_ttf.h"
+#include "SDL2/SDL_mixer.h"
 
 #include <kernel.h>
 #include <sifrpc.h>
 #include <loadfile.h>
 #include <iopheap.h>
 #include <sbv_patches.h>
-#include <romfs_io.h>
+//#include <romfs_io.h>
+#include <libcdvd.h>
 #elif (defined(__linux__) && !defined(ANDROID)) || defined (__WIIU__) || defined (__PSVITA__)
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_main.h>
@@ -54,6 +55,7 @@
 #endif
 
 #if defined (__WIIU__)
+#include <unistd.h>
 #include <whb/proc.h>
 #include <wut.h>
 #endif

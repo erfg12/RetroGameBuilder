@@ -99,7 +99,7 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 	return 0;
 }
 
-#if defined (__3DS__) || defined (__WII__) || defined (__DREAMCAST__) || defined (__WIN9X__) || defined (__PS2__)
+#if defined (__3DS__) || defined (__WII__) || defined (__DREAMCAST__) || defined (__WIN9X__)
 	int colorkey = SDL_SRCCOLORKEY;
 	int key_s = SDLK_s;
 	int key_p = SDLK_p;
@@ -495,7 +495,7 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 				}
 			}
 		}
-#if defined (__3DS__) || defined (__WII__) || (__DREAMCAST__) || defined (__WIN9X__) || defined (__PS2__)
+#if defined (__3DS__) || defined (__WII__) || (__DREAMCAST__) || defined (__WIN9X__)
 		SDL_Flip(screen);
 #else
 		SDL_BlitSurface(screen, NULL, screen, NULL);
@@ -517,6 +517,7 @@ int main(int argc, char* args[])
 #if defined (__SWITCH__)
     chdir("romfs:/");
 #endif	
+	//SDL_SetHint(SDL_HINT_EMSCRIPTEN_KEYBOARD_ELEMENT, "#document");
 	next_time = SDL_GetTicks() + TICK_INTERVAL;
 
 	shark = SDL_LoadBMP(RealPath("res/sprites/shark.bmp"));
@@ -524,9 +525,8 @@ int main(int argc, char* args[])
 #if defined (XBOX)
 		debugPrint("Failed to load res/sprites/shark.bmp file!\n");
 #endif
-		static char newPath[255];
-		//sprintf(newPath, "Failed to load image: %s%s %s\n", SDL_GetBasePath(), RealPath("res/sprites/shark.bmp"), SDL_GetError());
-		printf("Failed to load image: %s %s\n", RealPath("res/sprites/shark.bmp"), SDL_GetError());
+		printf("Failed to load image: %s%s %s\n", SDL_GetBasePath(), RealPath("res/sprites/shark.bmp"), SDL_GetError());
+		//printf("Failed to load image: %s %s\n", RealPath("res/sprites/shark.bmp"), SDL_GetError());
 		return 0;
 	}
 
@@ -563,6 +563,7 @@ int main(int argc, char* args[])
 	SifLoadFileInit();
 	SifInitIopHeap();
 	sbv_patch_enable_lmb();
+	//sceCdInit(SCECdINoD);
 	//rioInit();
 #endif
 #if !defined(XBOX)
@@ -578,7 +579,7 @@ int main(int argc, char* args[])
 #if (__DREAMCAST__) || defined (__WIN9X__)// SDL1
 		screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_DOUBLEBUF | SDL_HWSURFACE);
 		SDL_WM_SetCaption("SharkShark", NULL);
-#elif defined (__3DS__) || defined (__WII__) || defined (__PS2__)
+#elif defined (__3DS__) || defined (__WII__)
 		screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_SWSURFACE | SDL_FULLSCREEN);
 		SDL_WM_SetCaption("SharkShark", NULL);
 		SDL_InitSubSystem(SDL_INIT_JOYSTICK);
@@ -608,7 +609,7 @@ int main(int argc, char* args[])
 			printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 		else
 		{
-#if !defined (__3DS__) && !defined (__WII__) && !defined (__PS2__) && !defined (__DREAMCAST__) && !defined (__WIN9X__)
+#if !defined (__3DS__) && !defined (__WII__) && !defined (__DREAMCAST__) && !defined (__WIN9X__)
 			SDL_InitSubSystem(SDL_INIT_JOYSTICK);
 			SDL_JoystickEventState(SDL_ENABLE);
 			SDL_JoystickOpen(0);
@@ -619,10 +620,18 @@ int main(int argc, char* args[])
 			//	SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't initialize SDL_mixer.\n");
 			//}
 
+#if defined(__PS2__)
+			if (Mix_OpenAudio(44100, AUDIO_S16, 2, 512) < 0)
+			{
+				printf("Couldn't open audio: %s\n", SDL_GetError());
+				return 0;
+			}
+#else
 			if (Mix_OpenAudio(48000, AUDIO_S16LSB, 2, 1024) < 0)
 			{
 				printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
 			}
+#endif
 
 			sharkSpawnSound = Mix_LoadWAV(RealPath("res/audio/shark.wav"));
 			fishBiteSound = Mix_LoadWAV(RealPath("res/audio/eat.wav"));
