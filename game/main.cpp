@@ -383,18 +383,22 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 
 			if (SharkHealth > 0) {
 				sharkDeathAudioPlayed = 0;
+				Uint8 r = 0xFF;
+				Uint8 g = 0xFF;
+				Uint8 b = 0x00;
 				if (SharkHurtTimer % 10 && SharkHurtTimer > 0) {
-					// color yellow eyes
+					SDL_GetSurfaceColorMod(shark, &r, &g, &b); // color yellow eyes
 				}
 				else {
-					// color red eyes
+					g = 0x00;
+					SDL_GetSurfaceColorMod(shark, &r, &g, &b); // color red eyes
 				}
 				if (sharkDirection == 1) { // left
-					SDL_Rect shark_left = { 0, 0, 64, (Uint16)PosSize.y };
+					SDL_Rect shark_left = { 0, 0, 64, (Uint16)GoTo.y };
 					SDL_BlitSurface(shark, &shark_left, screen, &GoTo);
 				}
 				else { // right
-					SDL_Rect shark_right = { 64, 0, 128, (Uint16)PosSize.y };
+					SDL_Rect shark_right = { 64, 0, 128, (Uint16)GoTo.y };
 					SDL_BlitSurface(shark, &shark_right, screen, &GoTo);
 				}
 			}
