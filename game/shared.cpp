@@ -65,13 +65,18 @@ void SetShark(int bitten) {
 }
 
 void CheckRankUp() {
-    if ((score % 1000 == 0 || score % 1025 == 0 || score % 1050 == 0 || score % 1075 == 0) && playerRank < 4 && int(round(score / 1000)) == (playerRank + 1)) {
-        playerRank++;
-        printf("************** PLAYER RANK IS NOW %i ***************\n", playerRank);
-        Mix_PlayChannel(-1, fishRankUp, 0);
-    }
-    else if ((score % 1000 == 0 || score % 1025 == 0 || score % 1050 == 0 || score % 1075 == 0) && int(round(score / 1000)) == (playerRank + 1) && playerRank >= 4) {
-        lives++;
+    //printf("1000:%i 1025:%i 1050:%i 1075:%i rank:%i\n", score % 1000, score % 1025, score % 1050, score % 1075, playerRank);
+    if ((score % 1000 == 0 || (score - 25) % 1000 == 0 || (score - 50) % 1000 == 0 || (score - 75) % 1000 == 0) && int(round(score / 1000)) == (playerRank + 1)) {
+        if (playerRank < 4) {
+            playerRank++;
+            //printf("************** PLAYER RANK IS NOW %i ***************\n", playerRank);
+            Mix_PlayChannel(-1, fishRankUp, 0);
+        }
+        else {
+            //printf("************** GAINED +1 LIVE ***************\n");
+            Mix_PlayChannel(-1, fishRankUp, 0);
+            lives++;
+        }
     }
 }
 
@@ -198,13 +203,15 @@ void FishSpawn(float ScreenWidth, float ScreenHeight) {
         int pickCreature = 0;
         pickCreature = GetRandomNum(0, 26);
         int CheckFishEqualPlayerRank = 0;
-        for(int i = 0; i <= 4; i++) { // check if we have a fish out that is the same players rank
-            if (creatures[i].active == 1 && i == playerRank) // 0-4
-                CheckFishEqualPlayerRank = 1;
-        }
-        if (CheckFishEqualPlayerRank == 0) {
-            printf("spawning same lvl fish P:%i\n", playerRank);
-            pickCreature = playerRank;
+        if (playerRank < 4) { // spawn at least 1 fish that matches our rank
+            for (int i = 0; i <= 4; i++) { // check if we have a fish out that is the same players rank
+                if (creatures[i].active == 1 && i == playerRank) // 0-4
+                    CheckFishEqualPlayerRank = 1;
+            }
+            if (CheckFishEqualPlayerRank == 0) {
+                //printf("spawning same lvl fish RANK:%i\n", playerRank);
+                pickCreature = playerRank;
+            }
         }
         if (!creatures[pickCreature].active) {
             if (creatures[pickCreature].type == 8 && playerRank < 3) return; // no need to spawn jellyfish early in the game
