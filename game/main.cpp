@@ -215,6 +215,10 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 		while (SDL_PollEvent(&e)) {
 			if (e.type == SDL_QUIT)
 				quit = 1;
+			if (e.type == SDL_KEYDOWN) {
+				printf("keydown:%i\n", e.key.keysym.sym);
+				SDL_PumpEvents();
+			}
 			if (e.type == SDL_JOYAXISMOTION) {
 				//score = e.jaxis.value;
 			}

@@ -72,7 +72,9 @@ Install [DevKitPro](https://devkitpro.org/wiki/Getting_Started). Open `DevKitPro
 * Clone `https://github.com/emscripten-core/emsdk.git`. Navigate to `emsdk` dir. 
 * Linux/MacOS: `./emsdk install latest`, `./emsdk activate latest`, `source ./emsdk_env.sh`. Don't close Terminal. Go back to `/web` dir, type `chmod a+x build.sh` and `./build.sh`. 
 * Windows: `emsdk install latest`, `emsdk activate latest`, `emsdk_env.bat`. Don't close command window. Go back to `/web` dir and run `build.bat`
-* For testing, run `emrun build/game.html`. 
+* For testing, run `emrun build/game.html`.
+
+If you plan on embeding the game into a website, you may want to change the canvas element to: `<canvas class="emscripten" id="canvas" tabindex=1></canvas>` and add the script `document.getElementById('canvas').focus();`. Also delete the emscripten svg and use `style="display:none;"` on the textarea output.
 
 ### Wii
 - - -
