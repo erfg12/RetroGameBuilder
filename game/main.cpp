@@ -190,11 +190,6 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 
 		struct Rectangle playerRec = { playerPosition.x, playerPosition.y, 16, 16 };
 
-		if (Mix_PlayingMusic() == 0)
-		{
-			Mix_PlayMusic(bgMusic, -1);
-		}
-
 		// these should flip depending on which direction shark is facing
 		struct Rectangle sharkTailRec = { mrShark.position.x + (64 / 2), mrShark.position.y, 64 / 2, 32 };
 		struct Rectangle sharkBiteRec = { mrShark.position.x, mrShark.position.y, 64 / 2, 32 };
@@ -506,7 +501,9 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 		SDL_BlitSurface(screen, NULL, screen, NULL);
 		SDL_UpdateWindowSurface(gWindow);
 #endif
-		SDL_Delay(time_left());
+#if !defined(__EMSCRIPTEN__) && !defined (__3DS__) && !defined (__WII__) && !(__DREAMCAST__) && !defined (__WIN9X__)
+		SDL_Delay(time_left()); // causes audio hiccups on devices other than PC, iOS, Android
+#endif
 		next_time += TICK_INTERVAL;
 	}
 
@@ -521,8 +518,7 @@ int main(int argc, char* args[])
 #endif
 #if defined (__SWITCH__)
     chdir("romfs:/");
-#endif	
-	//SDL_SetHint(SDL_HINT_EMSCRIPTEN_KEYBOARD_ELEMENT, "#document");
+#endif
 	next_time = SDL_GetTicks() + TICK_INTERVAL;
 
 	shark = SDL_LoadBMP(RealPath("res/sprites/shark.bmp"));
@@ -671,6 +667,9 @@ int main(int argc, char* args[])
 			UI_mainmenu_renderQuad.y=SCREEN_HEIGHT / 2 - 90;
 			UI_mainmenu_renderQuad.w=(Uint16)UI_mainmenu->w;
 			UI_mainmenu_renderQuad.h=(Uint16)UI_mainmenu->h;
+
+			if (Mix_PlayingMusic() == 0)
+				Mix_PlayMusic(bgMusic, -1);
 
 #ifdef __EMSCRIPTEN__
 			emscripten_set_main_loop(game_loop, 0, 1);
