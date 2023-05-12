@@ -65,13 +65,12 @@ void SetShark(int bitten) {
 }
 
 void CheckRankUp() {
-    printf("rounded:%i rankCheck:%i\n", int(round(score / 1000)), (playerRank + 1));
     if ((score % 1000 == 0 || score % 1025 == 0 || score % 1050 == 0 || score % 1075 == 0) && playerRank < 4 && int(round(score / 1000)) == (playerRank + 1)) {
         playerRank++;
         printf("************** PLAYER RANK IS NOW %i ***************\n", playerRank);
         Mix_PlayChannel(-1, fishRankUp, 0);
     }
-    else if (score % 1000 == 0 && playerRank >= 4) {
+    else if ((score % 1000 == 0 || score % 1025 == 0 || score % 1050 == 0 || score % 1075 == 0) && int(round(score / 1000)) == (playerRank + 1) && playerRank >= 4) {
         lives++;
     }
 }

@@ -268,7 +268,7 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 		}
 
 		// click to move
-		if (MouseX && MouseY > 0 && PausedGame == 0 && GameOver == 0) {
+		if (MouseX > 0 && MouseY > 0 && PausedGame == 0 && GameOver == 0) {
 			if (abs(playerPosition.x - MouseX) > 2) { // move towards X
 				if (MouseX > playerPosition.x) {
 					playerPosition.x += playerSpeed;
@@ -299,11 +299,11 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 		if (mainMenu == 1) {
 			if (keys[key_s] || keys[key_return] || keys[key_a]) { mainMenu = 0; }
 		}
-		if (PausedGame == 0 && GameOver == 0 && mainMenu == 0 && MouseX == 0 && MouseY == 0) {
-			if ((keys[key_right] || keys[key_d] || playerMove[1] == 1) && playerPosition.x < SCREEN_WIDTH && playerDead == 0) { playerPosition.x += playerSpeed; playerDirection = -1; }
-			if ((keys[key_left] || keys[key_a] || playerMove[3] == 1) && playerPosition.x > 0 && playerDead == 0) { playerPosition.x -= playerSpeed; playerDirection = 1; }
-			if ((keys[key_up] || keys[key_w] || playerMove[0] == 1) && playerPosition.y > 0 && playerDead == 0) playerPosition.y -= playerSpeed;
-			if ((keys[key_down] || keys[key_s] || playerMove[2] == 1) && playerPosition.y < SCREEN_HEIGHT - 15 && playerDead == 0) playerPosition.y += playerSpeed;
+		if (PausedGame == 0 && GameOver == 0 && mainMenu == 0) {
+			if ((keys[key_right] || keys[key_d] || playerMove[1] == 1) && playerPosition.x < SCREEN_WIDTH && playerDead == 0) { playerPosition.x += playerSpeed; playerDirection = -1; MouseX = 0; MouseY = 0; }
+			if ((keys[key_left] || keys[key_a] || playerMove[3] == 1) && playerPosition.x > 0 && playerDead == 0) { playerPosition.x -= playerSpeed; playerDirection = 1; MouseX = 0; MouseY = 0; }
+			if ((keys[key_up] || keys[key_w] || playerMove[0] == 1) && playerPosition.y > 0 && playerDead == 0) { playerPosition.y -= playerSpeed; MouseX = 0; MouseY = 0; }
+			if ((keys[key_down] || keys[key_s] || playerMove[2] == 1) && playerPosition.y < SCREEN_HEIGHT - 15 && playerDead == 0) { playerPosition.y += playerSpeed; MouseX = 0; MouseY = 0; }
 		}
 
 		PauseTimer++;
