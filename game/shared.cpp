@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
+#include "common.hpp"
 
 #include "shared.hpp"
 
@@ -19,6 +20,7 @@ int sharkMaxBounces;
 int score;
 int SharkSpawnTimer;
 int SharkHurtTimer;
+int PauseTimer;
 int SharkHealth;
 int LeftClick; // bool
 int sharkDirection; // 1 = left, -1 = right
@@ -62,6 +64,18 @@ void SetShark(int bitten) {
     //printf("DEBUG: Resetting shark\n");
 }
 
+void CheckRankUp() {
+    printf("rounded:%i rankCheck:%i\n", int(round(score / 1000)), (playerRank + 1));
+    if ((score % 1000 == 0 || score % 1025 == 0 || score % 1050 == 0 || score % 1075 == 0) && playerRank < 4 && int(round(score / 1000)) == (playerRank + 1)) {
+        playerRank++;
+        printf("************** PLAYER RANK IS NOW %i ***************\n", playerRank);
+        Mix_PlayChannel(-1, fishRankUp, 0);
+    }
+    else if (score % 1000 == 0 && playerRank >= 4) {
+        lives++;
+    }
+}
+
 void SetFish() {
     int t = 0; // creature type
     for (int i = 0; i < 27; i++) { // generate 27 sea creatures
@@ -100,6 +114,7 @@ void SetVars(float ScreenWidth, float ScreenHeight) {
     sharkMaxBounces = 5;
     SharkSpawnTimer = 0;
     SharkHurtTimer = 0;
+    PauseTimer = 0;
     SharkHealth = 10;
     LeftClick = 0;
     sharkBitten = 0;
@@ -138,6 +153,7 @@ void SharkRoam(float ScreenWidth, float ScreenHeight) {
             mrShark.position.y = -100;
             mrShark.active = 0;
             score = score + 100;
+            CheckRankUp();
             return;
         }
 
@@ -182,6 +198,15 @@ void FishSpawn(float ScreenWidth, float ScreenHeight) {
     if (FishSpawnTimer >= 60) {
         int pickCreature = 0;
         pickCreature = GetRandomNum(0, 26);
+        int CheckFishEqualPlayerRank = 0;
+        for(int i = 0; i <= 4; i++) { // check if we have a fish out that is the same players rank
+            if (creatures[i].active == 1 && i == playerRank) // 0-4
+                CheckFishEqualPlayerRank = 1;
+        }
+        if (CheckFishEqualPlayerRank == 0) {
+            printf("spawning same lvl fish P:%i\n", playerRank);
+            pickCreature = playerRank;
+        }
         if (!creatures[pickCreature].active) {
             if (creatures[pickCreature].type == 8 && playerRank < 3) return; // no need to spawn jellyfish early in the game
             if (creatures[pickCreature].type == 7 && playerRank < 2) return; // seahorses can wait a bit

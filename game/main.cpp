@@ -215,10 +215,10 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 		while (SDL_PollEvent(&e)) {
 			if (e.type == SDL_QUIT)
 				quit = 1;
-			if (e.type == SDL_KEYDOWN) {
+			/*if (e.type == SDL_KEYDOWN) {
 				printf("keydown:%i\n", e.key.keysym.sym);
 				SDL_PumpEvents();
-			}
+			}*/
 			if (e.type == SDL_JOYAXISMOTION) {
 				//score = e.jaxis.value;
 			}
@@ -254,8 +254,8 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 				if (e.jbutton.button == JOY_START) {
 					if (mainMenu == 1) mainMenu = 0;
 					else if (GameOver == 1) SetVars(SCREEN_WIDTH, SCREEN_HEIGHT);
-					else if (PausedGame == 0 && playerDead == 0 && GameOver == 0) PausedGame = 1;
-					else if (PausedGame == 1 && playerDead == 0 && GameOver == 0) PausedGame = 0;
+					else if (PausedGame == 0 && playerDead == 0 && GameOver == 0) if (PauseTimer > 50) { PausedGame = 1; PauseTimer = 0; }
+					else if (PausedGame == 1 && playerDead == 0 && GameOver == 0) if (PauseTimer > 50) { PausedGame = 0; PauseTimer = 0; }
 					else if (playerDead == 1 && PausedGame == 0 && GameOver == 0) { playerDead = 0; playerPosition.x = (float)SCREEN_WIDTH / 2; playerPosition.y = (float)SCREEN_HEIGHT / 2; }
 				}
 			}
@@ -293,7 +293,7 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 		}
 
 		// check for button presses
-		if (keys[key_p]) { if (PausedGame == 1) PausedGame = 0; else PausedGame = 1; }
+		if (keys[key_p]) { if (PausedGame == 1 && PauseTimer > 50) { PausedGame = 0; PauseTimer = 0; } else if (PausedGame == 0 && PauseTimer > 50) { PausedGame = 1; PauseTimer = 0; } }
 		if ((keys[key_return]) && GameOver == 1) { SetVars(SCREEN_WIDTH, SCREEN_HEIGHT); printf("restarting game"); }
 		if (keys[key_return] && playerDead == 1 && PausedGame == 0 && GameOver == 0) { playerDead = 0; playerPosition.x = (float)SCREEN_WIDTH / 2; playerPosition.y = (float)SCREEN_HEIGHT / 2; }
 		if (mainMenu == 1) {
@@ -305,6 +305,8 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 			if ((keys[key_up] || keys[key_w] || playerMove[0] == 1) && playerPosition.y > 0 && playerDead == 0) playerPosition.y -= playerSpeed;
 			if ((keys[key_down] || keys[key_s] || playerMove[2] == 1) && playerPosition.y < SCREEN_HEIGHT - 15 && playerDead == 0) playerPosition.y += playerSpeed;
 		}
+
+		PauseTimer++;
 
 		char UI_Score_t[255];
 		sprintf(UI_Score_t, "SCORE %d", score);
@@ -353,8 +355,11 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 				Mix_PlayChannel(-1, deadSound, 0);
 		}
 		else if (CheckCollisionRecs(playerRec, sharkTailRec) && SharkHealth > 0 && playerDead == 0) { // player bit shark on tail
-			if (sharkBitten != 1)
+			if (sharkBitten != 1) {
 				Mix_PlayChannel(-1, fishBiteSound, 0);
+				score = score + 25;
+				CheckRankUp();
+			}
 			sharkBitten = 1;
 		}
 
@@ -424,15 +429,7 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 						creatures[i].active = 0;
 						score = score + 100;
 						Mix_PlayChannel(-1, fishBiteSound, 0);
-						Mix_PlayChannel(-1, fishBiteSound, 0);
-						if (score % 1000 == 0 && playerRank < 4) {
-							playerRank++;
-							//printf("************** PLAYER RANK IS NOW %i ***************\n", playerRank);
-							Mix_PlayChannel(-1, fishRankUp, 0);
-						}
-						else if (score % 1000 == 0 && playerRank >= 4) {
-							lives++;
-						}
+						CheckRankUp();
 					}
 					else {
 						//printf("**************** BITTEN BY A FISH. X:%f Y:%f ACTIVE:%i TYPE:%i ********************\n", creatures[i].position.x, creatures[i].position.y, creatures[i].active, creatures[i].type);
@@ -539,6 +536,8 @@ int main(int argc, char* args[])
 	SDL_SetColorKey(shark_dead, colorkey, SDL_MapRGB(shark_dead->format, 0xFF, 0x0, 0xFF));
 	seahorse = SDL_LoadBMP(RealPath("res/sprites/seahorse.bmp"));
 	SDL_SetColorKey(seahorse, colorkey, SDL_MapRGB(seahorse->format, 0xFF, 0x0, 0xFF));
+	jellyfish = SDL_LoadBMP(RealPath("res/sprites/jellyfish.bmp"));
+	SDL_SetColorKey(jellyfish, colorkey, SDL_MapRGB(jellyfish->format, 0xFF, 0x0, 0xFF));
 	lobster = SDL_LoadBMP(RealPath("res/sprites/lobster.bmp"));
 	SDL_SetColorKey(lobster, colorkey, SDL_MapRGB(lobster->format, 0xFF, 0x0, 0xFF));
 	crab = SDL_LoadBMP(RealPath("res/sprites/crab.bmp"));
@@ -648,7 +647,7 @@ int main(int argc, char* args[])
 
 			SetVars(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-			UI_pause = TTF_RenderText_Solid(font, "PAUSED - PRESS P TO RESUME", color_white);
+			UI_pause = TTF_RenderText_Solid(font, "PAUSED !", color_white);
 			
 			UI_pause_renderQuad.x=SCREEN_WIDTH / 2 - 50;
 			UI_pause_renderQuad.y=SCREEN_HEIGHT / 2 - 50;
@@ -695,6 +694,7 @@ int main(int argc, char* args[])
 	SDL_FreeSurface(seahorse);
 	SDL_FreeSurface(lobster);
 	SDL_FreeSurface(crab);
+	SDL_FreeSurface(jellyfish);
 
 	Mix_FreeMusic(bgMusic);
 	TTF_CloseFont(font);
