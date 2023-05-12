@@ -232,7 +232,7 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 				} else if (GameOver == 1)
 					SetVars(SCREEN_WIDTH, SCREEN_HEIGHT);
 				else if (playerDead == 1 && PausedGame == 0 && GameOver == 0) {
-					playerDead = 0; playerPosition.x = (float)SCREEN_WIDTH / 2; playerPosition.y = (float)SCREEN_HEIGHT / 2; 
+					Respawn(SCREEN_WIDTH, SCREEN_HEIGHT);
 				} else {
 					SDL_GetMouseState(&MouseX, &MouseY);
 					printf("mouse clicked coords x:%i y:%i\n", MouseX, MouseY);
@@ -251,7 +251,7 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 					else if (GameOver == 1) SetVars(SCREEN_WIDTH, SCREEN_HEIGHT);
 					else if (PausedGame == 0 && playerDead == 0 && GameOver == 0) if (PauseTimer > 50) { PausedGame = 1; PauseTimer = 0; }
 					else if (PausedGame == 1 && playerDead == 0 && GameOver == 0) if (PauseTimer > 50) { PausedGame = 0; PauseTimer = 0; }
-					else if (playerDead == 1 && PausedGame == 0 && GameOver == 0) { playerDead = 0; playerPosition.x = (float)SCREEN_WIDTH / 2; playerPosition.y = (float)SCREEN_HEIGHT / 2; }
+					else if (playerDead == 1 && PausedGame == 0 && GameOver == 0) { Respawn(SCREEN_WIDTH, SCREEN_HEIGHT); }
 				}
 			}
 			else if (e.type == SDL_JOYBUTTONUP) {
@@ -290,7 +290,7 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 		// check for button presses
 		if (keys[key_p]) { if (PausedGame == 1 && PauseTimer > 50) { PausedGame = 0; PauseTimer = 0; } else if (PausedGame == 0 && PauseTimer > 50) { PausedGame = 1; PauseTimer = 0; } }
 		if ((keys[key_return]) && GameOver == 1) { SetVars(SCREEN_WIDTH, SCREEN_HEIGHT); printf("restarting game"); }
-		if (keys[key_return] && playerDead == 1 && PausedGame == 0 && GameOver == 0) { playerDead = 0; playerPosition.x = (float)SCREEN_WIDTH / 2; playerPosition.y = (float)SCREEN_HEIGHT / 2; }
+		if (keys[key_return] && playerDead == 1 && PausedGame == 0 && GameOver == 0) { Respawn(SCREEN_WIDTH,SCREEN_HEIGHT); }
 		if (mainMenu == 1) {
 			if (keys[key_s] || keys[key_return] || keys[key_a]) { mainMenu = 0; }
 		}
@@ -382,11 +382,11 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 				Uint8 g = 0xFF;
 				Uint8 b = 0x00;
 				if (SharkHurtTimer % 10 && SharkHurtTimer > 0) {
-					SDL_GetSurfaceColorMod(shark, &r, &g, &b); // color yellow eyes
+					g = 0x00;
+					SDL_SetSurfaceColorMod(shark, r, g, b); // color red eyes
 				}
 				else {
-					g = 0x00;
-					SDL_GetSurfaceColorMod(shark, &r, &g, &b); // color red eyes
+					SDL_SetSurfaceColorMod(shark, r, g, b); // color yellow eyes
 				}
 				if (sharkDirection == 1) { // left
 					SDL_Rect shark_left = { 0, 0, 64, (Uint16)GoTo.y };

@@ -96,6 +96,13 @@ void SetFish() {
     }
 }
 
+void Respawn(int SCREEN_WIDTH, int SCREEN_HEIGHT) {
+    playerDead = 0; 
+    playerRank = 0;
+    playerPosition.x = (float)SCREEN_WIDTH / 2; 
+    playerPosition.y = (float)SCREEN_HEIGHT / 2;
+}
+
 void SetVars(float ScreenWidth, float ScreenHeight) {
     srand(time(NULL));
     LeftClick = 0;
@@ -199,7 +206,9 @@ void SharkRoam(float ScreenWidth, float ScreenHeight) {
 void FishSpawn(float ScreenWidth, float ScreenHeight) {
     int height = 40;
     //if (ScreenHeight < 600) height = 20;
-    if (FishSpawnTimer >= 60) {
+    int TimeToSpawn = 60;
+    if (playerRank > 4) TimeToSpawn = 30; // increase spawns x2
+    if (FishSpawnTimer >= TimeToSpawn) {
         int pickCreature = 0;
         pickCreature = GetRandomNum(0, 26);
         int CheckFishEqualPlayerRank = 0;

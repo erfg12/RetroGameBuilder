@@ -102,5 +102,6 @@ extern void FishMoveAndDeSpawn(float ScreenWidth, float ScreenHeight, int CrustH
 extern void PlayerBit();
 extern const char* RealPath(const char* path);
 extern void CheckRankUp();
+extern void Respawn(int SCREEN_WIDTH, int SCREEN_HEIGHT);
 
 #endif
