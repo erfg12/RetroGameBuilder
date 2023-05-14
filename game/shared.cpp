@@ -33,6 +33,98 @@ int MouseX = 0;
 int MouseY = 0;
 struct SeaCreature creatures[27];
 
+int sharkDeathAudioPlayed = 0;
+
+int playerMove[4] = { 0,0,0,0 }; // up right down left
+
+SDL_Surface* shark;
+SDL_Surface* shark_dead;
+SDL_Surface* lobster;
+SDL_Surface* crab;
+SDL_Surface* seahorse;
+SDL_Surface* jellyfish;
+
+SDL_Surface* fish[5];
+
+SDL_Color color_white = { 255,255,255,255 };
+SDL_Color color_black = { 0,0,0,255 };
+
+Mix_Chunk* sharkSpawnSound;
+Mix_Chunk* sharkDeadSound;
+Mix_Chunk* fishBiteSound;
+Mix_Chunk* gameOverSound;
+Mix_Chunk* deadSound;
+Mix_Chunk* fishRankUp;
+
+Mix_Music* bgMusic;
+
+SDL_Surface* screen;
+
+SDL_Surface* UI_Score;
+SDL_Rect* UI_Score_renderQuad;
+
+SDL_Surface* UI_Lives;
+SDL_Rect* UI_Lives_renderQuad;
+
+SDL_Surface* UI_gameover;
+SDL_Rect* UI_gameover_renderQuad;
+
+SDL_Surface* UI_pause;
+SDL_Rect UI_pause_renderQuad;
+
+SDL_Surface* UI_died;
+SDL_Rect UI_died_renderQuad;
+
+SDL_Surface* UI_mainmenu;
+SDL_Rect UI_mainmenu_renderQuad;
+
+TTF_Font* font;
+const Uint8* keys;
+
+Uint32 next_time;
+
+// SDL 1
+#if defined (__3DS__) || defined (__WII__) || defined (__DREAMCAST__) || defined (__WIN9X__)
+int colorkey = SDL_SRCCOLORKEY;
+int key_s = SDLK_s;
+int key_p = SDLK_p;
+int key_w = SDLK_w;
+int key_a = SDLK_a;
+int key_d = SDLK_d;
+int key_return = SDLK_RETURN;
+int key_left = SDLK_LEFT;
+int key_right = SDLK_RIGHT;
+int key_up = SDLK_UP;
+int key_down = SDLK_DOWN;
+#else // SDL 2
+int colorkey = SDL_TRUE;
+int key_p = SDL_SCANCODE_P;
+int key_w = SDL_SCANCODE_W;
+int key_a = SDL_SCANCODE_A;
+int key_s = SDL_SCANCODE_S;
+int key_d = SDL_SCANCODE_D;
+int key_return = SDL_SCANCODE_RETURN;
+int key_left = SDL_SCANCODE_LEFT;
+int key_right = SDL_SCANCODE_RIGHT;
+int key_up = SDL_SCANCODE_UP;
+int key_down = SDL_SCANCODE_DOWN;
+SDL_Window* gWindow;
+#endif
+
+int playerSpeed = 2;
+int quit = 0;
+
+#if defined (__PSVITA__)
+int SCREEN_WIDTH = 960;
+int SCREEN_HEIGHT = 544;
+#elif defined (IOSBUILD)
+int SCREEN_WIDTH = 920;
+int SCREEN_HEIGHT = 430;
+#else
+int SCREEN_WIDTH = 640;
+int SCREEN_HEIGHT = 480;
+#endif
+
 int GetRandomNum(int min, int max)
 {
     int range, result, cutoff;
@@ -41,6 +133,27 @@ int GetRandomNum(int min, int max)
     cutoff = (RAND_MAX / range) * range;
     do { result = rand(); } while (result >= cutoff);
     return result % range + min;
+}
+
+Uint32 time_left(void)
+{
+    Uint32 now;
+
+    now = SDL_GetTicks();
+    if (next_time <= now)
+        return 0;
+    else
+        return next_time - now;
+}
+
+int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
+    if (r1.x + r1.w >= r2.x &&    // r1 right edge past r2 left
+        r1.x <= r2.x + r2.w &&    // r1 left edge past r2 right
+        r1.y + r1.h >= r2.y &&    // r1 top edge past r2 bottom
+        r1.y <= r2.y + r2.h) {    // r1 bottom edge past r2 top
+        return 1;
+    }
+    return 0;
 }
 
 void SetShark(int bitten) {
@@ -117,7 +230,7 @@ void SetVars(float ScreenWidth, float ScreenHeight) {
     PausedGame = 0;
     mainMenu = 1;
     GameOver = 0;
-    lives = 5;
+    lives = 2;
     playerDirection = 1;
     playerDead = 0;
     FishSpawnTimer = 0;
@@ -151,6 +264,30 @@ void HurtShark() {
         return;
     }
     SharkHurtTimer++;
+}
+
+void MixerOpenAudio() {
+#if defined(__PS2__)
+    if (Mix_OpenAudio(44100, AUDIO_S16, 2, 512) < 0)
+    {
+        printf("Couldn't open audio: %s\n", SDL_GetError());
+        return 0;
+    }
+#else
+    if (Mix_OpenAudio(48000, AUDIO_S16LSB, 2, 1024) < 0)
+    {
+        printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
+    }
+#endif
+}
+
+void RefreshScreen() {
+#if defined (__3DS__) || defined (__WII__) || (__DREAMCAST__) || defined (__WIN9X__)
+    SDL_Flip(screen);
+#else
+    SDL_BlitSurface(screen, NULL, screen, NULL);
+    SDL_UpdateWindowSurface(gWindow);
+#endif
 }
 
 void SharkRoam(float ScreenWidth, float ScreenHeight) {

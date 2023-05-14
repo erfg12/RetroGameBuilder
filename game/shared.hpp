@@ -90,6 +90,46 @@ extern SDL_Rect UI_died_renderQuad;
 extern SDL_Surface* UI_mainmenu;
 extern SDL_Rect UI_mainmenu_renderQuad;
 
+extern const Uint8* keys;
+extern TTF_Font* font;
+
+extern Uint32 next_time;
+
+typedef struct Rectangle {
+    float x;
+    float y;
+    float w;
+    float h;
+} Rectangle;
+
+extern int quit;
+extern int playerSpeed;
+
+extern int sharkDeathAudioPlayed;
+extern int playerMove[4];
+
+extern int colorkey;
+extern int key_s;
+extern int key_p;
+extern int key_w;
+extern int key_a;
+extern int key_d;
+extern int key_return;
+extern int key_left;
+extern int key_right;
+extern int key_up;
+extern int key_down;
+
+// SDL 1
+#if defined (__3DS__) || defined (__WII__) || defined (__DREAMCAST__) || defined (__WIN9X__)
+
+#else // SDL 2
+extern SDL_Window* gWindow;
+#endif
+
+extern int SCREEN_WIDTH;
+extern int SCREEN_HEIGHT;
+
 extern int GetRandomNum(int min, int max);
 extern void SetShark(int bitten);
 extern void SetFish();
@@ -103,5 +143,9 @@ extern void PlayerBit();
 extern const char* RealPath(const char* path);
 extern void CheckRankUp();
 extern void Respawn(int SCREEN_WIDTH, int SCREEN_HEIGHT);
+extern int CheckCollisionRecs(Rectangle r1, Rectangle r2);
+extern Uint32 time_left(void);
+extern void RefreshScreen();
+extern void MixerOpenAudio();
 
 #endif

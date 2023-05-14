@@ -1,187 +1,6 @@
 #include "common.hpp"
 #include "shared.hpp"
 
-#if defined (__PSVITA__)
-int SCREEN_WIDTH = 960;
-int SCREEN_HEIGHT = 544;
-#elif defined (IOSBUILD)
-int SCREEN_WIDTH = 920;
-int SCREEN_HEIGHT = 430;
-#else
-int SCREEN_WIDTH = 640;
-int SCREEN_HEIGHT = 480;
-#endif
-
-int sharkDeathAudioPlayed = 0;
-
-int playerMove[4] = { 0,0,0,0 }; // up right down left
-
-SDL_Surface* shark;
-SDL_Surface* shark_dead;
-SDL_Surface* lobster;
-SDL_Surface* crab;
-SDL_Surface* seahorse;
-SDL_Surface* jellyfish;
-
-SDL_Surface* fish[5];
-
-SDL_Color color_white = { 255,255,255,255 };
-SDL_Color color_black = { 0,0,0,255 };
-
-Mix_Chunk* sharkSpawnSound = NULL;
-Mix_Chunk* sharkDeadSound = NULL;
-Mix_Chunk* fishBiteSound = NULL;
-Mix_Chunk* gameOverSound = NULL;
-Mix_Chunk* deadSound = NULL;
-Mix_Chunk* fishRankUp = NULL;
-
-Mix_Music* bgMusic = NULL;
-
-SDL_Surface* screen = NULL;
-
-SDL_Surface* UI_Score;
-SDL_Rect* UI_Score_renderQuad;
-
-SDL_Surface* UI_Lives;
-SDL_Rect* UI_Lives_renderQuad;
-
-SDL_Surface* UI_gameover;
-SDL_Rect* UI_gameover_renderQuad;
-
-SDL_Surface* UI_pause;
-SDL_Rect UI_pause_renderQuad;
-
-SDL_Surface* UI_died;
-SDL_Rect UI_died_renderQuad;
-
-SDL_Surface* UI_mainmenu;
-SDL_Rect UI_mainmenu_renderQuad;
-
-int playerSpeed = 2;
-int quit = 0;
-
-TTF_Font* font = NULL;
-
-// SDL1 stuff
-//#ifdef main
-//#undef main
-//#endif
-
-typedef struct Rectangle {
-	float x;
-	float y;
-	float w;
-	float h;
-} Rectangle;
-
-#define TICK_INTERVAL    20
-
-static Uint32 next_time;
-
-Uint32 time_left(void)
-{
-	Uint32 now;
-
-	now = SDL_GetTicks();
-	if (next_time <= now)
-		return 0;
-	else
-		return next_time - now;
-}
-
-int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
-	if (r1.x + r1.w >= r2.x &&    // r1 right edge past r2 left
-		r1.x <= r2.x + r2.w &&    // r1 left edge past r2 right
-		r1.y + r1.h >= r2.y &&    // r1 top edge past r2 bottom
-		r1.y <= r2.y + r2.h) {    // r1 bottom edge past r2 top
-		return 1;
-	}
-	return 0;
-}
-
-#if defined (__3DS__) || defined (__WII__) || defined (__DREAMCAST__) || defined (__WIN9X__)
-	int colorkey = SDL_SRCCOLORKEY;
-	int key_s = SDLK_s;
-	int key_p = SDLK_p;
-	int key_w = SDLK_w;
-	int key_a = SDLK_a;
-	int key_d = SDLK_d;
-	int key_return = SDLK_RETURN;
-	int key_left = SDLK_LEFT;
-	int key_right = SDLK_RIGHT;
-	int key_up = SDLK_UP;
-	int key_down = SDLK_DOWN;
-
-	const Uint8* keys = SDL_GetKeyState(NULL);
-#else
-	int colorkey = SDL_TRUE;
-	int key_p = SDL_SCANCODE_P;
-	int key_w = SDL_SCANCODE_W;
-	int key_a = SDL_SCANCODE_A;
-	int key_s = SDL_SCANCODE_S;
-	int key_d = SDL_SCANCODE_D;
-	int key_return = SDL_SCANCODE_RETURN;
-	int key_left = SDL_SCANCODE_LEFT;
-	int key_right = SDL_SCANCODE_RIGHT;
-	int key_up = SDL_SCANCODE_UP;
-	int key_down = SDL_SCANCODE_DOWN;
-
-	SDL_Window* gWindow = NULL;
-	const Uint8* keys = NULL;
-#endif
-
-#if defined(__SWITCH__) || defined(__WIIU__)
-	#define JOY_START 10
-	#define JOY_LEFT  12
-	#define JOY_UP    13
-	#define JOY_RIGHT 14
-	#define JOY_DOWN  15
-#elif defined(__PSVITA__)
-	#define JOY_START 11
-	#define JOY_LEFT  7
-	#define JOY_UP	  8
-	#define JOY_RIGHT 9
-	#define JOY_DOWN  6
-#elif defined(__3DS__) || defined(__PS2__)
-	#define JOY_START 0
-	#define JOY_LEFT  99 // these are processed through joystick Hat
-	#define JOY_UP	  99
-	#define JOY_RIGHT 99
-	#define JOY_DOWN  99
-#endif
-
-#if defined(__WIN9X__)
-#define JOY_START 0
-#define JOY_LEFT  0
-#define JOY_UP	  0
-#define JOY_RIGHT 0
-#define JOY_DOWN  0
-#elif defined(__WII__)
-#define JOY_START 5
-#define JOY_LEFT  99 // joystick Hat
-#define JOY_UP	  99
-#define JOY_RIGHT 99
-#define JOY_DOWN  99
-#elif (defined(__WIN32__) && !defined(__WIN9X__) && !defined(XBOX)) || defined(__APPLE__) || defined(__linux__) || defined(__EMSCRIPTEN__)
-#define JOY_START SDL_CONTROLLER_BUTTON_START
-#define JOY_LEFT  SDL_CONTROLLER_BUTTON_DPAD_LEFT
-#define JOY_UP	  SDL_CONTROLLER_BUTTON_DPAD_UP
-#define JOY_RIGHT SDL_CONTROLLER_BUTTON_DPAD_RIGHT
-#define JOY_DOWN  SDL_CONTROLLER_BUTTON_DPAD_DOWN
-#elif defined(XBOX)
-#define JOY_START 7
-#define JOY_LEFT  SDL_CONTROLLER_BUTTON_DPAD_LEFT
-#define JOY_UP	  SDL_CONTROLLER_BUTTON_DPAD_UP
-#define JOY_RIGHT SDL_CONTROLLER_BUTTON_DPAD_RIGHT
-#define JOY_DOWN  SDL_CONTROLLER_BUTTON_DPAD_DOWN
-#elif defined(__XBOXONE__)
-#define JOY_START 7
-#define JOY_LEFT  13
-#define JOY_UP	  10
-#define JOY_RIGHT 11
-#define JOY_DOWN  12
-#endif
-
 	void game_loop() {
 		SDL_Event e;
 
@@ -495,12 +314,7 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 				}
 			}
 		}
-#if defined (__3DS__) || defined (__WII__) || (__DREAMCAST__) || defined (__WIN9X__)
-		SDL_Flip(screen);
-#else
-		SDL_BlitSurface(screen, NULL, screen, NULL);
-		SDL_UpdateWindowSurface(gWindow);
-#endif
+		RefreshScreen();
 #if !defined(__EMSCRIPTEN__) && !defined (__3DS__) && !defined (__WII__) && !(__DREAMCAST__) && !defined (__WIN9X__)
 		SDL_Delay(time_left()); // causes audio hiccups on devices other than PC, iOS, Android
 #endif
@@ -566,8 +380,6 @@ int main(int argc, char* args[])
 	SifLoadFileInit();
 	SifInitIopHeap();
 	sbv_patch_enable_lmb();
-	//sceCdInit(SCECdINoD);
-	//rioInit();
 #endif
 #if !defined(XBOX)
 	SDL_InitSubSystem(SDL_INIT_VIDEO);
@@ -578,7 +390,6 @@ int main(int argc, char* args[])
 	}
 	else
 	{
-		
 #if (__DREAMCAST__) || defined (__WIN9X__)// SDL1
 		screen = SDL_SetVideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32, SDL_DOUBLEBUF | SDL_HWSURFACE);
 		SDL_WM_SetCaption("SharkShark", NULL);
@@ -601,7 +412,6 @@ int main(int argc, char* args[])
 		SDL_DisplayMode dm;
 		SDL_GetDesktopDisplayMode(0, &dm);
 		SDL_SetWindowSize(gWindow, dm.w, dm.h);
-		//SDL_SetWindowFullscreen(gWindow, 0);
 		SCREEN_WIDTH = dm.w;
 		SCREEN_HEIGHT = dm.h;
 #endif
@@ -623,18 +433,7 @@ int main(int argc, char* args[])
 			//	SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't initialize SDL_mixer.\n");
 			//}
 
-#if defined(__PS2__)
-			if (Mix_OpenAudio(44100, AUDIO_S16, 2, 512) < 0)
-			{
-				printf("Couldn't open audio: %s\n", SDL_GetError());
-				return 0;
-			}
-#else
-			if (Mix_OpenAudio(48000, AUDIO_S16LSB, 2, 1024) < 0)
-			{
-				printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
-			}
-#endif
+			MixerOpenAudio();
 
 			sharkSpawnSound = Mix_LoadWAV(RealPath("res/audio/shark.wav"));
 			fishBiteSound = Mix_LoadWAV(RealPath("res/audio/eat.wav"));
