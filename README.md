@@ -12,7 +12,7 @@ Currently most systems don't compile. Check the TO-DO section below to see what 
 - [x] Linux
 - [x] MacOS
 - [ ] Mac OS X (no PPC Frameworks)
-- [ ] PlayStation 2 (SDL_INIT_AUDIO causes black screen)
+- [ ] PlayStation 2 (issues loading mixer and ttf assets from CD)
 - [x] PSVita
 - [x] Switch
 - [x] Windows 9x
