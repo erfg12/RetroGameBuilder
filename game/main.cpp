@@ -1,6 +1,10 @@
 #include "common.hpp"
 #include "shared.hpp"
 
+///PSP_MODULE_INFO("SDL2", 0, 1, 1);
+
+//PSP_MAIN_THREAD_ATTR(THREAD_ATTR_USER | THREAD_ATTR_VFPU);
+
 	void game_loop() {
 		SDL_Event e;
 
