@@ -49,6 +49,9 @@ extern SeaCreature creatures[27];
 extern int creatureRank[9];
 extern float creatureSpeed[9];
 
+extern char UI_Score_t[255];
+extern char UI_Lives_t[255];
+
 extern SDL_Surface* shark;
 extern SDL_Surface* shark_dead;
 extern SDL_Surface* lobster;
@@ -69,8 +72,6 @@ extern Mix_Chunk* deadSound;
 extern Mix_Chunk* fishRankUp;
 
 extern Mix_Music* bgMusic;
-
-extern SDL_Surface* screen;
 
 extern SDL_Surface* UI_Score;
 extern SDL_Rect* UI_Score_renderQuad;
@@ -122,10 +123,13 @@ extern int key_down;
 
 // SDL 1
 #if defined (__3DS__) || defined (__WII__) || defined (__DREAMCAST__) || defined (__WIN9X__)
-
+extern SDL_Surface* screen;
 #else // SDL 2
 extern SDL_Window* gWindow;
+extern SDL_Renderer* renderer;
 #endif
+
+extern void surfaceToScreen(SDL_Surface* surf, SDL_Rect* src, SDL_Rect* dst);
 
 extern int SCREEN_WIDTH;
 extern int SCREEN_HEIGHT;
@@ -147,5 +151,6 @@ extern int CheckCollisionRecs(Rectangle r1, Rectangle r2);
 extern Uint32 time_left(void);
 extern void RefreshScreen();
 extern void MixerOpenAudio();
+extern void exitApp();
 
 #endif

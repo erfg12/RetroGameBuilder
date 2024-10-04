@@ -20,7 +20,7 @@
 #include <sbv_patches.h>
 //#include <romfs_io.h>
 #include <libcdvd.h>
-#elif (defined(__linux__) && !defined(ANDROID)) || defined (__WIIU__) || defined (__PSVITA__) || defined (__PSP__)
+#elif (defined(__linux__) && !defined(ANDROID)) || defined (__WIIU__) || defined (__PSVITA__)
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_main.h>
 #include <SDL2/SDL_ttf.h>
@@ -68,11 +68,6 @@
 #include <psp2/kernel/processmgr.h>
 #endif
 
-#if defined (__PSP__)
-#include <pspthreadman.h>
-#include <pspkernel.h>
-#endif
-
 #if __EMSCRIPTEN__
 #include <emscripten.h>
 #endif
@@ -91,7 +86,7 @@
 #define JOY_UP    13
 #define JOY_RIGHT 14
 #define JOY_DOWN  15
-#elif defined(__PSVITA__) || defined(__PSP__)
+#elif defined(__PSVITA__) || defined(PSP)
 #define JOY_START 11
 #define JOY_LEFT  7
 #define JOY_UP	  8

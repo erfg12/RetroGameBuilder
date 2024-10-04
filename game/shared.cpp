@@ -83,6 +83,9 @@ const Uint8* keys;
 
 Uint32 next_time;
 
+char UI_Score_t[255];
+char UI_Lives_t[255];
+
 // SDL 1
 #if defined (__3DS__) || defined (__WII__) || defined (__DREAMCAST__) || defined (__WIN9X__)
 int colorkey = SDL_SRCCOLORKEY;
@@ -109,6 +112,7 @@ int key_right = SDL_SCANCODE_RIGHT;
 int key_up = SDL_SCANCODE_UP;
 int key_down = SDL_SCANCODE_DOWN;
 SDL_Window* gWindow;
+SDL_Renderer* renderer;
 #endif
 
 int playerSpeed = 2;
@@ -120,6 +124,9 @@ int SCREEN_HEIGHT = 544;
 #elif defined (IOSBUILD)
 int SCREEN_WIDTH = 920;
 int SCREEN_HEIGHT = 430;
+#elif defined(PSP)
+int SCREEN_WIDTH = 480;
+int SCREEN_HEIGHT = 272;
 #else
 int SCREEN_WIDTH = 640;
 int SCREEN_HEIGHT = 480;
@@ -154,6 +161,32 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
         return 1;
     }
     return 0;
+}
+
+void surfaceToScreen(SDL_Surface* surf, SDL_Rect* src, SDL_Rect* dst) {
+#if defined (__3DS__) || defined (__WII__) || defined (__DREAMCAST__) || defined (__WIN9X__) // sdl 1
+    SDL_BlitSurface(surf, src, screen, dst);
+#else
+    SDL_Texture* tmpTexture = SDL_CreateTextureFromSurface(renderer, surf);
+    if (tmpTexture)
+        SDL_RenderCopy(renderer, tmpTexture, src, dst);
+    SDL_DestroyTexture(tmpTexture); // causes PSP graphics to become garbage..
+#endif
+}
+
+void exitApp() {
+    Mix_FreeMusic(bgMusic);
+    TTF_CloseFont(font);
+    Mix_CloseAudio();
+    TTF_Quit();
+#if defined (__3DS__) || defined (__WII__) || defined (__DREAMCAST__) || defined (__WIN9X__) // sdl 1
+#else
+    SDL_DestroyRenderer(renderer);
+#endif
+    SDL_Quit(); // Quit SDL subsystems
+#if defined (__SWITCH__) || defined (__3DS__)
+    romfsExit();
+#endif
 }
 
 void SetShark(int bitten) {
@@ -273,6 +306,12 @@ void MixerOpenAudio() {
         printf("Couldn't open audio: %s\n", SDL_GetError());
         return 0;
     }
+#elif defined(PSP)
+    Mix_OpenAudio(44100,
+        MIX_DEFAULT_FORMAT,
+        MIX_DEFAULT_CHANNELS,
+        2048
+    );
 #else
     if (Mix_OpenAudio(48000, AUDIO_S16LSB, 2, 1024) < 0)
     {
@@ -284,9 +323,11 @@ void MixerOpenAudio() {
 void RefreshScreen() {
 #if defined (__3DS__) || defined (__WII__) || (__DREAMCAST__) || defined (__WIN9X__)
     SDL_Flip(screen);
-#else
     SDL_BlitSurface(screen, NULL, screen, NULL);
     SDL_UpdateWindowSurface(gWindow);
+#else
+    SDL_RenderPresent(renderer);
+    
 #endif
 }
 
