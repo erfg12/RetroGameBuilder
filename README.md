@@ -59,6 +59,17 @@ On Windows, download Docker. Run docker, now open a command prompt at the RetroG
 
 To build an iso disc image, use the command `mkisofs ./APP -o ./game.iso -allow-lowercase`
 
+### PSP
+- - -
+Install [PSPDEV](https://pspdev.github.io/installation.html).
+
+```
+cd ./psp
+mkdir build && cd build
+cmake ..
+make
+```
+
 ### PSVita
 - - -
 Use a Linux distro like Ubuntu (WSL for Windows users). First install [VitaSDK](https://vitasdk.org/). In the project directory, CD to the `/psvita` directory, then `chmod a+x ./psvita.sh`, and run `./build.sh`. In `/build` you will have your .vpk file.
