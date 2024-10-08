@@ -5,29 +5,6 @@
 		SDL_Event e;
 
 		Uint32 ticks = SDL_GetTicks();
-#if defined (__3DS__) || defined (__WII__) || defined (__DREAMCAST__) || defined (__WIN9X__) // sdl 1
-		SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 0, 255)); // blue like water (SDL1 might be 0x0000FF)
-#else
-		SDL_RenderClear(renderer);
-#endif
-		struct Rectangle playerRec = { playerPosition.x, playerPosition.y, 16, 16 };
-
-		// these should flip depending on which direction shark is facing
-		struct Rectangle sharkTailRec = { mrShark.position.x + (64 / 2), mrShark.position.y, 64 / 2, 32 };
-		struct Rectangle sharkBiteRec = { mrShark.position.x, mrShark.position.y, 64 / 2, 32 };
-		if (sharkDirection == -1) {
-			sharkTailRec.x=mrShark.position.x; 
-			sharkTailRec.y=mrShark.position.y;
-			sharkBiteRec.x=mrShark.position.x + (64 / 2);
-			sharkBiteRec.y=mrShark.position.y;
-		}
-
-		// NPCs move
-		if (PausedGame == 0 && GameOver == 0 && mainMenu == 0) {
-			SharkRoam(SCREEN_WIDTH, SCREEN_HEIGHT);
-			FishSpawn(SCREEN_WIDTH, SCREEN_HEIGHT);
-			FishMoveAndDeSpawn(SCREEN_WIDTH, SCREEN_HEIGHT, 16);
-		}
 
 		while (SDL_PollEvent(&e)) {
 			if (e.type == SDL_QUIT)
@@ -62,6 +39,7 @@
 			}
 			if (e.type == SDL_JOYBUTTONDOWN) {
 				//score = e.jbutton.button;
+				UpdateScore(score);
 				if (PausedGame == 0 && GameOver == 0 && mainMenu == 0) {
 					if (e.jbutton.button == JOY_UP) playerMove[0] = 1;
 					if (e.jbutton.button == JOY_DOWN) playerMove[2] = 1;
@@ -69,11 +47,13 @@
 					if (e.jbutton.button == JOY_LEFT) playerMove[3] = 1;
 				}
 				if (e.jbutton.button == JOY_START) {
-					if (mainMenu == 1) mainMenu = 0;
+					SDL_Log("mainMenu: %d, PausedGame:%d, GameOver:%d, playerDead:%d, PauseTimer:%d", mainMenu, PausedGame, GameOver, playerDead, PauseTimer);
+					if (mainMenu == 1) { SDL_Log("starting game"); mainMenu = 0; }
 					else if (GameOver == 1) SetVars(SCREEN_WIDTH, SCREEN_HEIGHT);
-					else if (PausedGame == 0 && playerDead == 0 && GameOver == 0) if (PauseTimer > 50) { PausedGame = 1; PauseTimer = 0; }
-					else if (PausedGame == 1 && playerDead == 0 && GameOver == 0) if (PauseTimer > 50) { PausedGame = 0; PauseTimer = 0; }
-					else if (playerDead == 1 && PausedGame == 0 && GameOver == 0) { Respawn(SCREEN_WIDTH, SCREEN_HEIGHT); }
+					else if (PausedGame == 0 && playerDead == 0 && GameOver == 0) { if (PauseTimer > 50) { SDL_Log("pausing game"); PausedGame = 1; PauseTimer = 0; } }
+					else if (PausedGame == 1 && playerDead == 0 && GameOver == 0) { if (PauseTimer > 50) { SDL_Log("unpausing game"); PausedGame = 0; PauseTimer = 0; } }
+					else if (playerDead == 1 && PausedGame == 0 && GameOver == 0) { SDL_Log("respawning"); Respawn(SCREEN_WIDTH, SCREEN_HEIGHT); }
+					else { SDL_Log("doing nothing..."); }
 				}
 			}
 			else if (e.type == SDL_JOYBUTTONUP) {
@@ -123,47 +103,60 @@
 			if ((keys[key_down] || keys[key_s] || playerMove[2] == 1) && playerPosition.y < SCREEN_HEIGHT - 15 && playerDead == 0) { playerPosition.y += playerSpeed; MouseX = 0; MouseY = 0; }
 		}
 
-		PauseTimer++;
+#if defined (__3DS__) || defined (__WII__) || defined (__DREAMCAST__) || defined (__WIN9X__) // sdl 1
+		SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 0, 255)); // blue like water (SDL1 might be 0x0000FF)
+#else
+		SDL_RenderClear(renderer);
+#endif
+		struct Rectangle playerRec = { playerPosition.x, playerPosition.y, 16, 16 };
 
-		sprintf(UI_Score_t, "SCORE %d", score);
-		UI_Score = TTF_RenderText_Solid(font, UI_Score_t, color_white);
-		struct SDL_Rect UI_Score_renderQuad;
-		UI_Score_renderQuad.x=10;
-		UI_Score_renderQuad.y=10;
-		UI_Score_renderQuad.w=(Uint16)UI_Score->w;
-		UI_Score_renderQuad.h=(Uint16)UI_Score->h;
+		// these should flip depending on which direction shark is facing
+		struct Rectangle sharkTailRec = { mrShark.position.x + (64 / 2), mrShark.position.y, 64 / 2, 32 };
+		struct Rectangle sharkBiteRec = { mrShark.position.x, mrShark.position.y, 64 / 2, 32 };
+		if (sharkDirection == -1) {
+			sharkTailRec.x = mrShark.position.x;
+			sharkTailRec.y = mrShark.position.y;
+			sharkBiteRec.x = mrShark.position.x + (64 / 2);
+			sharkBiteRec.y = mrShark.position.y;
+		}
 
-		surfaceToScreen(UI_Score, NULL, &UI_Score_renderQuad);
+		// NPCs move
+		if (PausedGame == 0 && GameOver == 0 && mainMenu == 0) {
+			SharkRoam(SCREEN_WIDTH, SCREEN_HEIGHT);
+			FishSpawn(SCREEN_WIDTH, SCREEN_HEIGHT);
+			FishMoveAndDeSpawn(SCREEN_WIDTH, SCREEN_HEIGHT, 16);
+		}
 
-		
-		sprintf(UI_Lives_t, "%i LIVES", lives);
-		UI_Lives = TTF_RenderText_Solid(font, UI_Lives_t, color_white);
-		struct SDL_Rect UI_Lives_renderQuad;
-		UI_Lives_renderQuad.x=SCREEN_WIDTH - 120;
-		UI_Lives_renderQuad.y=10;
-		UI_Lives_renderQuad.w=(Uint16)UI_Lives->w;
-		UI_Lives_renderQuad.h=(Uint16)UI_Lives->h;
+		if (PauseTimer <= 50) // helps pad button clicks so we don't double click
+			PauseTimer++;
 
-		surfaceToScreen(UI_Lives, NULL, &UI_Lives_renderQuad);
+		SDL_RenderCopy(renderer, UI_Score_t, NULL, UI_Score_renderQuad);
+		SDL_RenderCopy(renderer, UI_Lives_t, NULL, UI_Lives_renderQuad);
+
 		if (GameOver) {
-			char UI_gameover_t[255];
-			sprintf(UI_gameover_t, "GAME OVER! - YOUR SCORE: %4i", score);
-			UI_gameover = TTF_RenderText_Solid(font, UI_gameover_t, color_white);
+			char UI_gameover_char[255];
+			sprintf(UI_gameover_char, "GAME OVER! - YOUR SCORE: %4i", score);
+			UI_gameover = TTF_RenderText_Solid(font, UI_gameover_char, color_white);
 			struct SDL_Rect UI_gameover_renderQuad;
 			UI_gameover_renderQuad.x=SCREEN_WIDTH / 2 - 200;
 			UI_gameover_renderQuad.y=SCREEN_HEIGHT / 2 - 200;
 			UI_gameover_renderQuad.w=(Uint16)UI_gameover->w;
 			UI_gameover_renderQuad.h=(Uint16)UI_gameover->h;
-			surfaceToScreen(UI_gameover, NULL, &UI_gameover_renderQuad);
+			//surfaceToScreen(UI_gameover, NULL, &UI_gameover_renderQuad);
+			SDL_RenderCopy(renderer, UI_gameover_t, NULL, &UI_gameover_renderQuad);
+			SDL_FreeSurface(UI_gameover);
 		}
 		if (PausedGame) {
-			surfaceToScreen(UI_pause, NULL, &UI_pause_renderQuad);
+			//surfaceToScreen(UI_pause, NULL, &UI_pause_renderQuad);
+			SDL_RenderCopy(renderer, UI_pause_t, NULL, &UI_pause_renderQuad);
 		}
 		if (playerDead) {
-			surfaceToScreen(UI_died, NULL, &UI_died_renderQuad);
+			//surfaceToScreen(UI_died, NULL, &UI_died_renderQuad);
+			SDL_RenderCopy(renderer, UI_died_t, NULL, &UI_died_renderQuad);
 		}
 		if (mainMenu == 1) {
-			surfaceToScreen(UI_mainmenu, NULL, &UI_mainmenu_renderQuad);
+			//surfaceToScreen(UI_mainmenu, NULL, &UI_mainmenu_renderQuad);
+			SDL_RenderCopy(renderer, UI_mainmenu_t, NULL, &UI_mainmenu_renderQuad);
 		}
 
 		if (CheckCollisionRecs(playerRec, sharkBiteRec) && SharkHealth > 0 && playerDead == 0) { // shark bit player
@@ -176,7 +169,7 @@
 		else if (CheckCollisionRecs(playerRec, sharkTailRec) && SharkHealth > 0 && playerDead == 0) { // player bit shark on tail
 			if (sharkBitten != 1) {
 				Mix_PlayChannel(-1, fishBiteSound, 0);
-				score = score + 25;
+				UpdateScore(score + 25);
 				CheckRankUp();
 			}
 			sharkBitten = 1;
@@ -186,11 +179,13 @@
 		SDL_Rect PosSize = { (Sint16)playerPosition.x, (Sint16)playerPosition.y, 16, 16 };
 		if (playerDirection == 1) { // left
 			SDL_Rect fish_left = { 16, 0, 32, (Uint16)PosSize.y };
-			surfaceToScreen(fish[playerRank], &fish_left, &PosSize);
+			//surfaceToScreen(fish[playerRank], &fish_left, &PosSize);
+			SDL_RenderCopy(renderer, fish_t[playerRank], &fish_left, &PosSize);
 		}
 		else { // right
 			SDL_Rect fish_right = { 0, 0, 16, (Uint16)PosSize.y };
-			surfaceToScreen(fish[playerRank], &fish_right, &PosSize);
+			//surfaceToScreen(fish[playerRank], &fish_right, &PosSize);
+			SDL_RenderCopy(renderer, fish_t[playerRank], &fish_right, &PosSize);
 		}
 
 		// draw shark
@@ -214,11 +209,13 @@
 				}
 				if (sharkDirection == 1) { // left
 					SDL_Rect shark_left = { 0, 0, 64, (Uint16)GoTo.y };
-					surfaceToScreen(shark, &shark_left, &GoTo);
+					//surfaceToScreen(shark, &shark_left, &GoTo);
+					SDL_RenderCopy(renderer, shark_t, &shark_left, &GoTo);
 				}
 				else { // right
 					SDL_Rect shark_right = { 64, 0, 128, (Uint16)GoTo.y };
-					surfaceToScreen(shark, &shark_right, &GoTo);
+					//surfaceToScreen(shark, &shark_right, &GoTo);
+					SDL_RenderCopy(renderer, shark_t, &shark_right, &GoTo);
 				}
 			}
 			else {
@@ -228,10 +225,12 @@
 				}
 				// restore eye color here: 
 				if (sharkDirection == 1) { // left
-					surfaceToScreen(shark_dead, NULL, &GoTo);
+					//surfaceToScreen(shark_dead, NULL, &GoTo);
+					SDL_RenderCopy(renderer, shark_dead_t, NULL, &GoTo);
 				}
 				else { // right
-					surfaceToScreen(shark_dead, NULL, &GoTo);
+					//surfaceToScreen(shark_dead, NULL, &GoTo);
+					SDL_RenderCopy(renderer, shark_dead_t, NULL, &GoTo);
 				}
 			}
 		}
@@ -250,7 +249,7 @@
 						creatures[i].position.y = -10;
 						creatures[i].position.x = -10;
 						creatures[i].active = 0;
-						score = score + 100;
+						UpdateScore(score + 100);
 						Mix_PlayChannel(-1, fishBiteSound, 0);
 						CheckRankUp();
 					}
@@ -276,14 +275,17 @@
 				tmp2.w=16;
 				tmp2.h=16; // 2 animations + 2 directions
 				if (creatures[i].type == 5) {
-					surfaceToScreen(crab, &tmp, &GoTo);
+					//surfaceToScreen(crab, &tmp, &GoTo);
+					SDL_RenderCopy(renderer, crab_t, &tmp, &GoTo);
 				}
 				else if (creatures[i].type == 6) {
 					if (creatures[i].origin.x <= 20) { // move right
-						surfaceToScreen(lobster, &tmp2, &GoTo);
+						//surfaceToScreen(lobster, &tmp2, &GoTo);
+						SDL_RenderCopy(renderer, lobster_t, &tmp2, &GoTo);
 					}
 					else { // move left
-						surfaceToScreen(lobster, &tmp, &GoTo);
+						//surfaceToScreen(lobster, &tmp, &GoTo);
+						SDL_RenderCopy(renderer, lobster_t, &tmp, &GoTo);
 					}
 				}
 				else if (creatures[i].type <= 4 && creatures[i].type >= 0) {
@@ -293,7 +295,8 @@
 						fish_right.y=0;
 						fish_right.w=16;
 						fish_right.h=(Uint16)GoTo.y; // RIGHT
-						surfaceToScreen(fish[creatures[i].type], &fish_right, &GoTo);
+						//surfaceToScreen(fish[creatures[i].type], &fish_right, &GoTo);
+						SDL_RenderCopy(renderer, fish_t[creatures[i].type], &fish_right, &GoTo);
 					}
 					else {
 						SDL_Rect fish_left;
@@ -301,21 +304,25 @@
 						fish_left.y=0;
 						fish_left.w=32;
 						fish_left.h=(Uint16)GoTo.y;  // LEFT
-						surfaceToScreen(fish[creatures[i].type], &fish_left, &GoTo);
+						//surfaceToScreen(fish[creatures[i].type], &fish_left, &GoTo);
+						SDL_RenderCopy(renderer, fish_t[creatures[i].type], &fish_left, &GoTo);
 					}
 				}
 				else if (creatures[i].type == 7) {
 					if (creatures[i].origin.x <= 20) { // move right
-						surfaceToScreen(seahorse, &tmp, &GoTo);
+						//surfaceToScreen(seahorse, &tmp, &GoTo);
+						SDL_RenderCopy(renderer, seahorse_t, &tmp, &GoTo);
 					}
 					else { // move left
-						surfaceToScreen(seahorse, &tmp2, &GoTo);
+						//surfaceToScreen(seahorse, &tmp2, &GoTo);
+						SDL_RenderCopy(renderer, seahorse_t, &tmp2, &GoTo);
 					}
 				}
 				else if (creatures[i].type == 8) {
 					SDL_Rect GoToJelly = { (Sint16)creatures[i].position.x, (Sint16)creatures[i].position.y, 48, 48 };
 					SDL_Rect tmpJelly = { (Sint16)(animChange * 48), 0, 48, 48 };
-					surfaceToScreen(jellyfish, &tmpJelly, &GoToJelly);
+					//surfaceToScreen(jellyfish, &tmpJelly, &GoToJelly);
+					SDL_RenderCopy(renderer, jellyfish_t, &tmpJelly, &GoToJelly);
 				}
 			}
 		}
@@ -323,7 +330,7 @@
 //#if !defined(__EMSCRIPTEN__) && !defined (__3DS__) && !defined (__WII__) && !(__DREAMCAST__) && !defined (__WIN9X__)
 //		SDL_Delay(time_left()); // causes audio hiccups on devices other than PC, iOS, Android
 //#endif
-		next_time += TICK_INTERVAL;
+		//next_time += TICK_INTERVAL;
 	}
 
 int main(int argc, char* args[])
@@ -403,7 +410,7 @@ int main(int argc, char* args[])
 			return 0;
 		}
 #else
-		renderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED  | SDL_RENDERER_PRESENTVSYNC);
+		renderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 		if (renderer == NULL) {
 			printf("renderer is null! SDL_Error: %s\n", SDL_GetError());
 			exitApp();
@@ -414,7 +421,7 @@ int main(int argc, char* args[])
 
 #endif
 
-		next_time = SDL_GetTicks() + TICK_INTERVAL;
+		//next_time = SDL_GetTicks() + TICK_INTERVAL;
 
 		shark = SDL_LoadBMP(RealPath("res/sprites/shark.bmp"));
 		if (!shark) { // check if resources are where they're supposed to be
@@ -425,28 +432,38 @@ int main(int argc, char* args[])
 			//printf("Failed to load image: %s %s\n", RealPath("res/sprites/shark.bmp"), SDL_GetError());
 			return 0;
 		}
-
 		SDL_SetColorKey(shark, colorkey, SDL_MapRGB(shark->format, 0xFF, 0x0, 0xFF)); // NOTE: (SDL1) Images must be 24 bit depth to work with color keys
+		shark_t = SDL_CreateTextureFromSurface(renderer, shark);
 		shark_dead = SDL_LoadBMP(RealPath("res/sprites/shark_dead.bmp"));
 		SDL_SetColorKey(shark_dead, colorkey, SDL_MapRGB(shark_dead->format, 0xFF, 0x0, 0xFF));
+		shark_dead_t = SDL_CreateTextureFromSurface(renderer, shark_dead);
 		seahorse = SDL_LoadBMP(RealPath("res/sprites/seahorse.bmp"));
 		SDL_SetColorKey(seahorse, colorkey, SDL_MapRGB(seahorse->format, 0xFF, 0x0, 0xFF));
+		seahorse_t = SDL_CreateTextureFromSurface(renderer, seahorse);
 		jellyfish = SDL_LoadBMP(RealPath("res/sprites/jellyfish.bmp"));
 		SDL_SetColorKey(jellyfish, colorkey, SDL_MapRGB(jellyfish->format, 0xFF, 0x0, 0xFF));
+		jellyfish_t = SDL_CreateTextureFromSurface(renderer, jellyfish);
 		lobster = SDL_LoadBMP(RealPath("res/sprites/lobster.bmp"));
 		SDL_SetColorKey(lobster, colorkey, SDL_MapRGB(lobster->format, 0xFF, 0x0, 0xFF));
+		lobster_t = SDL_CreateTextureFromSurface(renderer, lobster);
 		crab = SDL_LoadBMP(RealPath("res/sprites/crab.bmp"));
 		SDL_SetColorKey(crab, colorkey, SDL_MapRGB(crab->format, 0xFF, 0x0, 0xFF));
+		crab_t = SDL_CreateTextureFromSurface(renderer, crab);
 		fish[0] = SDL_LoadBMP(RealPath("res/sprites/rank1.bmp"));
 		SDL_SetColorKey(fish[0], colorkey, SDL_MapRGB(fish[0]->format, 0xFF, 0x0, 0xFF));
+		fish_t[0] = SDL_CreateTextureFromSurface(renderer, fish[0]);
 		fish[1] = SDL_LoadBMP(RealPath("res/sprites/rank2.bmp"));
 		SDL_SetColorKey(fish[1], colorkey, SDL_MapRGB(fish[1]->format, 0xFF, 0x0, 0xFF));
+		fish_t[1] = SDL_CreateTextureFromSurface(renderer, fish[1]);
 		fish[2] = SDL_LoadBMP(RealPath("res/sprites/rank3.bmp"));
 		SDL_SetColorKey(fish[2], colorkey, SDL_MapRGB(fish[2]->format, 0xFF, 0x0, 0xFF));
+		fish_t[2] = SDL_CreateTextureFromSurface(renderer, fish[2]);
 		fish[3] = SDL_LoadBMP(RealPath("res/sprites/rank4.bmp"));
 		SDL_SetColorKey(fish[3], colorkey, SDL_MapRGB(fish[3]->format, 0xFF, 0x0, 0xFF));
+		fish_t[3] = SDL_CreateTextureFromSurface(renderer, fish[3]);
 		fish[4] = SDL_LoadBMP(RealPath("res/sprites/rank5.bmp"));
 		SDL_SetColorKey(fish[4], colorkey, SDL_MapRGB(fish[4]->format, 0xFF, 0x0, 0xFF));
+		fish_t[4] = SDL_CreateTextureFromSurface(renderer, fish[4]);
 
 		if (!shark)
 			printf("Error creating texture: %s\n", SDL_GetError());
@@ -477,6 +494,26 @@ int main(int argc, char* args[])
 
 			SetVars(SCREEN_WIDTH, SCREEN_HEIGHT);
 
+			// create UI
+			UI_Score = TTF_RenderText_Solid(font, "SCORE 0", color_white);
+			UI_Score_t = SDL_CreateTextureFromSurface(renderer, UI_Score);
+			struct SDL_Rect renderQuad_score;
+			renderQuad_score.x = 10;
+			renderQuad_score.y = 10;
+			renderQuad_score.w = (Uint16)UI_Score->w;
+			renderQuad_score.h = (Uint16)UI_Score->h;
+			UI_Score_renderQuad = &renderQuad_score;
+
+			sprintf(UI_Lives_char, "%i LIVES", lives);
+			UI_Lives = TTF_RenderText_Solid(font, UI_Lives_char, color_white);
+			UI_Lives_t = SDL_CreateTextureFromSurface(renderer, UI_Lives);
+			struct SDL_Rect renderQuad_lives;
+			renderQuad_lives.x = SCREEN_WIDTH - 120;
+			renderQuad_lives.y = 10;
+			renderQuad_lives.w = (Uint16)UI_Lives->w;
+			renderQuad_lives.h = (Uint16)UI_Lives->h;
+			UI_Lives_renderQuad = &renderQuad_lives;
+
 			UI_pause = TTF_RenderText_Solid(font, "PAUSED !", color_white);
 			
 			UI_pause_renderQuad.x=SCREEN_WIDTH / 2 - 50;
@@ -484,12 +521,20 @@ int main(int argc, char* args[])
 			UI_pause_renderQuad.w=(Uint16)UI_pause->w;
 			UI_pause_renderQuad.h=(Uint16)UI_pause->h;
 
+			UI_pause_t = SDL_CreateTextureFromSurface(renderer, UI_pause);
+
+#if defined(PSP)
+			UI_died = TTF_RenderText_Solid(font, "PLAYER DIED - PRESS START TO SPAWN", color_white);
+#else
 			UI_died = TTF_RenderText_Solid(font, "PLAYER DIED - PRESS ENTER TO SPAWN", color_white);
+#endif
 			
-			UI_died_renderQuad.x=SCREEN_WIDTH / 2 - 250;
+			UI_died_renderQuad.x=SCREEN_WIDTH / 2 - 220;
 			UI_died_renderQuad.y=SCREEN_HEIGHT / 2 - 50;
 			UI_died_renderQuad.w=(Uint16)UI_died->w;
 			UI_died_renderQuad.h=(Uint16)UI_died->h;
+
+			UI_died_t = SDL_CreateTextureFromSurface(renderer, UI_died);
 
 			UI_mainmenu = TTF_RenderText_Solid(font, "SHARK! SHARK! - [S]tart Game", color_white);
 			
@@ -497,6 +542,8 @@ int main(int argc, char* args[])
 			UI_mainmenu_renderQuad.y=SCREEN_HEIGHT / 2 - 90;
 			UI_mainmenu_renderQuad.w=(Uint16)UI_mainmenu->w;
 			UI_mainmenu_renderQuad.h=(Uint16)UI_mainmenu->h;
+
+			UI_mainmenu_t = SDL_CreateTextureFromSurface(renderer, UI_mainmenu);
 
 			if (Mix_PlayingMusic() == 0)
 				Mix_PlayMusic(bgMusic, -1);

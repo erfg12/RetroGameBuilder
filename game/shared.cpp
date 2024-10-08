@@ -83,8 +83,8 @@ const Uint8* keys;
 
 Uint32 next_time;
 
-char UI_Score_t[255];
-char UI_Lives_t[255];
+char UI_Score_char[255];
+char UI_Lives_char[255];
 
 // SDL 1
 #if defined (__3DS__) || defined (__WII__) || defined (__DREAMCAST__) || defined (__WIN9X__)
@@ -113,6 +113,20 @@ int key_up = SDL_SCANCODE_UP;
 int key_down = SDL_SCANCODE_DOWN;
 SDL_Window* gWindow;
 SDL_Renderer* renderer;
+
+SDL_Texture* shark_t = nullptr;
+SDL_Texture* shark_dead_t = nullptr;
+SDL_Texture* lobster_t = nullptr;
+SDL_Texture* crab_t = nullptr;
+SDL_Texture* seahorse_t = nullptr;
+SDL_Texture* jellyfish_t = nullptr;
+SDL_Texture* fish_t[5] = { nullptr, nullptr, nullptr, nullptr, nullptr };
+SDL_Texture* UI_Score_t = nullptr;
+SDL_Texture* UI_Lives_t = nullptr;
+SDL_Texture* UI_gameover_t = nullptr;
+SDL_Texture* UI_pause_t = nullptr;
+SDL_Texture* UI_died_t = nullptr;
+SDL_Texture* UI_mainmenu_t = nullptr;
 #endif
 
 int playerSpeed = 2;
@@ -166,11 +180,11 @@ int CheckCollisionRecs(Rectangle r1, Rectangle r2) {
 void surfaceToScreen(SDL_Surface* surf, SDL_Rect* src, SDL_Rect* dst) {
 #if defined (__3DS__) || defined (__WII__) || defined (__DREAMCAST__) || defined (__WIN9X__) // sdl 1
     SDL_BlitSurface(surf, src, screen, dst);
-#else
-    SDL_Texture* tmpTexture = SDL_CreateTextureFromSurface(renderer, surf);
-    if (tmpTexture)
-        SDL_RenderCopy(renderer, tmpTexture, src, dst);
-    SDL_DestroyTexture(tmpTexture); // causes PSP graphics to become garbage..
+//#else
+//    SDL_Texture* tmpTexture = SDL_CreateTextureFromSurface(renderer, surf);
+//    if (tmpTexture)
+//        SDL_RenderCopy(renderer, tmpTexture, src, dst);
+//    SDL_DestroyTexture(tmpTexture); // causes PSP graphics to become garbage..
 #endif
 }
 
@@ -222,6 +236,7 @@ void CheckRankUp() {
             //printf("************** GAINED +1 LIVE ***************\n");
             Mix_PlayChannel(-1, fishRankUp, 0);
             lives++;
+            UpdateLives(lives);
         }
     }
 }
@@ -252,7 +267,7 @@ void Respawn(int SCREEN_WIDTH, int SCREEN_HEIGHT) {
 void SetVars(float ScreenWidth, float ScreenHeight) {
     srand(time(NULL));
     LeftClick = 0;
-    score = 0;
+    UpdateScore(0);
     playerRank = 0;
     playerPosition.x = ScreenWidth / 2;
     playerPosition.y = ScreenHeight / 2;
@@ -264,6 +279,7 @@ void SetVars(float ScreenWidth, float ScreenHeight) {
     mainMenu = 1;
     GameOver = 0;
     lives = 2;
+    UpdateLives(lives);
     playerDirection = 1;
     playerDead = 0;
     FishSpawnTimer = 0;
@@ -271,7 +287,7 @@ void SetVars(float ScreenWidth, float ScreenHeight) {
     sharkMaxBounces = 5;
     SharkSpawnTimer = 0;
     SharkHurtTimer = 0;
-    PauseTimer = 0;
+    PauseTimer = 51;
     SharkHealth = 10;
     LeftClick = 0;
     sharkBitten = 0;
@@ -331,6 +347,25 @@ void RefreshScreen() {
 #endif
 }
 
+void UpdateScore(int newScore) {
+    score = newScore;
+    sprintf(UI_Score_char, "SCORE %d", score);
+    UI_Score = TTF_RenderText_Solid(font, UI_Score_char, color_white);
+    //surfaceToScreen(UI_Score, NULL, UI_Score_renderQuad); // SDL 1
+    //SDL_UpdateTexture(UI_Score_t, NULL, UI_Score->pixels, UI_Score->pitch); // glitches the text
+    UI_Score_t = SDL_CreateTextureFromSurface(renderer, UI_Score);
+    SDL_FreeSurface(UI_Score);
+}
+
+void UpdateLives(int newLives) {
+    lives = newLives;
+    sprintf(UI_Lives_char, "%i LIVES", lives);
+    UI_Lives = TTF_RenderText_Solid(font, UI_Lives_char, color_white);
+    //surfaceToScreen(UI_Lives, NULL, UI_Lives_renderQuad);
+    UI_Lives_t = SDL_CreateTextureFromSurface(renderer, UI_Lives);
+    SDL_FreeSurface(UI_Lives);
+}
+
 void SharkRoam(float ScreenWidth, float ScreenHeight) {
     if (mrShark.active)
     {
@@ -341,7 +376,7 @@ void SharkRoam(float ScreenWidth, float ScreenHeight) {
             mrShark.position.x = -100;
             mrShark.position.y = -100;
             mrShark.active = 0;
-            score = score + 100;
+            UpdateScore(score + 100);
             CheckRankUp();
             return;
         }
@@ -463,6 +498,7 @@ void FishMoveAndDeSpawn(float ScreenWidth, float ScreenHeight, int CrustHeight) 
 
 void PlayerBit() {
     lives--;
+    UpdateLives(lives);
     playerPosition.x=-200;
 	playerPosition.y=-200;
     MouseX = 0;

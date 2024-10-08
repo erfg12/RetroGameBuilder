@@ -49,8 +49,8 @@ extern SeaCreature creatures[27];
 extern int creatureRank[9];
 extern float creatureSpeed[9];
 
-extern char UI_Score_t[255];
-extern char UI_Lives_t[255];
+extern char UI_Score_char[255];
+extern char UI_Lives_char[255];
 
 extern SDL_Surface* shark;
 extern SDL_Surface* shark_dead;
@@ -127,6 +127,20 @@ extern SDL_Surface* screen;
 #else // SDL 2
 extern SDL_Window* gWindow;
 extern SDL_Renderer* renderer;
+
+extern SDL_Texture* shark_t;
+extern SDL_Texture* shark_dead_t;
+extern SDL_Texture* lobster_t;
+extern SDL_Texture* crab_t;
+extern SDL_Texture* seahorse_t;
+extern SDL_Texture* jellyfish_t;
+extern SDL_Texture* fish_t[5];
+extern SDL_Texture* UI_Score_t;
+extern SDL_Texture* UI_Lives_t;
+extern SDL_Texture* UI_gameover_t;
+extern SDL_Texture* UI_pause_t;
+extern SDL_Texture* UI_died_t;
+extern SDL_Texture* UI_mainmenu_t;
 #endif
 
 extern void surfaceToScreen(SDL_Surface* surf, SDL_Rect* src, SDL_Rect* dst);
@@ -144,6 +158,8 @@ extern void FishSpawn(float ScreenWidth, float ScreenHeight);
 extern void CrustJump(int CreatureID, float ScreenHeight, int height);
 extern void FishMoveAndDeSpawn(float ScreenWidth, float ScreenHeight, int CrustHeight);
 extern void PlayerBit();
+extern void UpdateScore(int newScore);
+extern void UpdateLives(int newLives);
 extern const char* RealPath(const char* path);
 extern void CheckRankUp();
 extern void Respawn(int SCREEN_WIDTH, int SCREEN_HEIGHT);
