@@ -327,10 +327,6 @@
 			}
 		}
 		RefreshScreen();
-//#if !defined(__EMSCRIPTEN__) && !defined (__3DS__) && !defined (__WII__) && !(__DREAMCAST__) && !defined (__WIN9X__)
-//		SDL_Delay(time_left()); // causes audio hiccups on devices other than PC, iOS, Android
-//#endif
-		//next_time += TICK_INTERVAL;
 	}
 
 int main(int argc, char* args[])
@@ -490,7 +486,7 @@ int main(int argc, char* args[])
 			sharkDeadSound = Mix_LoadWAV(RealPath("res/audio/shark_dead.wav"));
 			fishRankUp = Mix_LoadWAV(RealPath("res/audio/bigger.wav")); // NOTE: (SDL1) Game can crash on startup if audio bit-rate is too high
 
-			bgMusic = Mix_LoadMUS(RealPath("res/audio/bg_music.wav"));
+			bgMusic = Mix_LoadMUS(RealPath("res/audio/bg_music.ogg"));
 
 			SetVars(SCREEN_WIDTH, SCREEN_HEIGHT);
 
