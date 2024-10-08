@@ -13,6 +13,7 @@ Currently most systems don't compile. Check the TO-DO section below to see what 
 - [x] MacOS
 - [ ] Mac OS X (no PPC Frameworks)
 - [ ] PlayStation 2 (issues loading mixer and ttf assets from CD)
+- [x] PSP
 - [x] PSVita
 - [x] Switch
 - [x] Windows 9x
@@ -66,9 +67,13 @@ Install [PSPDEV](https://pspdev.github.io/installation.html).
 ```
 cd ./psp
 mkdir build && cd build
-cmake ..
+psp-cmake ..
 make
 ```
+
+To edit the EBOOT file and add an icon, use [PSPBrew](https://www.brewology.com/downloads/get.php?id=5487).
+
+To make a PSP ISO you need [EBOOT2ISO](https://www.brewology.com/downloads/get.php?id=10102) and [UMDGen](https://sea-02.dlo4d.com/files/umdgen/UMDGen_v4.00.rar).
 
 ### PSVita
 - - -
